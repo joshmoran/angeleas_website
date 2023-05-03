@@ -1,0 +1,275 @@
+/*  */
+/* Generic Elements */
+/*  */
+
+* {
+    box-sizing: border-box;
+}
+
+body>* {
+    margin: 0 auto;
+}
+
+/*  */
+/* Header */
+/*  */
+header {
+    display: block;
+    background-color: #333;
+}
+
+#headerTitle {
+    text-align: center;
+    float: left;
+    font-size: 2em;
+    top: 30px;
+    left: 100px;
+    width: 30%;
+    margin: 30px auto;
+
+}
+
+#navParent {
+    float: right;
+    right: 100px;
+}
+
+#navParent li {
+    display: inline-block;
+    height: auto;
+    width: 100px;
+    height: 40px;
+    padding: 0 0.25rem;
+    margin: 30px 0.25rem;
+    background-color: #eee;
+    text-align: center;
+}
+
+#navParent a {
+    padding: 20px;
+}
+
+/*  */
+/* Main Container  */
+/*  */
+#messages {
+    display: block;
+    clear: both;
+    background-color: red;
+    height: 100px;
+    width: 100%;
+
+}
+
+.message {
+    color: white;
+    font-weight: 900;
+    color: #333;
+    ;
+}
+
+#container,
+header,
+footer {
+    clear: both;
+    margin: 0 auto;
+}
+
+/*  */
+#content {
+    margin: 0 auto;
+    background-color: grey;
+}
+
+/* Home - Index */
+#btnImg {
+    margin: 0 auto;
+    font-size: xx-large;
+}
+
+#btnImg>li {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    margin: 0 auto;
+    top: -130px;
+    height: 100px;
+    background-color: white;
+}
+
+#btnImg img {
+    display: block;
+    max-width: 50%;
+    height: auto;
+}
+
+/*  */
+/* Footer */
+/*  */
+footer {
+    top: 100px;
+
+}
+
+footer h2 {
+    width: max-content;
+    margin: 0 auto;
+
+}
+
+/* All prooducts */
+#listParent {
+    clear: both;
+    margin: 0 auto;
+    padding: 0px;
+
+}
+
+#listParent li {
+    display: inline-block;
+    position: relative;
+    box-sizing: content-box;
+    width: 300px;
+    min-width: 300px;
+    padding: 2.5px;
+    margin: 1px auto;
+    border: 3px solid red;
+}
+
+#listParent a {
+    clear: both;
+    height: min-content;
+}
+
+#listParent img {
+
+    clear: both;
+    width: 100%;
+    height: 200px;
+    margin: 0 auto;
+}
+
+#listParent h4 {
+    width: 100%;
+    font-size: 14px;
+    height: 20px;
+    text-align: center;
+}
+
+/* Details Page */
+#contentSplit>* {
+    display: inline-block;
+    position: relative;
+    clear: both;
+    width: 100%;
+    margin: 10px;
+    padding: 5px;
+    /* box-sizing: content-box; */
+}
+
+#leftSide {
+    box-sizing: content-box;
+    float: left;
+    left: 0px;
+}
+
+#leftSide img {
+    max-width: 20%;
+}
+
+#rightSide {
+    clear: right;
+}
+
+/* Footer */
+footer,
+#footer {
+    width: 1.0rem;
+    display: block;
+
+}
+
+
+/* Smartphones (portrait and landscape) */
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    body {
+        background-color: white;
+    }
+}
+
+/* Smartphones (landscape) */
+@media only screen and (min-width: 321px) {
+
+    #container,
+    header,
+    footer,
+    nav {
+        width: 90%;
+    }
+
+    /* Main content */
+    #content {
+        width: 300px;
+    }
+
+    #listParent li {
+        width: 250px;
+        padding: 12.5px;
+        margin: 12.5px auto;
+    }
+}
+
+/* Smartphones (portrait) */
+@media only screen and (max-width: 320px) {
+
+    header h1 {
+        text-align: center;
+        width: 1rem;
+    }
+
+    header nav {
+        margin: 0 auto;
+    }
+}
+
+/* iPads(portrait and landscape) */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {}
+
+/* iPads (landscape) */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {}
+
+/* iPads (portrait) */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {}
+
+/*  Desktops and laptops */
+@media only screen and (min-width: 1224px) {
+
+    #container,
+    header,
+    footer,
+    nav {
+        width: 80%;
+
+    }
+
+    /* #listParent li {} */
+}
+
+/*  Large Screens */
+@media only screen and (min-width: 1824px) {
+
+    #container,
+    header,
+    footer,
+    nav {
+        width: 60%;
+    }
+
+    body {
+        background-color: grey;
+    }
+}
+
+/* iPhone 4 */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+only screen and (min-device-pixel-ratio: 1.5) {}

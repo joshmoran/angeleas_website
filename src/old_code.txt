@@ -1,0 +1,144 @@
+##############################
+########## BASKET.PHP
+##############################
+
+var_dump($_SESSION['cart']);
+					$lengthofBasket = count($_SESSION['cart']);
+					//var_dump($_SESSION['cart']);
+					echo $lengthofBasket;
+					$string;
+					for ($a = 0; $a < $lengthofBasket; $a++) {
+						//cho $_SESSION['cart'][1]['price'];
+						//$item = queryValue('products', 'product_id', $_SESSION['cart']);
+						//var_dump($item);
+						echo "<tr>
+									<td><img src='src/img/ui/delete.svg' /></td>
+									<td colspan='3'>" . $_SESSION['cart'][$a]['title'] . "</td>
+									<td>" . $_SESSION['cart'][$a]['quantity'] . "</td>
+									<td>" . $_SESSION['cart'][$a]['price'] . "</td>
+									</tr>";
+					}
+
+
+
+
+##############################
+########## FUNCTIONS.PHP
+##############################
+
+
+//function register_account($firstName, $lastName, $email, $address, $home, $mobile, $username, $password)
+//{
+//    require 'src/database.php';
+//    //require 'src/cookie.php';
+
+//    $sqlCustomers = "INSERT INTO customers(  first_name, last_name, email, address, home_no, mobile_no) VALUES ( ?, ?, ?, ?, ?, ? )";
+//    $customer = mysqli_prepare($db, $sqlCustomers);
+//    $customer->bind_param("ssssii", $firstName, $lastName, $email, $address, $home, $mobile);
+//    $customer->execute();
+
+//    $customer_id = mysqli_prepare($db, "SELECT customer_id from customers WHERE email = ? ");
+//    $customer_id->bind_param("s", $email);
+//    $customer_id->execute();
+
+//    foreach ($customer_id as $item) {
+//        $_SESSION['id'] = $id;
+//        $id = $item;
+//    }
+//    $randomNo = generateBasket();
+
+//    try {
+//        $sqlAccount = "INSERT INTO accounts ( customer_id, user,  pass ) VALUES ( ?, ?, ? )";
+//        $account = mysqli_prepare($db, $sqlAccount);
+//        $account->bind_param("iss", $id, $username, $password);
+//        $account->execute();
+//    } catch (Exception $e) {
+//        return false;
+//    }
+
+//    try {
+//        $sql = "INSERT INTO orders ( basket_id, customer_id ) VALUES ( ?, ? ) ";
+//        $basket = $db->prepare($sql);
+//        $basket->bind_param("ii", $randomNo, $id);
+//        $basket->execute();
+//    } catch (Exception $e) {
+//        return false;
+//    }
+
+
+
+//    if (login_account($username, $password)) {
+//        header("Location: account.php");
+//        return true;
+//    } else {
+//        $error_message .= 'Registration is succesful, but could not sign you in. Please try again';
+//        return false;
+//    }
+//}
+
+function queryValue($database, $name, $value)
+{
+	require "src/database.php";
+
+	try {
+		// $query = $db->query("SELECT * FROM ? WHERE ? = ?");
+		// $query->bindParam(1, $database, PDO::PARAM_STR);
+		// $query->bindParam(2, $name, PDO::PARAM_STR);
+		// $query->bindParam(3, $value, PDO::PARAM_STR);
+		// $query->execute();
+		// $query->fetch(PDO::FETCH_ASSOC);
+		if ($query == [] || empty($quey)) {
+			return false;
+		} else {
+			foreach ($query as $item) {
+			}
+		}
+	} catch (Exception $e) {
+	}
+}
+
+function login_account($username, $password)
+{
+
+	require 'src/database.php';
+	require 'src/cookie.php';
+
+	$error_message = '';
+
+	$sql = "SELECT * FROM accounts WHERE username = ?";
+	$sqlAccount = $db->prepare($sql);
+	$sqlAccount->bind_param("s", $username);
+	$sqlAccount->execute();
+	$user = $sqlAccount->get_result()->fetch_assoc();
+
+	if ($user && password_verify($password, $user['pass'])) {
+		// Add user to session
+
+		//      $error_message = 'Yep';
+
+	} else {
+		$error_message = 'Authentication Error';
+		return false;
+	}
+
+	// $sql = "SELECT * FROM orders WHERE customer_id = ? and complete = false";
+	// $order = mysqli_prepare($db, $sql);
+	// $order->bind_param("i", $user['id']);
+	// $order->execute();
+	// $execute = $order->get_result()->fetch_assoc();
+
+	// if ($execute) {
+	// 	foreach ($execute as $items) {
+	// 		$basketid = $items['basket_id'];
+	// 	}
+	// } else {
+	// 	$basketid = generatebasket();
+	// 	$sql = "insert into orders ( basket_id, customer_id  ) values ( ?, ? )";
+	// 	$createbasket = $db->prepare($sql);
+	// 	$createbasket->bind_param("ii", $basketid, $customerid);
+	// 	$createbasket->execute();
+	// }
+	// $SESSION['basket'] = $basketID;
+
+	return true;
+}
