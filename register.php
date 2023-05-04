@@ -128,10 +128,6 @@ if (isset($_POST['register'])) {
 					<td><input type="text" name="email" value="" /></td>
 				</tr>
 				<tr>
-					<td><label for="address">Address: </label></td>
-					<td><input type="text" name="address" /></td>
-				</tr>`
-				<tr>
 					<td><label for="phoneHome">Home Phone Number:</label></td>
 					<td><input type="text" name="phoneHome" value="" /></td>
 				</tr>
@@ -142,6 +138,44 @@ if (isset($_POST['register'])) {
 				<tr>
 					<td><label for="dob">Date of birth:</label></td>
 					<td><input type="text" name="dob" value="" /></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<h3>Card Number</h3>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="cardenumber">Card Number: </label></td>
+					<td><input type="number" name="cardnumber" maxlength="16" value="" /></td>
+				</tr>
+				<tr>
+					<td><label for="expiry">Expiry: </label></td>
+					<td><input type="date" name="expiry" value="" /></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<h3>Address</h3>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="expiry">Expiry: </label></td>
+					<td><input type="date" name="expiry" value="" /></td>
+				</tr>
+				<tr>
+					<td><label for="expiry">Expiry: </label></td>
+					<td><input type="date" name="expiry" value="" /></td>
+				</tr>
+				<tr>
+					<td><label for="expiry">Expiry: </label></td>
+					<td><input type="date" name="expiry" value="" /></td>
+				</tr>
+				<tr>
+					<td><label for="expiry">Expiry: </label></td>
+					<td><input type="date" name="expiry" value="" /></td>
+				</tr>
+				<tr>
+					<td><label for="expiry">Expiry: </label></td>
+					<td><input type="date" name="expiry" value="" /></td>
 				</tr>
 				<tr>
 					<td colspan="2">

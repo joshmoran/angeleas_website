@@ -17,12 +17,11 @@ if (!isset($item) && !isset($quantity)) {
 
 if ( isset($_SESSION['basket_id'])){
 	$basketID = $_SESSION['basket_id'];
-	echo $basketID;
 }
 
 if ( isset($_SESSION['customer_id'])){
 	$customerID = $_SESSION['customer_id'];
-	echo $customerID;
+
 }
 
 if (!isset($_SESSION['cart'])) {

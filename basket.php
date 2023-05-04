@@ -2,7 +2,11 @@
 session_start();
 
 require "src/database.php";
-echo $_POST['id'];
+
+if ( isset( $_GET['del'])){
+	$sqlDelete = "DELETE FROM cart WHERE product_id = " . $_GET['del'] . " AND basket_id = " . $_SESSION['basket_id'];
+	$queryDel = mysqli_query( $db, $sqlDelete);
+}
 if ( isset( $_POST['id'] )){
 
 	echo 'The selected element is ' . $_POST['id'];
@@ -13,6 +17,9 @@ if ( !empty( $_SESSION['loggedIn'] )){
 	echo $basketID;
 } else {
 	header("Location: index.php");
+}
+if (!empty($_POST['basket'])){
+	echo $_POST['delete'];
 }
 
 $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = products.id WHERE basket_id = '$basketID'";
@@ -35,6 +42,7 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 
 	<div id="container">
 		<table>
+			<form action="basket.php" method="post" id="basket">
 			<?php
 				require("src/database.php");
 				$query = mysqli_query($db, $sqlOrder);
@@ -54,11 +62,29 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 					echo "</tr>";
 
 					$total = 0;
+					
+					$customerID = $_SESSION['customer_id'];
+					$basketID = $_SESSION['basket_id'];
 
+					$sqlBasket = "SELECT * FROM cart WHERE basket_id = $basketID";
+					$basketQuery = mysqli_query($db, $sqlOrder);
+			
+					var_dump(mysqli_fetch_assoc($basketQuery));
+
+					// while ( $products = mysqli_fetch_assoc($basketQuery) ) {
+					// 	echo "<tr>";
+					// 	echo "<td><input type='submit' name='delete' /> value='" . $products['id'] . "'><img src='src/img/ui/delete-f.svg' /></a></td>";
+					// 	echo "<td>" . $products['product_name'] . "</td>";
+					// 	echo "<td>" . $products['product_price'] . "</td>";
+					// 	echo "<td>" . $products['product_quantity'] . "</td>";
+					// 	echo "<td>" . $products['product_name'] . "</td>";
+					// 	echo "</tr>";
+					// }
+						
 					while ( $row = mysqli_fetch_assoc($query) ){
 						(float)$total += (float)$row['price'] * (int)$row['quantity'];
 						echo "<tr>";
-						echo "<td><button id='delete' onclick='deleteRow(event)' value='" . $row['id'] . "'><img src='src/img/ui/delete-f.svg' value='" . $row['id'] . "' /></button></td>";
+						echo "<td><a href='basket.php?del=" . $row['id'] . "'><img src='src/img/ui/delete-f.svg' value='" . $row['id'] . "' /></a></td>";
 						echo "<td>" . $row['name'] . "</td>";
 						echo "<td>" . $row['description'] . "</td>";
 						echo "<td>" . $row['price'] . "</td>";
@@ -79,11 +105,12 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 					echo "<td></td>";
 					echo "<td></td>";
 					echo "<td></td>";
-					echo "<td><button >Checkout</button></td>";
+					echo "<td><button><a href='purchase.php'>Checkout</a></button></td>";
 					echo "</tr>";
 
 				}
 			?>
+			</form>
 		</table>
 	</div>
 	

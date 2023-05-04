@@ -49,7 +49,7 @@ CREATE TABLE cart (
     product_id VARCHAR(10) NOT NULL);
 
 CREATE TABLE cart (
-    basket_id INT(20) PRIMARY KEY UNIQUE,
+    basket_id INT(20),
     product_id INT(1000) NOT NULL,
     quantity INT(100) NOT NULL,
     total_price FLOAT(4) NOT NULL
@@ -159,3 +159,38 @@ INSERT INTO types (id, name, description) VALUES (7, "Deep-fried", "");
 INSERT INTO types (id, name, description) VALUES (8, "Frozen", "" );
 INSERT INTO types (id, name, description) VALUES (9, "Gelatin", "");
 INSERT INTO types (id, name, description) VALUES (10, "Fruit", "");
+-------------------------------------------------------------------------
+CREATE TABLE products (
+id INT(255) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+name TEXT(30) NOT NULL,
+description VARCHAR(250) NOT NULL,
+category INT(1) NOT NULL,
+price FLOAT(2,2) NOT NULL,
+image_src VARCHAR(150) NOT NULL);
+
+CREATE TABLE types (
+id INT(2) NOT NULL UNIQUE,
+name VARCHAR(30) NOT NULL,
+description VARCHAR(250) NOT NULL);
+
+
+CREATE TABLE alergies (
+product_id INT(100) NOT NULL,
+type TEXT(30) NOT NULL,
+description VARCHAR(255) NOT NULL);
+
+CREATE TABLE orders (
+order_id INT  NOT NULL PRIMARY KEY,
+customer_id INT NOT NULL,
+time_ordered DATETIME,
+complete BOOLEAN);
+
+CREATE TABLE customers (
+customer_id INTEGER PRIMARY KEY,
+first_name VARCHAR(30) NOT NULL,
+last_name VARCHAR(30) NOT NULL,
+email VARCHAR(50) NOT NULL,
+addres VARCHAR(255) NOT NULL,
+home  INT(15) NOT NULL,
+mobile INT(11) NOT NULL);
+
