@@ -4,6 +4,17 @@ require "src/functions.php";
 
 //$_SESSION['loggedIn'] = false;
 
+// Important information
+
+// customer name = split into first and second namer 
+// email 
+// home no
+// mobile no
+
+// add card to account
+// add address to account 
+
+
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$name = trim( filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING));
 	$nameSplit = explode(' ', $name);

@@ -7,6 +7,7 @@ function scrollImages () {
     // alert( 'working' );
 }
 
+
 document.addEventListener( 'load', scrollImages() );
 
 // let count = 0;

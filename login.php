@@ -34,7 +34,7 @@ if (isset($_POST['login'])) {
 
 			if ( mysqli_num_rows($orderQuery) < 1){
 				$basketID = generateBasket();
-				$sqlInsert = "INSERT INTO orders VALUES ( '$basketID', '$customerID', null, false )";
+				$sqlInsert = "INSERT INTO orders (order_id, customer_id, complete ) VALUES ( '$basketID', '$customerID', false )";
 				$sqlBasketInsert = mysqli_query($db, $sqlInsert);
 				$_SESSION['basket_id'] = $basketID;
 			} else {
@@ -47,7 +47,7 @@ if (isset($_POST['login'])) {
             $_SESSION['loggedIn'] = true;
 
             $error_message = 'It has been matched and verified';
-            //header('location: ./account.php');
+            header('location: ./account.php');
             exit();
         } else {
             $error_message = 'Passwords do not match';

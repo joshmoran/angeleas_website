@@ -1,34 +1,41 @@
 <?php
+session_start();
 
 require 'src/functions.php';
 function randomNumber() {
     return random_int(0, 9999999999);
 }
+$customerNo;
 
 if (isset($_POST['register'])) {
     require "src/database.php";
 
     echo 'yes,, yes, yes';
 
-	$firstName = trim(filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_STRING));
-	$lastName = trim(filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_STRING));
-
-    $postEmail = $_POST['email'];
-
+	$firstName = htmlspecialchars( $_POST['firstname']);
+	$lastName = htmlspecialchars( $_POST['lastname']);
 	$email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
-	$address = trim(filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING));
 	$home = trim(filter_input(INPUT_POST, 'phoneHome', FILTER_SANITIZE_NUMBER_INT));
 	$mobile = trim(filter_input(INPUT_POST, 'phoneMobile', FILTER_SANITIZE_NUMBER_INT));
+	$dob = trim(filter_input(INPUT_POST, 'dob', FILTER_SANITIZE_NUMBER_INT));
 
-	//$dob = trim(filter_input(INPUT_POST, 'dob', FILTER_SANITIZE_NUMBER_INT));
+	$cardnumber = trim( filter_input( INPUT_POST, 'cardnumber', FILTER_SANITIZE_NUMBER_INT));
+	$cardexpiry = trim( filter_input( INPUT_POST, 'expiry', FILTER_SANITIZE_NUMBER_INT));
 
-    $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
-	$password = trim(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING));
+	$address_1st = htmlspecialchars( $_POST['1st_line']);
+	$address_2nd = htmlspecialchars( $_POST['2nd_line']);
+	$address_3rd = htmlspecialchars( $_POST['3rd_line']);
+	$region = htmlspecialchars( $_POST['region']);
+	$postcode = htmlspecialchars( $_POST['postcode']);
+
+    $username = htmlspecialchars( $_POST['username']);
+	$password = htmlspecialchars( $_POST['password']);
 
 	// Important Values - |first_name, last_name, $email, username, password
 
     //Checking if customer id already exists
 
+	// for table -- customers
     do {
         $customerNo = randomNumber();
 
@@ -38,7 +45,7 @@ if (isset($_POST['register'])) {
         $count = mysqli_fetch_array($checkID);
     } while ( $count['cnt'] = 0  );
 
-	$sqlCustomer = "INSERT INTO customers VALUES ('$customerNo', '$firstName', '$lastName', '$email', '$address', '$home', '$mobile')";
+	$sqlCustomer = "INSERT INTO customers VALUES ('$customerNo', '$firstName', '$lastName', '$email', '$home', '$mobile')";
 
     if( mysqli_query($db, $sqlCustomer) ) {
         $error_message = 'Successfully added to customers';
@@ -47,6 +54,7 @@ if (isset($_POST['register'])) {
         return false;
     }
 
+	// for table -- accounts
     $encryptedPassword = password_hash($password, PASSWORD_DEFAULT);
     $sqlAccount = "INSERT INTO accounts VALUES ( '$customerNo', '$username', '$encryptedPassword');";
 
@@ -56,7 +64,7 @@ if (isset($_POST['register'])) {
         $error_message = 'Could not add to Accounts';
         return false;
     }
-
+	// for table -- cart
     do {
         $basketNo = randomNumber();
         $sqlBasket = "SELECT count(*) as count from cart where basket_id = " . $basketNo;
@@ -70,6 +78,26 @@ if (isset($_POST['register'])) {
         $error_message = 'Successfully added to Cart';
     } else {
         $error_message = 'Could not add to Cart';
+        return false;
+    }
+	// for table -- credit_cards
+	$sqlCards = "INSERT INTO credit_cards VALUES ( '$customerNo', '$cardnumber', '$cardexpiry' )";
+
+	
+	if (mysqli_query( $db, $sqlCards)){
+		$error_message = 'Successfully added to Cards';
+	} else {
+		$error_message = 'Could not add to Cards';
+        return false;
+	}
+
+	// for table -- $address
+	$sqlAddress = "INSERT INTO address VALUES ( '$customerNo', '$address_1st', '$address_2nd', '$address_3rd', '$region', '$postcode' )";
+
+    if( mysqli_query($db, $sqlAddress) ) {
+        $error_message = 'Successfully added to Addresses';
+    } else {
+        $error_message = 'Could not add to Addresses';
         return false;
     }
 
@@ -145,7 +173,7 @@ if (isset($_POST['register'])) {
 					</td>
 				</tr>
 				<tr>
-					<td><label for="cardenumber">Card Number: </label></td>
+					<td><label for="cardnumber">Card Number: </label></td>
 					<td><input type="number" name="cardnumber" maxlength="16" value="" /></td>
 				</tr>
 				<tr>
@@ -158,24 +186,24 @@ if (isset($_POST['register'])) {
 					</td>
 				</tr>
 				<tr>
-					<td><label for="expiry">Expiry: </label></td>
-					<td><input type="date" name="expiry" value="" /></td>
+					<td><label for="1st_line">1st Line : </label></td>
+					<td><input type="text" name="1st_line" value="" /></td>
 				</tr>
 				<tr>
-					<td><label for="expiry">Expiry: </label></td>
-					<td><input type="date" name="expiry" value="" /></td>
+					<td><label for="2nd_line">2nd Line: </label></td>
+					<td><input type="text" name="2nd_line" value="" /></td>
 				</tr>
 				<tr>
-					<td><label for="expiry">Expiry: </label></td>
-					<td><input type="date" name="expiry" value="" /></td>
+					<td><label for="3rd_line">3rd Line: </label></td>
+					<td><input type="text" name="3rd_line" value="" /></td>
 				</tr>
 				<tr>
-					<td><label for="expiry">Expiry: </label></td>
-					<td><input type="date" name="expiry" value="" /></td>
+					<td><label for="region">Region: </label></td>
+					<td><input type="text" name="region" value="" /></td>
 				</tr>
 				<tr>
-					<td><label for="expiry">Expiry: </label></td>
-					<td><input type="date" name="expiry" value="" /></td>
+					<td><label for="postcode">Postcode: </label></td>
+					<td><input type="text" name="postcode" value="" /></td>
 				</tr>
 				<tr>
 					<td colspan="2">

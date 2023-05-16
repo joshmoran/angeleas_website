@@ -1,18 +1,24 @@
 <?php
 session_start();
-require_once "src/database.php";
+require "src/database.php";
 
 $error_message  = '';
-if ( !isset( $_GET['id'] )){
-	// if ( isset( $_SESSION['product_id']) ){
-	// 	header("Location: details.php?id=" . $_SESSION['product_id']);
-	// } else {
-	// 	header("Location: products.php");
-	// }
-} else if ( isset( $_GET['id'])){
-	$product = $_GET['id'];
-	setcookie("product_id", $product, time() - 3600);
-} 
+if ( !isset( $_GET['id'] ) || empty( $_GET['id'] ) ) {
+	header("Location: products.php");
+}
+
+if ( empty( $_SESSION['basket_id'] && isset( $_SESSION['customer_id'])) ){
+	do {
+		$no = randomNumber();
+
+		$sqlBasket = "SELECT * FROM orders WHERE customer_id = " . $_SESSION['customer_id'] . " AND order_id = " . $no;
+		$basketResults = mysqli_query($db, $sqlBasket);
+
+		$count = mysqli_num_rows($basketResults);
+	} while ( $count < 1 );
+
+	$_SESSION['basket_id'] = $no;
+}
 
 // if (isset($_POST['addToBasket'])) {
 //    $item = $_GET['id'];
@@ -27,23 +33,54 @@ if ( !isset( $_GET['id'] )){
 //}
 
 // $_SESSION['current_item'] = $_GET['id'];
-
+function randomNumber() {
+    return random_int(0, 9999999999);
+}
 
 if ( !empty($_POST['addToBasket'])) {
 	$item = $_POST['item'];
 	$quantity = $_POST['quantity'];
 	$price = $_POST['cost'];
-
-	$basketID = $_SESSION['basket_id'];
 	$productID = $_GET['id'];
-	$sqlCheckInCart = "SELECT * from cart WHERE product_id = " . 
 
-	$sqlInsertToCart = "INSERT INTO cart VALUES ( '$basketID', '$item', '$quantity', '$total')";
+	$total = (int)$quantity * (float)$price;
+	// Check status is complete
+	$sqlStatus = "SELECT * FROM orders WHERE customer_id = " . $_SESSION['customer_id'] . " AND complete = 0";
+	$status = mysqli_query( $db, $sqlStatus );
+	
+	if ( mysqli_num_rows ( $status ) === 0  || $_SESSION['basket_id'] == '') {
+		do {
+			$basketNo = randomNumber();
 
-	$sqlCartResults = mysqli_query($db, $sqlInsertToCart);
+			$sqlCheckID = "SELECT order_id from orders where order_id = " . $basketNo;
+			$checkID = mysqli_query($db, $sqlCheckID);
+			
+			$count = mysqli_num_rows($checkID);
 
-	header("Location: basket.php");
+		} while ( $count = 0);
+		$_SESSION['basket_id'] = $basketNo;
+		$sqlAddToOrder = "INSERT INTO orders ( order_id, customer_id, complete)  VALUES ( " . $basketNo  . ", " .  $_SESSION['customer_id'] . ", 0 )";
+		$sqlBasket = "update orders set order_id = " . $basketNo . " WHERE complete = 0 AND customer_id = " . $_SESSION['customer_id'];
+		$addOrderQuery = mysqli_query($db, $sqlAddToOrder);
+		$addBasket = mysqli_query($db, $sqlBasket);
+		
+	} else {
+		$basketNo = $_SESSION['basket_id'];
+	} 
 
+	// Check if already in basket - if so, update, if not INSERT
+	$sqlCheckBasket = "SELECT * FROM cart WHERE basket_id = " . $_SESSION['basket_id']. " AND product_id = ". $_GET['id'];
+	$checkBasketResult = mysqli_query($db, $sqlCheckBasket);
+
+	if ( mysqli_num_rows( $checkBasketResult ) > 0 ) { 
+		$sqlInsertToCart = "UPDATE cart SET quantity = " . $quantity . " WHERE basket_id = ". $_SESSION['basket_id']. " AND product_id = ". $_GET['id'];
+	} else {
+		$sqlInsertToCart = "INSERT INTO cart VALUES ( '$basketNo', '$item', '$quantity', '$total')";
+		
+	}
+	//header("Location: basket.php");
+//
+$sqlCartResults = mysqli_query($db, $sqlInsertToCart);	
 	$error_message = 'Add to cart';
 }
 ?>
@@ -88,11 +125,13 @@ if ( !empty($_POST['addToBasket'])) {
 				$string .= "<p>" . $products['description'] . "</p>";
 				$string .= "<input type='number' value='" . $products['price'] . "' name='cost' />";
 				
-				$sqlCheckInCart = "SELECT quantity FROM cart WHERE product_id = " . $product;
+				$sqlCheckInCart = "SELECT quantity FROM cart WHERE basket_id = " . $_SESSION['basket_id'] . " AND product_id = " . $_GET['id'];
 				$sqlCheckInCartQuery = mysqli_query($db, $sqlCheckInCart);
 				if ( mysqli_num_rows($sqlCheckInCartQuery) > 0 ){
-					$inCart = mysqli_fetch_column($sqlCheckInCartQuery);
-					$string .= "<input type='number' value='" . $inCart . "' name='quantity' />";
+					while ( $inCart = mysqli_fetch_array($sqlCheckInCartQuery) ) {
+						$string .= "<input type='number' value='" . $inCart['quantity'] . "' name='quantity' />";
+						break;
+					}
 				} else  {
 					$string .= "<input type='number' placeholder='1' name='quantity' value='1'/>";
 				}

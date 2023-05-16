@@ -23,7 +23,7 @@ $customerID = $_SESSION['customer_id'];
 	<div id="container">
 		<table>
 			<?php
-				$sqlOrders = "SELECT * FROM orders WHERE customer_id = '$customerID' AND complete = true";
+				$sqlOrders = "SELECT order_id, date, status  FROM orders WHERE customer_id = '$customerID' AND complete = true";
 				$results = mysqli_query( $db, $sqlOrders );
 
 				$string = '';
@@ -31,23 +31,23 @@ $customerID = $_SESSION['customer_id'];
 				if (mysqli_num_rows($results) < 1 ) {
 					$string = '<tr><td>Im sorry you have not placed any orders</td></tr>';
 				} else {
-					$string =  "<tr><th>Order Number</th><th>Order Status</th><th>Total</th><th>More Information</tr>";
+					$string =  "<tr>
+									<th>Order Number</th>
+									<th>Order Status</th>
+									<th>Total</th>
+									<th>More Information</th>
+								</tr>";
 
 					while ( $order =  mysqli_fetch_assoc($results)	) {
 						$string .= "<tr>";
 						$string .= "<td>" . $order['order_id'] . "</td>";
 						$string .= "<td>";
-						if ( $order['complete'] == 1 ) {
-							$string .= 'Completed';
-						} else {
-							$string .= 'Pending';
-						}
+						$string .= $order['status']; 
 						$string .= "</td>";
-						$string .= "<td>" . $order['time_ordered'] . "</td>";
+						$string .= "<td>" . $order['date'] . "</td>";
 						$string .= "<td><a href='order_history.php?id=" . $order['order_id'] . "' >Details</a></td>";
 						$string .= "</tr>";
 					}
-					var_dump($order);
 				}
 
 
