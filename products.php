@@ -1,8 +1,10 @@
 <?php
 session_start();
 
-require "src/functions.php";
+//require "src/functions.php";
 require "src/database.php";
+$itemsPerPage = 5;
+
 
 if (!isset($filter)) {
     $filter = 0;
@@ -15,13 +17,18 @@ if (!isset($item) && !isset($quantity)) {
     $quantity = 0;
 }
 
-if ( isset($_SESSION['basket_id'])){
-	$basketID = $_SESSION['basket_id'];
+if (!empty($_GET['error'])) {
+    if ($_GET['error'] == 'customer' || $_GET['error'] == 'basket') {
+        $error_message = 'Please Login to continue';
+    }
 }
 
-if ( isset($_SESSION['customer_id'])){
-	$customerID = $_SESSION['customer_id'];
+if (isset($_SESSION['basket_id'])) {
+    $basketID = $_SESSION['basket_id'];
+}
 
+if (isset($_SESSION['customer_id'])) {
+    $customerID = $_SESSION['customer_id'];
 }
 
 if (!isset($_SESSION['cart'])) {
@@ -31,11 +38,11 @@ if (!isset($_SESSION['cart'])) {
 
 if (!empty($_POST['pages'])) {
     (int)$pageNo = $_POST['page'];
-    echo $pageNo;
+
     if (isset($_SESSION['basket'])) {
         $basket = $_SESSION['basket'];
     } else {
-        $basket = array();	
+        $basket = array();
     }
 }
 if (!empty($_POST['category'])) {
@@ -73,7 +80,7 @@ if (!empty($_POST['category'])) {
 //if (!empty($_POST['item'])) {
 //    echo 'yes, yes';
 //    $totalPages = $_SESSION['totalItems'];
-	
+
 
 //    for( $a = 0; $a < $totalPages; $a++ ){
 //        if (  isset( $_SESSION['item' . $a]) || isset( $_SESSION['quantity' . $a]) || isset( $_SESSION['price' . $a] )) {
@@ -131,7 +138,7 @@ if (!empty($_POST['category'])) {
                     }
                     $result = mysqli_query($db, $sql);
                     $totalPages = mysqli_num_rows($result);
-					$_SESSION['totalItems'] = $totalPages;
+                    $_SESSION['totalItems'] = $totalPages;
                     (int)$noOfPages = ceil($totalPages  / $itemsPerPage) - 1;
                     for ($a = 0; $a <= $noOfPages; $a++) {
                         echo '<button type="submit" form="pages" name="page" value="' . $a . '">Page ' . $a + 1 . '</button>';
@@ -173,7 +180,7 @@ if (!empty($_POST['category'])) {
                     } else {
                         $pageNo = 0;
                     }
-                    $offsetNo = $pageNo * $itemsPerPage; 
+                    $offsetNo = $pageNo * $itemsPerPage;
                     if (!empty($pageNo)) {
                         $sql .= " OFFSET " . (int)$offsetNo;
                     }
@@ -181,40 +188,40 @@ if (!empty($_POST['category'])) {
                     //                    $prod = getProducts($pageNo, $itemsPerPage, $filter);
                     $counter = 1;
                     $string = '';
-                    while ( $products = mysqli_fetch_assoc($result) ) {
-        //(int)$no =  $products['id'];
-						        echo '<li><a href="details.php?id=' . $products['id'] . '"><img src="' . $products['image_src'] . '" alt="' . $products['description'] . '" /></a><h3>' . $products['name'] . '</h3>
+                    while ($products = mysqli_fetch_assoc($result)) {
+                        //(int)$no =  $products['id'];
+                        echo '<li><a href="details.php?id=' . $products['id'] . '"><img src="' . $products['image_src'] . '" alt="' . $products['description'] . '" /></a><h3>' . $products['name'] . '</h3>
 						<input type="text" name="price" value="' . $products['price'] . '" />
 						
 						
 						</li>';
-					}
-					
-						        //$0counter = $counter + 1;
-						     // <input type="number" name="quantity' . $products['id'] . '" value="" />
-							//  <input type="hidden" name="buy" value="' . $products['id'] . '
-						// <input type="submit" name="item" value="Submit" />" />
-                        
-				//        $string .= '<a href="details.php?id=' . $products['id'] . '" class="product">
-				//    <img src="' . $products['image_src'] . '" alt="' . $products['description'] . '" />
+                    }
 
-				//    <input type="number" name="quantity" placeholder="1" />
-				//    <input type="number" name="price" value="' . $products['price'] . '"  placeholder="1" disabled />
-				//    <input type="submit" name="name"  value="add to basket" />
-				//</a>';
-				//        $string = $products['id'];
-	
-//						print_r ( $string );
-					
-                      ?>
-					  </ul>
-                </form>
+                    //$0counter = $counter + 1;
+                    // <input type="number" name="quantity' . $products['id'] . '" value="" />
+                    //  <input type="hidden" name="buy" value="' . $products['id'] . '
+                    // <input type="submit" name="item" value="Submit" />" />
+
+                    //        $string .= '<a href="details.php?id=' . $products['id'] . '" class="product">
+                    //    <img src="' . $products['image_src'] . '" alt="' . $products['description'] . '" />
+
+                    //    <input type="number" name="quantity" placeholder="1" />
+                    //    <input type="number" name="price" value="' . $products['price'] . '"  placeholder="1" disabled />
+                    //    <input type="submit" name="name"  value="add to basket" />
+                    //</a>';
+                    //        $string = $products['id'];
+
+                    //						print_r ( $string );
+
+                    ?>
+                </ul>
+            </form>
         </div>
-		</div>
-        <?php
-        //  include("inc/footer.php");
-        ?>
-        <script src="src/js/js.js"></script>
+    </div>
+    <?php
+    //  include("inc/footer.php");
+    ?>
+    <script src="src/js/js.js"></script>
 </body>
 
 </html>

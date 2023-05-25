@@ -18,8 +18,9 @@ ini_set("display_errors", "on");
 try {
     $db = mysqli_connect("localhost", $dbuser, $dbpass, $dbname);
     //$db = new PDO("mysql:host=localhost;dbname=$dbname", $dbuser, $dbpass);
-   //$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-} catch ( PDOException $e ){
+} catch (PDOException $e) {
     echo "connection failed " . $e->getMessage();
+    unset($db);
 }

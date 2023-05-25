@@ -5,6 +5,10 @@ require "src/database.php";
 
 $basketID = $_SESSION['basket_id'];
 $customerID = $_SESSION['customer_id'];
+
+if ($_SESSION['loggedIn'] == false) {
+	header("Location: login.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -20,40 +24,52 @@ $customerID = $_SESSION['customer_id'];
 	<?php
 	include "inc/header.php";
 	?>
+
 	<div id="container">
+		<div id="return">
+			<a href="account.php"><button>Return to your account</button></a>
+		</div>
 		<table>
 			<?php
-				$sqlOrders = "SELECT order_id, date, status  FROM orders WHERE customer_id = '$customerID' AND complete = true";
-				$results = mysqli_query( $db, $sqlOrders );
+			$sqlOrders = "SELECT order_id, time_ordered, complete  FROM orders WHERE customer_id = '$customerID' AND complete = true ORDER BY time_ordered ASC";
+			$results = mysqli_query($db, $sqlOrders);
 
-				$string = '';
+			$string = '';
 
-				if (mysqli_num_rows($results) < 1 ) {
-					$string = '<tr><td>Im sorry you have not placed any orders</td></tr>';
-				} else {
-					$string =  "<tr>
+			if (mysqli_num_rows($results) < 1) {
+				$string = '<tr><td>Im sorry you have not placed any orders</td></tr>';
+			} else {
+				$string =  "<tr>
 									<th>Order Number</th>
 									<th>Order Status</th>
 									<th>Total</th>
 									<th>More Information</th>
 								</tr>";
 
-					while ( $order =  mysqli_fetch_assoc($results)	) {
-						$string .= "<tr>";
-						$string .= "<td>" . $order['order_id'] . "</td>";
-						$string .= "<td>";
-						$string .= $order['status']; 
-						$string .= "</td>";
-						$string .= "<td>" . $order['date'] . "</td>";
-						$string .= "<td><a href='order_history.php?id=" . $order['order_id'] . "' >Details</a></td>";
-						$string .= "</tr>";
+				while ($order =  mysqli_fetch_assoc($results)) {
+					$string .= "<tr>";
+					$string .= "<td>" . $order['order_id'] . "</td>";
+					$string .= "<td>";
+					if ($order['complete'] == 0) {
+						$string .= "Pending";
+					} else if ($order['complete'] == 1) {
+						$string .= "Confirmed";
+					} else if ($order['complete'] == 2) {
+						$string .= "Shipped";
+					} else if ($order['complete'] == 3) {
+						$string .= "Complete";
 					}
+					$string .= "</td>";
+					$string .= "<td>" . $order['time_ordered'] . "</td>";
+					$string .= "<td><a href='order_history.php?id=" . $order['order_id'] . "' >Details</a></td>";
+					$string .= "</tr>";
 				}
+			}
 
 
-				print_r( $string );
+			print_r($string);
 			?>
-		
+
 		</table>
 	</div>
 	<?php

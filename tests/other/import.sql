@@ -55,6 +55,23 @@ CREATE TABLE cart (
     total_price FLOAT(4) NOT NULL
 )
 
+CREATE TABLE address (
+    customer_id VARCHAR(255) NOT NULL,
+    1_line VARCHAR(255) NOT NULL,
+    2_line VARCHAR(255) NOT NULL,
+    3_line VARCHAR(255),
+    region VARCHAR(255) NOT NULL,
+    postcode VARCHAR(255) NOT NULL
+    
+);
+
+CREATE TABLE purchases (
+    basket_id INT(20) NOT NULL,
+    customer_id VARCHAR(255) NOT NULL,
+    product_id INT(255) NOT NULL,
+    quantity INT(100) NOT NULL
+);
+INSERT INTO purchases ( basket_id, customer_id, product_id, quantity )
 
 CREATE TABLE accounts (
 customer_id INT NOT NULL UNIQUE PRIMARY KEY,

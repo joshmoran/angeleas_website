@@ -4,13 +4,31 @@ session_start();
 
 
 require "src/database.php";
+require "src/random_number.php";
 
-if ( isset( $_GET['del'])){
+if (isset($_GET['del'])) {
 	$sqlDelete = "DELETE FROM cart WHERE product_id = " . $_GET['del'] . " AND basket_id = " . $_SESSION['basket_id'];
-	$queryDel = mysqli_query( $db, $sqlDelete);
+	$queryDel = mysqli_query($db, $sqlDelete);
 }
 
-if ( !empty( $_SESSION['loggedIn'] )){
+if (!isset($_SESSION['basket_id'])) {
+	// Check if outstanding basket none
+	$sql = "SELECT basket_id FROM basket WHERE customer_id = " . $_SESSION['customer_id'] . " AND complete = false";
+	$basketResult = mysqli_query($db, $sql);
+
+	if (mysqli_num_rows($basketResult) === 0) {
+		do {
+			$no = randomNumber();
+
+			$sql = "SELECT basket_id FROM cart WHERE basket_id = " . $no;
+			$result = mysqli_query($db, $sql);
+
+			$_SESSION['basket_id'] = $no;
+		} while (mysqli_num_rows($result) > 0);
+	}
+}
+
+if (isset($_SESSION['loggedIn'])) {
 	(int)$basketID = $_SESSION['basket_id'];
 } else {
 	header("Location: index.php");
@@ -30,17 +48,19 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 
 <body>
 	<?php
-		include "inc/header.php";
+	include "inc/header.php";
 	?>
 
 	<div id="container">
 		<table>
 			<form action="basket.php" method="post" id="basket">
-			<?php
+				<?php
 				require("src/database.php");
+
+				echo $_SESSION['basket_id'];
 				$query = mysqli_query($db, $sqlOrder);
 
-				if ( mysqli_num_rows( $query ) < 1 ) {
+				if (mysqli_num_rows($query) < 1) {
 					$string = "<tr>";
 					$string .= "<th>Please add something to the basket</th>";
 
@@ -55,13 +75,13 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 					echo "</tr>";
 
 					$total = 0;
-					
+
 					$customerID = $_SESSION['customer_id'];
 					$basketID = $_SESSION['basket_id'];
 
 					$sqlBasket = "SELECT * FROM cart WHERE basket_id = $basketID";
 					$basketQuery = mysqli_query($db, $sqlOrder);
-			
+
 					// while ( $products = mysqli_fetch_assoc($basketQuery) ) {
 					// 	echo "<tr>";
 					// 	echo "<td><input type='submit' name='delete' /> value='" . $products['id'] . "'><img src='src/img/ui/delete-f.svg' /></a></td>";
@@ -71,8 +91,8 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 					// 	echo "<td>" . $products['product_name'] . "</td>";
 					// 	echo "</tr>";
 					// }
-						
-					while ( $row = mysqli_fetch_assoc($query) ){
+
+					while ($row = mysqli_fetch_assoc($query)) {
 						(float)$total += (float)$row['price'] * (int)$row['quantity'];
 						echo "<tr>";
 						echo "<td><a href='basket.php?del=" . $row['id'] . "'><img src='src/img/ui/delete-f.svg' value='" . $row['id'] . "' /></a></td>";
@@ -98,16 +118,15 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 					echo "<td></td>";
 					echo "<td><button><a href='purchase.php'>Checkout</a></button></td>";
 					echo "</tr>";
-
 				}
-			?>
+				?>
 			</form>
 		</table>
 	</div>
-	
-<?php include "inc/footer.php"; ?>
 
-	<script src="src/js/jquery.js">	</script>
+	<?php include "inc/footer.php"; ?>
+
+	<script src="src/js/jquery.js"> </script>
 	<script>
 		function deleteRow(e) {
 			//var posting = $.post('basket.php', { id: e.target.parentElement.value }, () => {
@@ -130,16 +149,20 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 			var id = e.target.parentElement.value;
 			formData.append('id', id);
 
-			fetch(url, { method: 'POST', body: formData })
-				.then(function (response) {
+			fetch(url, {
+					method: 'POST',
+					body: formData
+				})
+				.then(function(response) {
 					return response.text();
 				})
-				.then(function (body) {
+				.then(function(body) {
 					console.log(body);
 				});
-		
 
-		}	
+
+		}
 	</script>
 </body>
+
 </html>
