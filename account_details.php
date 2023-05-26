@@ -27,14 +27,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// Credit Card Numbers
 	require "src/database.php";
 
-	function parseInformationCustomer() {
+	$sqlCustomer = "UPDATE customers SET ";
+	$sqlAddress = "UPDATE address SET ";
+	$sqlCreditCard = "UPDATE credit_cards SET ";
 
-	}
+	if ( $sqlCustomer != "UPDATE customers SET ") {
+		$sqlCustomer .= ", ";
+	} else if ( $sqlAddress != "UPDATE address SET " ){
+		$sqlAddress 
+	} else if ( $sqlCreditCard != "UPDATE credit_cards SET " ){
+
+	} 
 
 	if ( isset( $_POST['makeChangesCustomer'])) {
 		// Check if variables are empty, if empty and not required, move on
 		if ( ( $_POST['first_name'] ) ){
-			$firstName = mysqli_escape_string($db, $_POST['first_name']);
+			$sqlCustomer .= ""
 		} else {
 			$errors[] = "First Name is a required field";
 		}
