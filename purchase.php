@@ -124,13 +124,10 @@ if (!empty($_POST['purchase'])) {
     } else {
         $card = mysqli_real_escape_string($db, $_POST['card']);
         $address = mysqli_real_escape_string($db, $_POST['address']);
-        echo "correct";
     }
-    echo "purchase";
 
     // If there are no errors in the required fields, submit and insert/remove selected data
     if (empty($errors)) {
-        echo "purchase";
         $sqlCart = "SELECT * FROM cart WHERE basket_id = '$basketID'";
         $cartQuery =  mysqli_query($db, $sqlCart);
 

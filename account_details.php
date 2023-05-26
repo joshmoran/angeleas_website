@@ -13,11 +13,30 @@ require "src/functions.php";
 
 // add card to account
 // add address to account 
-
+$errors = array();
 if ($_SESSION['loggedIn'] == false) {
 	header("Location: login.php");
 }
 
+global $sqlCustomer;
+
+function checkSql($toParse)
+{
+	if ($toParse == 'customer') {
+		
+		if ($sqlCustomer != "UPDATE customers SET ") {
+			$sqlCustomer .= ", ";
+		}
+	} else if ($toParse == 'address') {
+		if ($sqlAddress != "UPDATE address SET ") {
+			$sqlAddress .= ', ';
+		}
+	} else if ($toParse == 'credit_card') {
+		if ($sqlCreditCard != "UPDATE credit_cards SET ") {
+			$sqlCreditCard = ', ';
+		}
+	}
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -27,35 +46,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// Credit Card Numbers
 	require "src/database.php";
 
-	$sqlCustomer = "UPDATE customers SET ";
+
 	$sqlAddress = "UPDATE address SET ";
 	$sqlCreditCard = "UPDATE credit_cards SET ";
 
-	function checkSql($toParse)
-	{
-		if ($toParse == 'customer') {
-
-			if ($sqlCustomer != "UPDATE customers SET ") {
-				$sqlCustomer .= ", ";
-			}
-		} else if ($toParse == 'address') {
-			if ($sqlAddress != "UPDATE address SET ") {
-				$sqlAddress .= ', ';
-			}
-		} else if ($toParse == 'credit_card') {
-			if ($sqlCreditCard != "UPDATE credit_cards SET ") {
-				$sqlCreditCard = ', ';
-			}
-		}
-	}
 
 	if (isset($_POST['makeChangesCustomer'])) {
+		$sqlCustomer = "UPDATE customers SET ";
 		// Check if variables are empty, if empty and not required, move on
 		//	- first_name
-		//	- first_name
-		//	- first_name
-		//	- first_name
-		//	- first_name
+		//	- last_name
+		//	- email
+		//	- home
+		//	- mobile
 		if (($_POST['first_name'])) {
 			checkSql('customer');
 			$sqlCustomer .= ' first_name = ' . mysqli_real_escape_string($db, $_POST['first_name']) . ' ';
@@ -70,27 +73,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$errors[] = "last Name is a required field";
 		}
 
-		if (empty($_POST['last_name'])) {
+		if (empty($_POST['email'])) {
 			checkSql('customer');
-			$sqlCustomer .= ' last_name = "' . mysqli_escape_string($db, $_POST['last_name']) . '" ';
+			$sqlCustomer .= ' email = "' . mysqli_escape_string($db, $_POST['email']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
 
-		if (empty($_POST['last_name'])) {
+		if (empty($_POST['mobile'])) {
 			checkSql('customer');
-			$sqlCustomer .= ' last_name = "' . mysqli_escape_string($db, $_POST['last_name']) . '" ';
+			$sqlCustomer .= ' mobile = "' . mysqli_escape_string($db, $_POST['mobile']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
 
-		if (empty($_POST['last_name'])) {
+		if (empty($_POST['home'])) {
 			checkSql('customer');
-			$sqlCustomer .= ' last_name = "' . mysqli_escape_string($db, $_POST['last_name']) . '" ';
+			$sqlCustomer .= ' home = "' . mysqli_escape_string($db, $_POST['home']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
-	} else if (isset($_POST['makeChangesAddress'])) {
+
+		echo $sqlCustomer;
+	}
+
+	if (isset($_POST['makeChangesAddress'])) {
 	} else if (isset($_POST['makeChangesCreditCard'])) {
 	} else {
 		$errors[] = 'Could not processing your request. Please try again. If this happens again, please contact us.';
@@ -186,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><input type="text" name="home" /></td>
 				</tr>
 				<tr>
-					<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
+					<td colspan="2"><button type="submit" name="makeChangesCustomer" value="Submit">Submit</button></td>
 				</tr>
 				<!--
 					CHANGE ADDRESS DETAILS
@@ -220,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><input type="text" name="region" /></td>
 				</tr>
 				<tr>
-					<td><label for="addressPostcode">Postcode</label></td>
+					<td><label for="postcode">Postcode</label></td>
 					<td><input type="text" name="postcode"></td>
 				</tr>
 				<tr>
