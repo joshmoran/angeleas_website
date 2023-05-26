@@ -22,10 +22,12 @@ global $sqlCustomer;
 
 function checkSql($toParse)
 {
+	if (empty($sqlCustomer) && $toParse == 'customer') {
+		$sqlCustomers = "UPDATE customers SET ";
+	}
 	if ($toParse == 'customer') {
-		
-		if ($sqlCustomer != "UPDATE customers SET ") {
-			$sqlCustomer .= ", ";
+		if (isset($sqlCustomer) && $sqlCustomer == 'UPDATE customers SET ') {
+			$sqlCustomers .= ', ';
 		}
 	} else if ($toParse == 'address') {
 		if ($sqlAddress != "UPDATE address SET ") {
@@ -52,42 +54,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 	if (isset($_POST['makeChangesCustomer'])) {
-		$sqlCustomer = "UPDATE customers SET ";
+		// $sqlCustomer = "UPDATE customers SET ";
 		// Check if variables are empty, if empty and not required, move on
 		//	- first_name
 		//	- last_name
 		//	- email
 		//	- home
 		//	- mobile
-		if (($_POST['first_name'])) {
+		if (isset($_POST['firstName'])) {
 			checkSql('customer');
-			$sqlCustomer .= ' first_name = ' . mysqli_real_escape_string($db, $_POST['first_name']) . ' ';
+			$sqlCustomer .= ' first_name = ' . mysqli_real_escape_string($db, $_POST['firstName']) . ' ';
 		} else {
 			$errors[] = "First Name is a required field";
 		}
 
-		if (empty($_POST['last_name'])) {
+		if (!empty($_POST['lastName'])) {
 			checkSql('customer');
-			$sqlCustomer .= ' last_name = "' . mysqli_escape_string($db, $_POST['last_name']) . '" ';
+			$sqlCustomer .= ' last_name = "' . mysqli_escape_string($db, $_POST['lastName']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
 
-		if (empty($_POST['email'])) {
+		if (isset($_POST['email'])) {
 			checkSql('customer');
 			$sqlCustomer .= ' email = "' . mysqli_escape_string($db, $_POST['email']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
 
-		if (empty($_POST['mobile'])) {
+		if (isset($_POST['mobile'])) {
 			checkSql('customer');
 			$sqlCustomer .= ' mobile = "' . mysqli_escape_string($db, $_POST['mobile']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
 
-		if (empty($_POST['home'])) {
+		if (isset($_POST['home'])) {
 			checkSql('customer');
 			$sqlCustomer .= ' home = "' . mysqli_escape_string($db, $_POST['home']) . '" ';
 		} else {
