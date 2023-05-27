@@ -34,20 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	function checkSql(string $toParse)
 	{
 		echo '<br>' . $toParse;
-		if (true) {
+		if ($toParse == 'customer') {
 			echo 'parse customer';
-			if (isset($sqlCustomer)) {
+			if (!isset($sqlCustomer)) {
 				echo 'option one';
-				$sqlCustomer = "UPDATE customers SET ";
-			} else if (!empty($sqlCustomer) && $sqlCustomer != 'UPDATE customers SET ') {
+				return 'UPDATE customer SET ';
+			} else if ($sqlCustomer != 'UPDATE customer SET ') {
 				echo 'option two';
-				$sqlCustomer .= ', ';
+				return ', ';
 			} else {
 				echo 'option three';
 			}
 		}
 
-		$sqlCustomer = 'BLANK';
 		//else if ($toParse == 'address') {
 		// 	if ($sqlAddress != "UPDATE address SET ") {
 		// 		$sqlAddress .= ', ';
@@ -64,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 	if (isset($_POST['makeChangesCustomer'])) {
+		$sqlCustomer;
 		// $sqlCustomer = "UPDATE customers SET ";
 		// Check if variables are empty, if empty and not required, move on
 		//	- first_name
@@ -72,15 +72,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		//	- home
 		//	- mobile
 		if (!empty($_POST['firstName'])) {
-			checkSql('customer');
-			$sqlCustomer .= ' first_name = ' . mysqli_real_escape_string($db, $_POST['firstName']) . ' ';
+			$comma = checkSql('customer');
+
+			$sqlCustomer .= $comma . ' first_name = ' . mysqli_real_escape_string($db, $_POST['firstName']) . ' ';
 		} else {
 			$errors[] = "First Name is a required field";
 		}
 
 		if (!empty($_POST['lastName'])) {
-			checkSql('customer');
-			$sqlCustomer .= ' last_name = "' . mysqli_escape_string($db, $_POST['lastName']) . '" ';
+			$comma = checkSql('customer');
+			$sqlCustomer .= $comma . ' last_name = "' . mysqli_escape_string($db, $_POST['lastName']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
