@@ -93,16 +93,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 		$sqlCustomer .= " WHERE customer_id = " . $_SESSION['customer_id'];
 
-		if (count)
+		if (count($errors)) {
 			if (mysqli_query($db, $sqlCustomer)) {
 				$errors[] = 'Successfully updated your customer details';
 			} else {
 				$errors[] = 'Something went wrong. Please try again later';
 			}
+		}
 	}
 
 	if (isset($_POST['makeChangesAddress'])) {
-	} else if (isset($_POST['makeChangesCreditCard'])) {
+	} 
+	
+	if (isset($_POST['makeChangesCreditCard'])) {
 	} else {
 		$errors[] = 'Could not processing your request. Please try again. If this happens again, please contact us.';
 	}

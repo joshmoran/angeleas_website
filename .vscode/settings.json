@@ -11,5 +11,8 @@
     "editor.inlineSuggest.suppressSuggestions": true,
     "editor.snippetSuggestions": "top",
     "editor.suggest.insertMode": "replace",
-    "editor.suggest.preview": true
+    "editor.suggest.preview": true,
+    "cSpell.enableFiletypes": [
+        "perl"
+    ]
 }
