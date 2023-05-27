@@ -18,37 +18,6 @@ if ($_SESSION['loggedIn'] == false) {
 	header("Location: login.php");
 }
 
-$sqlCustomer = '';
-function checkSql(string $toParse)
-{
-	echo '<br>' . $toParse;
-	if ($toParse == 'customer') {
-		echo 'parse customer';
-		if (isset($sqlCustomer)) {
-			$sqlCustomer = '';
-		}
-		if (str_contains($sqlCustomer, 'UPDATE customer SET ')) {
-			echo 'option two';
-			return ', ';
-		} else if (empty($sqlCustomer)) {
-			echo 'option one';
-			return 'UPDATE customer SET ';
-		} else {
-			echo 'option three';
-		}
-	}
-
-	//else if ($toParse == 'address') {
-	// 	if ($sqlAddress != "UPDATE address SET ") {
-	// 		$sqlAddress .= ', ';
-	// 	}
-	// } else if ($toParse == 'credit_card') {
-	// 	if ($sqlCreditCard != "UPDATE credit_cards SET ") {
-	// 		$sqlCreditCard = ', ';
-	// 	}
-	// }
-}
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	// Three Sections of Details 
@@ -58,6 +27,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require "src/database.php";
 
 
+	function checkSql(string $statement, string $toParse)
+	{
+		echo '<br>' . $toParse;
+		if ($toParse == 'customer') {
+			echo 'parse customer';
+
+			if ($statement == null) {
+				echo 'option one';
+				return 'UPDATE customer SET ';
+			} else {
+				echo 'option two';
+				return ', ';
+			}
+		}
+
+		//else if ($toParse == 'address') {
+		// 	if ($sqlAddress != "UPDATE address SET ") {
+		// 		$sqlAddress .= ', ';
+		// 	}
+		// } else if ($toParse == 'credit_card') {
+		// 	if ($sqlCreditCard != "UPDATE credit_cards SET ") {
+		// 		$sqlCreditCard = ', ';
+		// 	}
+		// }
+	}
 
 	$sqlAddress = "UPDATE address SET ";
 	$sqlCreditCard = "UPDATE credit_cards SET ";
@@ -72,8 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		//	- email
 		//	- home
 		//	- mobile
+
+		if (isset($sqlCustomer)) {
+			$sqlCustomer = '';
+		}
 		if (!empty($_POST['firstName'])) {
-			$comma = checkSql('customer');
+			$comma = checkSql($sqlCustomer, 'customer');
 
 			$sqlCustomer .= $comma . ' first_name = ' . mysqli_real_escape_string($db, $_POST['firstName']) . ' ';
 		} else {
@@ -81,29 +79,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		if (!empty($_POST['lastName'])) {
-			$comma = checkSql('customer');
+			$comma = checkSql($sqlCustomer, 'customer');
 			$sqlCustomer .= $comma . ' last_name = "' . mysqli_escape_string($db, $_POST['lastName']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
 
 		if (!empty($_POST['email'])) {
-			checkSql('customer');
-			$sqlCustomer .= ' email = "' . mysqli_escape_string($db, $_POST['email']) . '" ';
+			$comma = checkSql($sqlCustomer, 'customer');
+			$sqlCustomer .= $comma . ' email = "' . mysqli_escape_string($db, $_POST['email']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
 
 		if (!empty($_POST['mobile'])) {
-			checkSql('customer');
-			$sqlCustomer .= ' mobile = "' . mysqli_escape_string($db, $_POST['mobile']) . '" ';
+			$comma = checkSql($sqlCustomer, 'customer');
+			$sqlCustomer .= $comma . ' mobile = "' . mysqli_escape_string($db, $_POST['mobile']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
 
 		if (!empty($_POST['home'])) {
-			checkSql('customer');
-			$sqlCustomer .= ' home = "' . mysqli_escape_string($db, $_POST['home']) . '" ';
+			$comma = checkSql($sqlCustomer, 'customer');
+			$sqlCustomer .= $comma . ' home = "' . mysqli_escape_string($db, $_POST['home']) . '" ';
 		} else {
 			$errors[] = "last Name is a required field";
 		}
