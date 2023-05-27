@@ -18,9 +18,36 @@ if ($_SESSION['loggedIn'] == false) {
 	header("Location: login.php");
 }
 
-global $sqlCustomer;
+$sqlCustomer = '';
+function checkSql(string $toParse)
+{
+	echo '<br>' . $toParse;
+	if ($toParse == 'customer') {
+		echo 'parse customer';
+		if (isset($sqlCustomer)) {
+			$sqlCustomer = '';
+		}
+		if (str_contains($sqlCustomer, 'UPDATE customer SET ')) {
+			echo 'option two';
+			return ', ';
+		} else if (empty($sqlCustomer)) {
+			echo 'option one';
+			return 'UPDATE customer SET ';
+		} else {
+			echo 'option three';
+		}
+	}
 
-
+	//else if ($toParse == 'address') {
+	// 	if ($sqlAddress != "UPDATE address SET ") {
+	// 		$sqlAddress .= ', ';
+	// 	}
+	// } else if ($toParse == 'credit_card') {
+	// 	if ($sqlCreditCard != "UPDATE credit_cards SET ") {
+	// 		$sqlCreditCard = ', ';
+	// 	}
+	// }
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -30,40 +57,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// Credit Card Numbers
 	require "src/database.php";
 
-	$sqlCustomer;
-	function checkSql(string $toParse)
-	{
-		echo '<br>' . $toParse;
-		if ($toParse == 'customer') {
-			echo 'parse customer';
-			if (!isset($sqlCustomer)) {
-				echo 'option one';
-				return 'UPDATE customer SET ';
-			} else if ($sqlCustomer != 'UPDATE customer SET ') {
-				echo 'option two';
-				return ', ';
-			} else {
-				echo 'option three';
-			}
-		}
 
-		//else if ($toParse == 'address') {
-		// 	if ($sqlAddress != "UPDATE address SET ") {
-		// 		$sqlAddress .= ', ';
-		// 	}
-		// } else if ($toParse == 'credit_card') {
-		// 	if ($sqlCreditCard != "UPDATE credit_cards SET ") {
-		// 		$sqlCreditCard = ', ';
-		// 	}
-		// }
-	}
 
 	$sqlAddress = "UPDATE address SET ";
 	$sqlCreditCard = "UPDATE credit_cards SET ";
 
 
 	if (isset($_POST['makeChangesCustomer'])) {
-		$sqlCustomer;
+
 		// $sqlCustomer = "UPDATE customers SET ";
 		// Check if variables are empty, if empty and not required, move on
 		//	- first_name
