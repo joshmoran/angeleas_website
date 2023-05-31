@@ -34,7 +34,14 @@ if ($_SESSION['admin'] == false) {
             $sql = "SELECT * FROM orders INNER JOIN customers ON orders.customer_id=customers.customer_id WHERE complete = 1";
             $sqlQuery = mysqli_query($db, $sql);
             foreach (mysqli_fetch_assoc($sqlQuery) as $user) {
-                echo 
+                echo '<tr';
+                echo '<td>' . $user['order_id'] . '</td';
+                echo '<td>' . $user['time_ordered'] . '</td>';
+                echo '<td>' . $user['status'] . '</td>';
+                $customerID = $_SESSION['customer_id'];
+                $sqlAddress = "SELECT * FROM address WHERE customer_id = $customerID";
+                $sqlAddress = mysqli_query($db, $sqlAddress);
+                echo '</tr>';
             }
             ?>
         </table>
