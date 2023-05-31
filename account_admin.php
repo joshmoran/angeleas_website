@@ -31,20 +31,21 @@ if ($_SESSION['admin'] == false) {
             </tr>
             <?php
             require "src/database.php";
-            $sql = "SELECT * FROM orders RIGHT JOIN customers ON orders.customer_id=customers.customer_id WHERE complete = 1";
+            $sql = "SELECT * FROM orders LEFT JOIN customers ON orders.customer_id=customers.customer_id WHERE complete = 1";
             $sqlQuery = mysqli_query($db, $sql);
-            foreach (mysqli_fetch_assoc($sqlQuery) as $user) {
+            while ($user = $sqlQuery->fetch_assoc()) {
                 echo '<tr';
-                //echo '<td>' . $user['order_id'] . '</td';
+                var_dump($user['addres']);
+                echo '<td>' . $user['order_id'] . '</td';
                 echo '<td>' . $user['time_ordered'] . '</td>';
                 echo '<td>' . $user['status'] . '</td>';
                 // Customer ID
                 $customerID = $_SESSION['customer_id'];
                 // Customer Order Details
-                $sqlItems = "SELECT quantity, product_id FROM purchases RIGHT JOIN products ON purchases.product_id=products.product_id WHERE purchases.customer_id " . $customerID;
+                $sqlItems = "SELECT purchases.quantity, purchases.product_id, products.name FROM purchases INNER JOIN products ON purchases.product_id=products.id WHERE purchases.customer_id = " . $customerID;
                 $sqlQueryItems = mysqli_query($db, $sqlItems);
                 echo '<td>';
-                foreach (mysqli_fetch_assoc($sqlQueryItems) as $item) {
+                while ($user = mysqli_fetch_assoc($sqlQueryItems)) {
 
                     echo $item['name'] . ' X ' . $item['quantity'] . '<br>';
                 }
