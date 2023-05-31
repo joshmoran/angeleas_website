@@ -3,7 +3,23 @@ session_start();
 if ($_SESSION['admin'] == false) {
     header("Location:login.php");
 }
-// dispatch the view function
+// dispatch 
+// accept 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['accept']) && isset($_POST['customer_id']) && isset($_POST['basket_id'])) {
+        $customerID = mysqli_escape_string($db, $_POST['customer_id']);
+        $basketID = mysqli_escape_string($db, $_POST['basket_id']);
+
+        $sql = "UPDATE orders SET status = 'order accepted, awaiting dispatch' WHERE customer_id = $customerID AND basket_id = $basketID";
+
+        if ( mysqli_query($db, $sql)) {
+            $errors[] = ''
+        }
+    }
+
+    if (isset($_POST['accept']) && isset($_POST['customer_id']) && isset($_POST['basket_id'])) {
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -81,13 +97,13 @@ if ($_SESSION['admin'] == false) {
                     // 'order accepted, awaiting dispatch'
                     // 'order dispatched'
                     if ($user['status'] == 'waiting for to be accepted') {
-                        $string .= '<td><a href="account_admin.php?accept=true&id=' . $user['order_id'] . '"><button>Accept</button></a></td>';
+                        $string .= '<td><a href="account_admin.php?accept=true&customer_id=' . $user['order_id'] . '&basket_id=' . $user['order_id'] . '"><button>Accept</button></a></td>';
                     } else {
                         $string .= '<td></td>';
                     }
 
                     if ($user['status'] != 'order dispatched') {
-                        $string .= '<td><a href="account_admin.php?dispatch=true&id=' . $user['order_id'] . '"><button>Dispatched</button></a></td>';
+                        $string .= '<td><a href="account_admin.php?dispatch=true&customer_id=' . $user['order_id'] . '&basket_id=' . $user['order_id'] . '"><button>Dispatched</button></a></td>';
                     } else {
                         $string .= '<td></td>';
                     }
