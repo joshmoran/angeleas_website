@@ -22,43 +22,52 @@ if ($_SESSION['admin'] == false) {
     ?>
     <div id="container">
         <table>
-            <tr>
+            <tead>
                 <th>Order Number</th>
                 <th>Order Date</th>
                 <th>Order Status</th>
                 <th>Order Details</th>
                 <th>Postage Details</th>
-            </tr>
-            <?php
-            require "src/database.php";
-            $sql = "SELECT * FROM orders LEFT JOIN customers ON orders.customer_id=customers.customer_id WHERE complete = 1";
-            $sqlQuery = mysqli_query($db, $sql);
-            while ($user = $sqlQuery->fetch_assoc()) {
-                echo '<tr';
-                var_dump($user['addres']);
-                echo '<td>' . $user['order_id'] . '</td';
-                echo '<td>' . $user['time_ordered'] . '</td>';
-                echo '<td>' . $user['status'] . '</td>';
-                // Customer ID
-                $customerID = $_SESSION['customer_id'];
-                // Customer Order Details
-                $sqlItems = "SELECT purchases.quantity, purchases.product_id, products.name FROM purchases INNER JOIN products ON purchases.product_id=products.id WHERE purchases.customer_id = " . $customerID;
-                $sqlQueryItems = mysqli_query($db, $sqlItems);
-                echo '<td>';
-                while ($user = mysqli_fetch_assoc($sqlQueryItems)) {
+                </thead>
+                <tbody>
+                    <?php
+                    require "src/database.php";
+                    $sql = "SELECT * FROM orders LEFT JOIN customers ON orders.customer_id=customers.customer_id WHERE complete = 1";
+                    $sqlQuery = mysqli_query($db, $sql);
+                    $string = '';
+                    while ($user = $sqlQuery->fetch_assoc()) {
 
-                    echo $item['name'] . ' X ' . $item['quantity'] . '<br>';
-                }
-                echo '</td>';
-                // Customer Address
-                $sqlAddress = "SELECT * FROM address WHERE customer_id = $customerID";
-                $sqlQueryAddress = mysqli_query($db, $sqlAddress);
-                foreach (mysqli_fetch_assoc($sqlQueryAddress) as $address) {
-                    echo '<td>' . $address['1_line'] . '<br>' . $address['2_line'] . '<br>' . $address['3_line'] . '<br>' . $address['region'] . '<br>' . $address['postcode'] . '</td>';
-                }
-                echo '</tr>';
-            }
-            ?>
+
+                        $string .= '<tr';
+
+
+                        $string .=  '<td>' . $user['order_id'] . '</td';
+                        $string .=  '<td>' . $user['time_ordered'] . '</td>';
+                        $string .=  '<td>' . $user['status'] . '</td>';
+                        // Customer ID
+                        $customerID = $_SESSION['customer_id'];
+                        // Customer Order Details
+                        $sqlItems = "SELECT purchases.quantity, purchases.product_id, products.name FROM purchases INNER JOIN products ON purchases.product_id=products.id WHERE purchases.customer_id = " . $customerID;
+                        $sqlQueryItems = mysqli_query($db, $sqlItems);
+                        $string .=  '<td>';
+                        while ($item = $sqlQueryItems->fetch_assoc()) {
+                            $string .=  $item['name'] . ' X ' . $item['quantity'] . '<br>';
+                        }
+                        $string .=  '</td>';
+                        // Customer Address
+                        $address = explode(",", $user['addres']);
+                        $string .=  '<td>' . $user['name'] . '<br>' . trim($address[0]) . '<br>' . trim($address[1]) . '<br>' . trim($address[2]) . '<br>' . trim($address[3]) . '<br>' . trim($address[4]) . '</td>';
+                        // $sqlAddress = "SELECT * FROM address WHERE customer_id = $customerID";
+                        // $sqlQueryAddress = mysqli_query($db, $sqlAddress);
+                        // foreach (mysqli_fetch_assoc($sqlQueryAddress) as $address) {
+                        //     
+                        // }
+                        $string .=  '</tr>';
+                    }
+
+                    echo $string;
+                    ?>
+                <tbody>
         </table>
     </div>
     <?php
