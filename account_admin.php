@@ -31,16 +31,30 @@ if ($_SESSION['admin'] == false) {
             </tr>
             <?php
             require "src/database.php";
-            $sql = "SELECT * FROM orders INNER JOIN customers ON orders.customer_id=customers.customer_id WHERE complete = 1";
+            $sql = "SELECT * FROM orders RIGHT JOIN customers ON orders.customer_id=customers.customer_id WHERE complete = 1";
             $sqlQuery = mysqli_query($db, $sql);
             foreach (mysqli_fetch_assoc($sqlQuery) as $user) {
                 echo '<tr';
-                echo '<td>' . $user['order_id'] . '</td';
+                //echo '<td>' . $user['order_id'] . '</td';
                 echo '<td>' . $user['time_ordered'] . '</td>';
                 echo '<td>' . $user['status'] . '</td>';
+                // Customer ID
                 $customerID = $_SESSION['customer_id'];
+                // Customer Order Details
+                $sqlItems = "SELECT quantity, product_id FROM purchases RIGHT JOIN products ON purchases.product_id=products.product_id WHERE purchases.customer_id " . $customerID;
+                $sqlQueryItems = mysqli_query($db, $sqlItems);
+                echo '<td>';
+                foreach (mysqli_fetch_assoc($sqlQueryItems) as $item) {
+
+                    echo $item['name'] . ' X ' . $item['quantity'] . '<br>';
+                }
+                echo '</td>';
+                // Customer Address
                 $sqlAddress = "SELECT * FROM address WHERE customer_id = $customerID";
-                $sqlAddress = mysqli_query($db, $sqlAddress);
+                $sqlQueryAddress = mysqli_query($db, $sqlAddress);
+                foreach (mysqli_fetch_assoc($sqlQueryAddress) as $address) {
+                    echo '<td>' . $address['1_line'] . '<br>' . $address['2_line'] . '<br>' . $address['3_line'] . '<br>' . $address['region'] . '<br>' . $address['postcode'] . '</td>';
+                }
                 echo '</tr>';
             }
             ?>
