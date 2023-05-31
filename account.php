@@ -26,6 +26,11 @@ if ($_SESSION['loggedIn'] == false) {
             <tr>
                 <td><a href="account_details.php">Change Account Details</a></td>
                 <td><a href="account_orders.php">Your Order</a></td>
+                <?php
+                if ($_SESSION['admin']) {
+                    echo '<td><a href="account_admin.php">View pending orders</a></td>';
+                }
+                ?>
             </tr>
         </table>
     </div>

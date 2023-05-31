@@ -131,8 +131,7 @@ if (isset($_POST['register'])) {
 	$_SESSION['customer_id'] = $customerNo;
 	$_SESSION['basket_id'] = $basketNo;
 	$_SESSION['loggedIn'] = true;
-	$_SESSION['username'] = $username;
-
+	$_SESSION['admin'] = false;
 	header("Location: account.php");
 	die();
 }
