@@ -3,6 +3,7 @@ session_start();
 if ($_SESSION['admin'] == false) {
     header("Location:login.php");
 }
+// dispatch the view function
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,7 +39,7 @@ if ($_SESSION['admin'] == false) {
         ?><div id="container">
         <table><?php
                 require "src/database.php";
-                $sql = "SELECT * FROM orders LEFT JOIN customers ON orders.customer_id=customers.customer_id WHERE complete = 1";
+                $sql = "SELECT * FROM orders LEFT JOIN customers ON orders.customer_id=customers.customer_id WHERE complete = 1 AND NOT status = 'order dispatched'";
                 $sqlQuery = mysqli_query($db, $sql);
                 $string = '<thead><th>Order Number</th>
                 <th>Order Date</th>
@@ -75,9 +76,21 @@ if ($_SESSION['admin'] == false) {
                     // foreach (mysqli_fetch_assoc($sqlQueryAddress) as $address) {
                     //     
                     // }
-                    $string .= '<td><a href="account_admin.php?accept=true&id=' . $user['order_id'] . '"><button>Accept</button></a></td>';
+                    // order status breakdown
+                    // 'waiting for to be accepted'
+                    // 'order accepted, awaiting dispatch'
+                    // 'order dispatched'
+                    if ($user['status'] == 'waiting for to be accepted') {
+                        $string .= '<td><a href="account_admin.php?accept=true&id=' . $user['order_id'] . '"><button>Accept</button></a></td>';
+                    } else {
+                        $string .= '<td></td>';
+                    }
 
-                    $string .= '<td><a href="account_admin.php?accept=true&id=' . $user['order_id'] . '"><button>Accept</button></a></td>';
+                    if ($user['status'] != 'order dispatched') {
+                        $string .= '<td><a href="account_admin.php?dispatch=true&id=' . $user['order_id'] . '"><button>Dispatched</button></a></td>';
+                    } else {
+                        $string .= '<td></td>';
+                    }
                     $string .=  '</tr>';
                 }
 
