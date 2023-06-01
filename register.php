@@ -7,6 +7,11 @@ require 'src/random_number.php';
 if (isset($_POST['register'])) {
 	require "src/database.php";
 
+	function checkemail($str)
+	{
+		return (preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $str)) ? FALSE : TRUE;
+	}
+
 	// required
 	// FIRST NAME 
 	// LAST NAME 
@@ -35,7 +40,7 @@ if (isset($_POST['register'])) {
 
 	// EMAIL - CHECK IF VALID EMAIL ADDRESS
 	$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
-	if (filter_var($email, FILTER_VALIDATE_EMAIL) == FALSE || strlen($email) == '' || $email == null) {
+	if (checkemail($email) == false || strlen($email) == '' || $email == null) {
 		$errorEmail = 'Email is required and must be a valid email address.';
 	}
 
@@ -71,20 +76,19 @@ if (isset($_POST['register'])) {
 
 		$sqlCheckID = "SELECT customer_id from customers where customer_id = " . $customerNo;
 		$checkID = mysqli_query($db, $sqlCheckID);
-		$_SESSION['customer_id'] = $customerNo;
-	} while (mysqli_num_rows($checkID) == 0);
+	} while (mysqli_num_rows($checkID) > 0);
 
-	if (strlen($address_1st) >= 1 || $address_1st != null || $address_1st != '' || strlen($postcode) >= 1 || $postcode != null || $postcode != '' || strlen($region) >= 1 || $region != null || $region != '') {
-		$addressIm = $address_1st . ', ' . $address_2nd . ', ' . $address_3rd . ', ' . $region . ',' . $postcode;
-		$sqlCustomer = "INSERT INTO customers VALUES ('$customerNo', '$firstName', '$lastName', '$email', '$addressIm', '$home', '$mobile')";
+	// if (strlen($address_1st) >= 1 || $address_1st != null || $address_1st != '' || strlen($postcode) >= 1 || $postcode != null || $postcode != '' || strlen($region) >= 1 || $region != null || $region != '') {
+	$addressIm = $address_1st . ', ' . $address_2nd . ', ' . $address_3rd . ', ' . $region . ',' . $postcode;
+	$sqlCustomer = "INSERT INTO customers VALUES ('$customerNo', '$firstName', '$lastName', '$email', '$addressIm', '$home', '$mobile')";
 
-		if (mysqli_query($db, $sqlCustomer)) {
-			$error_message = 'Successfully added to customers';
-		} else {
-			$error_message = 'Could not add to Customers';
-			return false;
-		}
+	if (mysqli_query($db, $sqlCustomer)) {
+		$error_message = 'Successfully added to customers';
+	} else {
+		$error_message = 'Could not add to Customers';
+		return false;
 	}
+	// }
 
 	// for table -- accounts
 	$encryptedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -99,10 +103,9 @@ if (isset($_POST['register'])) {
 	// for table -- cart
 	do {
 		$basketNo = randomNumber();
-		$sqlBasket = "SELECT count(*) as count from cart where basket_id = " . $basketNo;
+		$sqlBasket = "SELECT order_id from orders where basket_id = " . $basketNo;
 		$checkBasket = mysqli_query($db, $sqlBasket);
-		$count = mysqli_fetch_array($checkBasket);
-	} while ($count['count'] = 0);
+	} while (mysqli_num_rows($checkBasket) > 0);
 
 	$sqlCart = "INSERT INTO orders VALUES ( '$basketNo', '$customerNo', null, false )";
 
