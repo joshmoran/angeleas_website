@@ -7,7 +7,7 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
 	header("Location: index.php");
 }
 if (isset($_POST['login'])) {
-    require "src/database.php";
+	require "src/database.php";
 
 	$username = $_POST['username'];
 	$password = $_POST['password'];
@@ -19,20 +19,20 @@ if (isset($_POST['login'])) {
 	$count = $row['cntUser'];
 
 	if ($count > 0) {
-        $error_message = 'Could find the username, looking for password';
+		$error_message = 'Could find the username, looking for password';
 
-        $sql_query = "SELECT customer_id, pass from accounts where username = '$username'";
-        $passwordSalt = mysqli_query($db, $sql_query);
-        $accountResult = mysqli_fetch_assoc($passwordSalt);
+		$sql_query = "SELECT customer_id, pass from accounts where username = '$username'";
+		$passwordSalt = mysqli_query($db, $sql_query);
+		$accountResult = mysqli_fetch_assoc($passwordSalt);
 
-        if ( password_verify($_POST['password'], $accountResult['pass'] )){
+		if (password_verify($_POST['password'], $accountResult['pass'])) {
 			$customerID = $accountResult['customer_id'];
 
 			$sqlOrders = "SELECT order_id, customer_id FROM orders WHERE customer_id = '$customerID' AND complete = false";
 			$orderQuery = mysqli_query($db, $sqlOrders);
 			$basketID = mysqli_fetch_column($orderQuery, 0);
 
-			if ( mysqli_num_rows($orderQuery) < 1){
+			if (mysqli_num_rows($orderQuery) < 1) {
 				$basketID = generateBasket();
 				$sqlInsert = "INSERT INTO orders (order_id, customer_id, complete ) VALUES ( '$basketID', '$customerID', false )";
 				$sqlBasketInsert = mysqli_query($db, $sqlInsert);
@@ -41,18 +41,19 @@ if (isset($_POST['login'])) {
 				$_SESSION['basket_id'] = mysqli_fetch_column($orderQuery, 0);
 			}
 
-		    $_SESSION['username'] = $username;
-            $_SESSION['customer_id'] = $customerID;
+			$_SESSION['username'] = $username;
+			$_SESSION['customer_id'] = $customerID;
 			$_SESSION['basket_id'] = $basketID;
-            $_SESSION['loggedIn'] = true;
+			$_SESSION['loggedIn'] = true;
+			$_SESSION['admin'] = true;
 
-            $error_message = 'It has been matched and verified';
-            header('location: ./account.php');
-            exit();
-        } else {
-            $error_message = 'Passwords do not match';
+			$error_message = 'It has been matched and verified';
+			header('location: ./account.php');
+			exit();
+		} else {
+			$error_message = 'Passwords do not match';
 			die();
-        }
+		}
 	} else {
 		echo "Invalid username and password";
 	}

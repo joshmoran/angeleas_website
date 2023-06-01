@@ -5,13 +5,11 @@ if (empty($_GET['id'])) {
 	header("Location: login.php");
 }
 
-$errorStatus = 'yes';
 require "src/database.php";
 $orderID = $_GET['id'];
 $sqlOrder = "SELECT * FROM purchases RIGHT JOIN orders ON purchases.basket_id = orders.order_id RIGHT JOIN products ON purchases.product_id = products.id RIGHT JOIN customers ON purchases.customer_id = customers.customer_id WHERE orders.order_id = " . $orderID;
 
 $results = mysqli_query($db, $sqlOrder);
-
 
 if ($_SESSION['loggedIn'] == false) {
 	header("Location: login.php");
@@ -84,15 +82,16 @@ if ($_SESSION['loggedIn'] == false) {
 						-->
 
 				<?php
-				$sqlCustomer = "SELECT * FROM customers RIGHT JOIN orders ON customers.customer_id = orders.customer_id  WHERE customers.customer_id = " . $_SESSION['customer_id'];
+				$sqlCustomer = "SELECT * FROM customers RIGHT JOIN orders ON customers.customer_id = orders.customer_id  WHERE customers.customer_id = " . $_SESSION['customer_id'] . ' AND orders.order_id = ' . $_GET['id'];
 				$customerResult = mysqli_query($db, $sqlCustomer);
 				$customerArray = mysqli_fetch_array($customerResult);
+
 				$name = $customerArray['first_name'] . ' ' . $customerArray['last_name'];
 				?>
 				<table>
 					<tr>
 						<label for="name">Customers Name:
-							<input type="text" id="name" name="name" value="<?php echo $name; ?>" />
+							<input type="text" id="name" name="name" value="<?php echo $customerArray['name']; ?>" />
 							<span></span>
 						</label>
 					</tr>

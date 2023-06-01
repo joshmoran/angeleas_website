@@ -23,20 +23,31 @@ if (isset($_POST['register'])) {
 	$mobile = trim(filter_input(INPUT_POST, 'phoneMobile', FILTER_SANITIZE_NUMBER_INT));
 	$dob = trim(filter_input(INPUT_POST, 'dob', FILTER_SANITIZE_NUMBER_INT));
 	// Check Requirements for inputted values meet the Requirements
+
+	// FIRST NAME 
 	if (strlen($firstName) <= 3 || $firstName == null || $firstName == '') {
 		$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
 	}
 
+	// LAST NAME
 	if (strlen($lastName) <= 3 || $lastName == null || $lastName == '') {
 		$errorLastName = 'Last Name is required and must not be empty or less than 3 characters.';
 		exit;
 	}
 
-	if (strlen($home) != 11) {
+	// EMAIL - CHECK IF VALID EMAIL ADDRESS
+	$regex = '/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/';
+	if (preg_match($regex, $email) == false) {
+		$errors[]
+
+	// HOME NUMBER - ONLY CHECK IF INPUT IS ENTERED
+	if (strlen($home) != 11 || strlen($home) > 1)  {
 		$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
 		exit;
 	}
-	if (strlen($mobile) != 11) {
+
+	// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
+	if (strlen($mobile) != 11 || strlen($mobile) > 1)  {
 		$errorPhone = 'Please enter a valid mobile phone number. Please use 0 at the start';
 		exit;
 	}
