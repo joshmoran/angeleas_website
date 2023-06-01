@@ -16,12 +16,11 @@ if (isset($_POST['register'])) {
 	// PASSWORD
 
 	// Import Customers details from the form
-	$firstName = htmlspecialchars($_POST['firstname']);
-	$lastName = htmlspecialchars($_POST['lastname']);
-	$email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
-	$home = trim(filter_input(INPUT_POST, 'phoneHome', FILTER_SANITIZE_NUMBER_INT));
-	$mobile = trim(filter_input(INPUT_POST, 'phoneMobile', FILTER_SANITIZE_NUMBER_INT));
-	$dob = trim(filter_input(INPUT_POST, 'dob', FILTER_SANITIZE_NUMBER_INT));
+	$firstName = trim(mysqli_real_escape_string($db, $_POST['firstname']));
+	$lastName = trim(mysqli_real_escape_string($db, $_POST['lastname']));
+	$email = trim(mysqli_real_escape_string($db, $_POST['email']));
+	$home = trim(mysqli_real_escape_string($db, $_POST['phoneHome']));
+	$mobile = trim(mysqli_real_escape_string($db, $_POST['phoneMobile']));
 	// Check Requirements for inputted values meet the Requirements
 
 	// FIRST NAME 
@@ -32,29 +31,24 @@ if (isset($_POST['register'])) {
 	// LAST NAME
 	if (strlen($lastName) <= 3 || $lastName == null || $lastName == '') {
 		$errorLastName = 'Last Name is required and must not be empty or less than 3 characters.';
-		exit;
 	}
 
 	// EMAIL - CHECK IF VALID EMAIL ADDRESS
-	$regex = '/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/';
-	if (preg_match($regex, $email) == false) {
-		$errors[]
+	$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
+	if (filter_var($email, FILTER_VALIDATE_EMAIL) == FALSE || strlen($email) == '' || $email == null) {
+		$errorEmail = 'Email is required and must be a valid email address.';
+	}
 
 	// HOME NUMBER - ONLY CHECK IF INPUT IS ENTERED
-	if (strlen($home) != 11 || strlen($home) > 1)  {
+	if (strlen($home) != 11 || strlen($home) > 1) {
 		$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
-		exit;
 	}
 
 	// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
-	if (strlen($mobile) != 11 || strlen($mobile) > 1)  {
-		$errorPhone = 'Please enter a valid mobile phone number. Please use 0 at the start';
-		exit;
+	if (strlen($mobile) != 11 || strlen($mobile) > 1) {
+		$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
 	}
 
-
-	$cardnumber = trim(filter_input(INPUT_POST, 'cardnumber', FILTER_SANITIZE_NUMBER_INT));
-	$cardexpiry = trim(filter_input(INPUT_POST, 'expiry', FILTER_SANITIZE_NUMBER_INT));
 
 	$address_1st = htmlspecialchars($_POST['1st_line']);
 	$address_2nd = htmlspecialchars($_POST['2nd_line']);
@@ -116,16 +110,6 @@ if (isset($_POST['register'])) {
 		$error_message = 'Successfully added to Cart';
 	} else {
 		$error_message = 'Could not add to Cart';
-		return false;
-	}
-	// for table -- credit_cards
-	$sqlCards = "INSERT INTO credit_cards VALUES ( '$customerNo', '$cardnumber', '$cardexpiry' )";
-
-
-	if (mysqli_query($db, $sqlCards)) {
-		$error_message = 'Successfully added to Cards';
-	} else {
-		$error_message = 'Could not add to Cards';
 		return false;
 	}
 
@@ -213,32 +197,6 @@ if (isset($_POST['register'])) {
 						<td><input type="text" name="phoneMobile" value="" /></td>
 						<td><?php if (isset($errorMobile)) {
 								echo $errorMobile;
-							} ?></td>
-					</tr>
-					<tr>
-						<td><label for="dob">Date of birth:</label></td>
-						<td><input type="text" name="dob" value="" /></td>
-						<td><?php if (isset($errorDob)) {
-								echo $errorDob;
-							} ?></td>
-					</tr>
-					<tr>
-						<td colspan="3">
-							<h3>Card Number</h3>
-						</td>
-					</tr>
-					<tr>
-						<td><label for="cardnumber">Card Number: </label></td>
-						<td><input type="number" name="cardnumber" maxlength="16" value="" /></td>
-						<td><?php if (isset($errorCardNumber)) {
-								echo $errorCardNumber;
-							} ?></td>
-					</tr>
-					<tr>
-						<td><label for="expiry">Expiry: </label></td>
-						<td><input type="date" name="expiry" value="" /></td>
-						<td><?php if (isset($errorExpiry)) {
-								echo $errorExpiry;
 							} ?></td>
 					</tr>
 					<tr>
