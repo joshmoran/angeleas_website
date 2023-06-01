@@ -1,6 +1,5 @@
 <?php
 session_start();
-//$error_message = 'yesssss';
 include "src/functions.php";
 
 if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
