@@ -1,25 +1,44 @@
 <?php
 session_start();
+
+require "src/database.php";
+
+
 if ($_SESSION['admin'] == false) {
     header("Location:login.php");
 }
+$errors = array();
 // dispatch 
 // accept 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['accept']) && isset($_POST['customer_id']) && isset($_POST['basket_id'])) {
-        $customerID = mysqli_escape_string($db, $_POST['customer_id']);
-        $basketID = mysqli_escape_string($db, $_POST['basket_id']);
+if (isset($_GET['accept']) && isset($_GET['customer_id']) && isset($_GET['basket_id'])) {
+    $customerID = mysqli_escape_string($db, $_GET['customer_id']);
+    $basketID = mysqli_escape_string($db, $_GET['basket_id']);
 
-        $sql = "UPDATE orders SET status = 'order accepted, awaiting dispatch' WHERE customer_id = $customerID AND basket_id = $basketID";
+    $sql = "UPDATE orders SET status = 'order accepted, awaiting dispatch' WHERE customer_id = $customerID AND order_id = $basketID";
 
-        if ( mysqli_query($db, $sql)) {
-            $errors[] = ''
-        }
-    }
-
-    if (isset($_POST['accept']) && isset($_POST['customer_id']) && isset($_POST['basket_id'])) {
+    if (mysqli_query($db, $sql)) {
+        $errors[] = 'Changed status - accepted order';
+    } else {
+        $errors[] = 'There has been a problem changing the order status, please contact the administrator';
     }
 }
+
+if ($_GET['dispatch'] == true && isset($_GET['customer_id']) && isset($_GET['basket_id'])) {
+    $customerID = mysqli_escape_string($db, $_GET['customer_id']);
+    $basketID = mysqli_escape_string($db, $_GET['basket_id']);
+    echo '2';
+
+    $sql = "UPDATE orders SET status = 'order dispatched' WHERE customer_id = " . $customerID . " AND order_id = " . $basketID;
+
+    header()
+
+    if (mysqli_query($db, $sql)) {
+        $errors[] = 'Changed status - accepted order';
+    } else {
+        $errors[] = 'There has been a problem changing the order status, please contact the administrator';
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -50,14 +69,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </head>
 
-<body><?php
-        include "inc/header.php";
-        ?><div id="container">
+<body>
+    <?php
+    include "inc/header.php";
+    ?>
+    <div id="errors">
+        <?php
+        if (count($errors) > 0) {
+            echo '<ul>';
+            foreach ($errors as $error) {
+                echo '<li class="message">' . $error . '</li>';
+            }
+            echo '</ul>';
+        }
+        ?>
+    </div>
+    <div id="container">
         <table><?php
                 require "src/database.php";
+
+
                 $sql = "SELECT * FROM orders LEFT JOIN customers ON orders.customer_id=customers.customer_id WHERE complete = 1 AND NOT status = 'order dispatched'";
                 $sqlQuery = mysqli_query($db, $sql);
-                $string = '<thead><th>Order Number</th>
+                
+                if ( mysqli_num_rows($sqlQuery) > 0 ){
+                    $string = '<thead><th>Order Number</th>
                 <th>Order Date</th>
                 <th>Order Status</th>
                 <th>Order Details</th>
@@ -97,13 +133,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // 'order accepted, awaiting dispatch'
                     // 'order dispatched'
                     if ($user['status'] == 'waiting for to be accepted') {
-                        $string .= '<td><a href="account_admin.php?accept=true&customer_id=' . $user['order_id'] . '&basket_id=' . $user['order_id'] . '"><button>Accept</button></a></td>';
+                        $string .= '<td><a href="account_admin.php?accept=true&customer_id=' . $user['customer_id'] . '&basket_id=' . $user['order_id'] . '"><button>Accept</button></a></td>';
                     } else {
                         $string .= '<td></td>';
                     }
 
                     if ($user['status'] != 'order dispatched') {
-                        $string .= '<td><a href="account_admin.php?dispatch=true&customer_id=' . $user['order_id'] . '&basket_id=' . $user['order_id'] . '"><button>Dispatched</button></a></td>';
+                        $string .= '<td><a href="account_admin.php?dispatch=true&customer_id=' . $user['customer_id'] . '&basket_id=' . $user['order_id'] . '"><button>Dispatched</button></a></td>';
                     } else {
                         $string .= '<td></td>';
                     }
@@ -111,10 +147,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
 
                 echo $string;
+            } else {
+                echo '<tr>';
+                echo '<td>There are no outstaning orders</td>';
+                echo '</tr>';
+            }
+            
                 ?><tbody>
         </table>
     </div><?php
             include "inc/footer.php";
-            ?></body>
+            ?>
+</body>
 
 </html>
