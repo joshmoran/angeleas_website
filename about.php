@@ -10,7 +10,7 @@ session_start();
 	</head>
 	<body>
 	<?php include("inc/header.php"); ?>
-	
+	<div id=
 	<?php include("inc/footer.php"); ?>
 	<script src="src/js/js.js"></script>
 	</body>
