@@ -2,10 +2,6 @@
 /* Generic Elements */
 /*  */
 
-*
-{
-    box-sizing: border-box;
-}
 
 body > *
 {
@@ -112,9 +108,23 @@ footer
 
 #btnImg img
 {
-    display: block;
-    max-width: 50%;
+    width: max-content;
     height: auto;
+}
+
+#btnImg button
+{
+    display: block;
+    margin: 0.1%;
+    width: fit-content;
+    height: auto;
+}
+
+#banner
+{
+    width: 90%;
+    margin: 0 5%;
+
 }
 
 /*  */
@@ -312,10 +322,6 @@ footer,
         background-color: grey;
     }
 
-    #imgScroll img
-    {
-        width: 80%;
-    }
 }
 
 /* iPhone 4 */

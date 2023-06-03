@@ -15,7 +15,7 @@ require "src/functions.php";
     <?php include("inc/header.php"); ?>
     <div id="container">
         <div id="imgScroll">
-            <img src="src/img/banner/0.jpg" alt="banner">
+            <img src="src/img/banner/0.jpg" id="banner" alt="banner">
             <ul id="btnImg">
                 <li><button id="home0"><img src="src/img/banner/selected.jpg" /></button></li>
                 <li><button id="home1"><img src="src/img/banner/unselected.jpg" /></button></li>
@@ -32,6 +32,7 @@ require "src/functions.php";
         </div>
         <?php include("inc/footer.php"); ?>
         <script src="src/js/js.js"></script>
+        <script src="src/js/carasel.js"></script>
 </body>
 
 </html>
