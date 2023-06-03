@@ -1,8 +1,11 @@
-noOfBtns = 3
+let btn0 = document.getElementById( '#home0' )
 
-for ( a = 0; a <= noOfBtns; a++ ) {
-    document.getElementById( "home" + a ).addEventListener( "click", function () {
-        alert( a )
-        document.getElementById( "myModal" ).style.display = "block"
-    } )
+alert( btn0[ 0 ] )
+
+function carousel ( e ) {
+    e.parentNode
 }
+
+btn0.addEventListener('click', , listener)
+
+
