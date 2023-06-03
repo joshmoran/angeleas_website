@@ -123,6 +123,7 @@ footer
 #banner
 {
     width: 90%;
+    position: relative;
     height: 100%;
     margin: 0 5%;
 
