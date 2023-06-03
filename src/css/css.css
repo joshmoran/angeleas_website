@@ -100,9 +100,9 @@ footer
     position: relative;
     display: inline-block;
     width: 100px;
-    margin: 0 auto;
+    /* margin: 0 auto;
     top: -130px;
-    height: 100px;
+    height: 100px; */
     background-color: white;
 }
 
@@ -123,6 +123,7 @@ footer
 #banner
 {
     width: 90%;
+    height: 100%;
     margin: 0 5%;
 
 }

@@ -1,16 +1,30 @@
 #container
 {
+    width: 80%;
+    margin: auto;
+
+    display: block;
+    bottom: 10rem;
+}
+
+#container div
+{
     display: inline-block;
-    position: relative;
+    margin: auto;
+}
+
+#left
+{
+    width: 36;
+    padding: 1%;
+    margin: 1%;
 }
 
 #right
 {
     float: right;
-    max-width: fit-content;
-}
-
-#container > *
-{
-    width: auto;
+    width: 55%;
+    margin: 1%;
+    padding: 1%;
+    clear: left;
 }
