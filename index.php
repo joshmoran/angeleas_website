@@ -27,7 +27,7 @@ require "src/functions.php";
 
             </div>
             <div id="rightSide">
-
+    
             </div>
         </div>
         <?php include("inc/footer.php"); ?>
