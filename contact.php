@@ -1,6 +1,6 @@
 <?php
 session_start();
-//require "src/functions";
+require "src/variables.php";
 
 if (!empty($_POST['email'])) {
 	try {
@@ -30,7 +30,7 @@ if (!empty($_POST['email'])) {
 
 	<head>
 		<meta charset="utf-8">
-		<title><?php //echo $websiteName; 
+		<title><?php echo $websiteName;
 				?> - Contact</title>
 		<link href="src/css/css.css" rel="stylesheet" type="text/css" />
 		<link href="src/css/contact.css" rel="stylesheet" type="text/css" />

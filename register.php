@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
 error_reporting(-1);
 
-require 'src/functions.php';
+require 'src/variables.php';
 require 'src/random_number.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <head>
 	<meta charset="utf-8">
-	<title>Template</title>
+	<title><?php echo $websiteName; ?> - Register</title>
 	<link type="text/css" href="src/css/css.css" rel="stylesheet" />
 </head>
 
@@ -164,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	<?php
 	include "inc/header.php";
 	?>
-	<div id-"container">
+	<div id="container">
 		<div id="messages">
 			<?php
 			if (isset($error_message)) {

@@ -90,14 +90,15 @@ if (isset($_POST['login'])) {
 	<?php
 	include "inc/header.php";
 	?>
-	<div id="messages">
-		<?php
-		if (isset($error_message)) {
-			echo '<p class="messageText">' . $error_message . '</p>';
-		}
-		?>
-	</div>
+
 	<div id="container">
+		<div id="messages">
+			<?php
+			if (isset($error_message)) {
+				echo '<p class="messageText">' . $error_message . '</p>';
+			}
+			?>
+		</div>
 		<form method="post" action="">
 			<table>
 				<tr>

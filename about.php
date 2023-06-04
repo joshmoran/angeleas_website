@@ -1,6 +1,6 @@
 <?php
 session_start();
-$websiteName = '';
+require 'src/variables.php';
 ?>
 <DOCTYPE html>
 	<html>

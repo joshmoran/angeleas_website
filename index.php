@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "src/functions.php";
+require "src/variables.php";
 ?>
 <!DOCTYPE html>
 <html>

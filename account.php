@@ -1,5 +1,6 @@
 <?php
 session_start();
+require 'src/variables.php';
 if ($_SESSION['loggedIn'] == false) {
     header("Location: login.php");
 }
@@ -9,7 +10,7 @@ if ($_SESSION['loggedIn'] == false) {
 
 <head>
     <meta charset="utf-8">
-    <title>Account Home</title>
+    <title><?php echo $websiteName; ?> - Account Home</title>
     <link href="src/css/css.css" rel="stylesheet" type="text/css" />
 </head>
 
