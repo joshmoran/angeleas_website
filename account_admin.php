@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
 
-    if ($_GET['dispatch'] == true && isset($_GET['customer_id']) && isset($_GET['basket_id'])) {
+    if (isset($_GET['dispatch']) == true && isset($_GET['customer_id']) && isset($_GET['basket_id'])) {
         $customerID = mysqli_escape_string($db, $_GET['customer_id']);
         $basketID = mysqli_escape_string($db, $_GET['basket_id']);
         echo '2';

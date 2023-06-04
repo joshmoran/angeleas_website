@@ -18,6 +18,7 @@ if ($_SESSION['loggedIn'] == false) {
 	<meta charset="utf-8">
 	<title>Template</title>
 	<link type="text/css" href="src/css/css.css" rel="stylesheet" />
+	<link type="text/css" href="src/css/account_orders.css" rel="stylesheet" />
 </head>
 
 <body>

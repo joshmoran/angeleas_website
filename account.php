@@ -23,15 +23,15 @@ if ($_SESSION['loggedIn'] == false) {
     <div id="container">
 
         <h2>Your Account</h2>
-        <button><a href="account_details.php"><button>Change Account Details</a></button>
+        <a href="account_details.php"><button>Change Account Details</button></a>
         <br>
         <br>
-        <button><a href="account_orders.php"><button>Your Order</a></button>
+        <a href="account_orders.php"><button>Your Order</button></a>
         <br>
         <?php
         if ($_SESSION['admin']) {
             echo '<br>';
-            echo '<a href="account_admin.php"><button>View pending orders</a></button>';
+            echo '<a href="account_admin.php"><button>View pending orders</button></a>';
         }
         ?>
     </div>

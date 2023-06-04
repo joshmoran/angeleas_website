@@ -4,14 +4,34 @@ table
     display: block;
 }
 
+#container
+{
+    width: 80%;
+}
+
+#container > *
+{
+    width: 100%;
+}
+
 td
 {
     width: max-content;
 }
 
-a
+h2
 {
-    height: 80em;
+    text-align: center;
+}
+
+button
+{
+    width: 50rem;
+    height: 5rem;
+    margin: 0 auto;
+    left: inherit;
+    display: block;
+    float: center;
     border: 1px solid #000;
-    min-width: 60em;
+
 }
