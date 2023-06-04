@@ -1,8 +1,7 @@
 <?php
 session_start();
 
-
-
+require "src/variables.php";
 require "src/database.php";
 require "src/random_number.php";
 

@@ -113,11 +113,9 @@ if (!empty($_POST['category'])) {
 </head>
 
 <body>
-    <header>
-        <?php
-        require "inc/header.php";
-        ?>
-    </header>
+    <?php
+    require "inc/header.php";
+    ?>
     <div id="container">
         <div id="messages">
             <?php
