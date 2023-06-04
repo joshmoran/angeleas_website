@@ -31,7 +31,7 @@ if ($_SESSION['loggedIn'] == false) {
 		</div>
 		<table>
 			<?php
-			$sqlOrders = "SELECT order_id, time_ordered, complete  FROM orders WHERE customer_id = '$customerID' AND complete = true ORDER BY time_ordered ASC";
+			$sqlOrders = "SELECT order_id, time_ordered, status, complete  FROM orders WHERE customer_id = '$customerID' AND complete = true ORDER BY time_ordered ASC";
 			$results = mysqli_query($db, $sqlOrders);
 
 			$string = '';
@@ -49,17 +49,7 @@ if ($_SESSION['loggedIn'] == false) {
 				while ($order =  mysqli_fetch_assoc($results)) {
 					$string .= "<tr>";
 					$string .= "<td>" . $order['order_id'] . "</td>";
-					$string .= "<td>";
-					if ($order['complete'] == 0) {
-						$string .= "Pending";
-					} else if ($order['complete'] == 1) {
-						$string .= "Confirmed";
-					} else if ($order['complete'] == 2) {
-						$string .= "Shipped";
-					} else if ($order['complete'] == 3) {
-						$string .= "Complete";
-					}
-					$string .= "</td>";
+					$string .= "<td>" . $order['status'] . "</td>";
 					$string .= "<td>" . $order['time_ordered'] . "</td>";
 					$string .= "<td><a href='order_history.php?id=" . $order['order_id'] . "' >Details</a></td>";
 					$string .= "</tr>";

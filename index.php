@@ -9,6 +9,7 @@ require "src/variables.php";
     <meta charset="UTF-8">
     <title><?php echo $websiteName . ' - Home'; ?></title>
     <link rel="stylesheet" href="src/css/css.css" type="text/css" />
+    <link rel="stylesheet" href="src/css/index.css" type="text/css" />
 </head>
 
 <body>

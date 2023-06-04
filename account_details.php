@@ -103,8 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 
 	if (isset($_POST['makeChangesAddress'])) {
-	} 
-	
+	}
+
 	if (isset($_POST['makeChangesCreditCard'])) {
 	} else {
 		$errors[] = 'Could not processing your request. Please try again. If this happens again, please contact us.';
@@ -226,11 +226,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><input type="text" name="address2nd" /></td>
 				</tr>
 				<tr>
-					<td><label for="address3rd">First Line</label></td>
+					<td><label for="address3rd">Third Line</label></td>
 					<td><input type="text" name="address3rd" /></td>
 				</tr>
 				<tr>
-					<td><label for="region">Second Line</label></td>
+					<td><label for="region">Region</label></td>
 					<td><input type="text" name="region" /></td>
 				</tr>
 				<tr>

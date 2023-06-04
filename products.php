@@ -109,7 +109,8 @@ if (!empty($_POST['category'])) {
 <head>
     <meta charset="utf-8">
     <title><?php echo $websiteName . ' - All Products'; ?></title>
-    <link rel="stylesheet" href="src/css/css.css" />
+    <link rel="stylesheet" href="src/css/css.css" type="text/css " />
+    <link rel="stylesheet" href="src/css/products.css" type="text/css " />
 </head>
 
 <body>

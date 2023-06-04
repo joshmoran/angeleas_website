@@ -105,7 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
                         $string .= '<tr>';
 
-                        var_dump($user);
                         $string .=  '<td>' . $user['order_id'] . '</td>';
                         $string .=  '<td>' . $user['time_ordered'] . '</td>';
                         $string .=  '<td>' . $user['status'] . '</td>';

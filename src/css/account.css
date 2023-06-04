@@ -1,0 +1,16 @@
+table
+{
+    width: 60%;
+    display: block;
+}
+
+td
+{
+    width: max-content;
+}
+
+a
+{
+    height: 100%;
+    min-width: 100%;
+}

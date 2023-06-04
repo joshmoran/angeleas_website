@@ -12,6 +12,7 @@ if ($_SESSION['loggedIn'] == false) {
     <meta charset="utf-8">
     <title><?php echo $websiteName; ?> - Account Home</title>
     <link href="src/css/css.css" rel="stylesheet" type="text/css" />
+    <link href="src/css/account.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -20,16 +21,13 @@ if ($_SESSION['loggedIn'] == false) {
 
     ?>
     <div id="container">
-        <table>
-            <tr>
-                <th colspan="2">Your Account</th>
-            </tr>
-            <tr>
-                <td><a href="account_details.php">Change Account Details</a></td>
-                <td><a href="account_orders.php">Your Order</a></td>
+
+                <h2>Your Account</h2>
+                <a href="account_details.php">Change Account Details</a>
+                <a href="account_orders.php">Your Order</a>
                 <?php
                 if ($_SESSION['admin']) {
-                    echo '<td><a href="account_admin.php">View pending orders</a></td>';
+                    echo '<a href="account_admin.php">View pending orders</a>';
                 }
                 ?>
             </tr>
