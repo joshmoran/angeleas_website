@@ -42,7 +42,8 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 <head>
 	<meta charset="utf-8">
 	<title>Basket</title>
-	<link rel="stylesheet" href="src/css/css.css" />
+	<link rel="stylesheet" href="src/css/css.css" type="text/css " />
+	<link rel="stylesheet" href="src/css/basket.css" type="text/css " />
 </head>
 
 <body>
@@ -56,7 +57,6 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 				<?php
 				require("src/database.php");
 
-				echo $_SESSION['basket_id'];
 				$query = mysqli_query($db, $sqlOrder);
 
 				if (mysqli_num_rows($query) < 1) {

@@ -26,7 +26,7 @@ if ($_SESSION['loggedIn'] == false) {
         <a href="account_details.php"><button>Change Account Details</button></a>
         <br>
         <br>
-        <a href="account_orders.php"><button>Your Order</button></a>
+        <a href="account_orders.php"><button>Your Orders</button></a>
         <br>
         <?php
         if ($_SESSION['admin']) {

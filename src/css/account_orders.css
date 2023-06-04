@@ -1,9 +1,18 @@
-table {
-    
-}th,
+table
+{
+    margin: auto;
+    display: block;
+}
+
+th,
 td
 {
     width: 15em;
     text-align: center;
     margin: auto;
+}
+
+tr
+{
+    height: 1.5em;
 }

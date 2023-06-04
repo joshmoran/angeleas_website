@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'src/variables.php';
 
 if (empty($_GET['id'])) {
 	header("Location: login.php");
@@ -20,44 +21,9 @@ if ($_SESSION['loggedIn'] == false) {
 
 <head>
 	<meta charset="utf-8" />
-	<title></title>
+	<title><?php echo $websiteName; ?> - Order Details</title>
 	<link href="src/css/css.css" rel="stylesheet" type="text/css" />
-	<style>
-		#split {
-			box-sizing: border-box;
-			width: 80%;
-			margin: auto;
-		}
-
-		#split>* {
-			float: left;
-			margin: 0 auto;
-
-		}
-
-		label {
-			display: inline-block;
-		}
-
-		#orderDetails {
-			width: 50%;
-			float: right;
-		}
-
-		#orderDetails label input {
-			float: right;
-		}
-
-		label {
-			width: 90%;
-		}
-
-		table {
-			clear: both;
-			margin: auto;
-			display: block;
-		}
-	</style>
+	<link href="src/css/order_history.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -67,8 +33,42 @@ if ($_SESSION['loggedIn'] == false) {
 			<a href="account_orders.php"><button>Return to your orders</button></a>
 		</div>
 		<div id="split">
-			<div id="mapOfAddress">
-				<h1>Display the map</h1>
+			<div id="basket">
+				<table>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Amount</th>
+						<th>Quantity</th>
+					</tr>
+					<!--
+				Sections to include
+					- split section
+						- map of address
+						- details of order
+					- table of basket orders
+					- Feedback and queries
+-->
+					<?php
+					require("src/database.php");
+
+
+					$string = '';
+
+					while ($row = mysqli_fetch_assoc($results)) {
+						echo '<tr>';
+						echo "<td>" . $row['name'] . "</td>";
+						echo "<td>" . $row['description'] . "</td>";
+						echo "<td>" . $row['price'] . "</td>";
+						echo "<td>" . $row['quantity'] . "</td>";
+						echo "</tr>";
+					}
+
+					echo $string;
+					?>
+
+
+				</table>
 			</div>
 			<div id="orderDetails">
 				<!-- 
@@ -130,43 +130,7 @@ if ($_SESSION['loggedIn'] == false) {
 
 			</div>
 		</div>
-		<div id="basket">
-			<table>
-				<tr>
-					<th>Name</th>
-					<th>Description</th>
-					<th>Amount</th>
-					<th>Quantity</th>
-				</tr>
-				<!--
-				Sections to include
-					- split section
-						- map of address
-						- details of order
-					- table of basket orders
-					- Feedback and queries
--->
-				<?php
-				require("src/database.php");
 
-
-				$string = '';
-
-				while ($row = mysqli_fetch_assoc($results)) {
-					echo '<tr>';
-					echo "<td>" . $row['name'] . "</td>";
-					echo "<td>" . $row['description'] . "</td>";
-					echo "<td>" . $row['price'] . "</td>";
-					echo "<td>" . $row['quantity'] . "</td>";
-					echo "</tr>";
-				}
-
-				echo $string;
-				?>
-
-
-			</table>
-		</div>
 		<?php include("inc/footer.php"); ?>
 		<script src="src/js/js.js"></script>
 </body>

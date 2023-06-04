@@ -1,0 +1,16 @@
+table
+{
+    width: 80%;
+    text-align: center;
+}
+
+tr
+{
+    height: 1.5em;
+}
+
+th,
+td
+{
+    width: 1em;
+}

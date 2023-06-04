@@ -1,0 +1,53 @@
+#split
+{
+    box-sizing: border-box;
+    width: 80%;
+    margin: auto;
+}
+
+#split > *
+{
+    float: left;
+
+    margin: 1em auto 0;
+
+}
+
+label
+{
+    display: inline-block;
+}
+
+#orderDetails
+{
+    width: 50%;
+    float: right;
+}
+
+#orderDetails label input
+{
+    float: right;
+}
+
+label
+{
+    width: 90%;
+}
+
+table
+{
+    clear: both;
+    margin: auto;
+    display: block;
+}
+
+tr
+{
+    height: 1.5em;
+}
+
+th,
+td
+{
+    width: 6em;
+}

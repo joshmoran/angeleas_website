@@ -31,6 +31,7 @@ if ($_SESSION['loggedIn'] == false) {
 			<a href="account.php"><button>Return to your account</button></a>
 		</div>
 		<table>
+			<p></p>
 			<?php
 			$sqlOrders = "SELECT order_id, time_ordered, status, complete  FROM orders WHERE customer_id = '$customerID' AND complete = true ORDER BY time_ordered ASC";
 			$results = mysqli_query($db, $sqlOrders);

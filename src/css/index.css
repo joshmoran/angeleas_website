@@ -1,6 +1,6 @@
 #btnImg
 {
-    margin: 0 auto;
+    margin: -5em auto 0;
     font-size: xx-large;
 }
 
@@ -8,7 +8,6 @@
 {
     position: relative;
     display: inline-block;
-    width: 100px;
     /* margin: 0 auto;
     top: -130px;
     height: 100px; */
@@ -17,23 +16,24 @@
 
 #btnImg img
 {
-    width: max-content;
-    height: auto;
+    width: 4em;
+    height: 4em;
+
 }
 
 #btnImg button
 {
     display: block;
     margin: 0.1%;
-    width: fit-content;
-    height: auto;
+    width: 5em;
+    height: 5em;
 }
 
 #banner
 {
     width: 90%;
     position: relative;
-    height: 100%;
+    height: 25em;
     margin: 0 5%;
 
 }
