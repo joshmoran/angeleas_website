@@ -54,7 +54,7 @@ if (!empty($_POST['email'])) {
 					<input type="text" name="subject" placeholder="Reason for contacting">
 
 					<label for="message">Message: </label>
-					<textarea name="message" cols="60" rows="4">Write Something</textarea>
+					<textarea name="message" cols="40" rows="8">Write Something</textarea>
 
 					<input type="submit" name="email" value="Submit">
 			</form>

@@ -1,6 +1,6 @@
 #btnImg
 {
-    margin: -5em auto 0;
+    margin: -3em auto 0 1em;
     font-size: xx-large;
 }
 
@@ -36,4 +36,15 @@
     height: 25em;
     margin: 0 5%;
 
+}
+
+#contentSplit
+{
+    display: block;
+    width: 80%;
+    margin: 3em auto 0;
+}
+
+#contentSplit p { 
+    text-align: justify;
 }

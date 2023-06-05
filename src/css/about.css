@@ -1,8 +1,6 @@
 #container
 {
     width: 80%;
-    margin: auto;
-
     display: block;
     bottom: 10rem;
 }
@@ -15,16 +13,28 @@
 
 #left
 {
-    width: 36;
+    width: 30em;
     padding: 1%;
-    margin: 1%;
+    margin: 1% auto 1% 5em;
 }
+
+#left img
+{
+    margin: 0 auto;
+    margin: 1%;
+    padding: 1%;
+}
+
 
 #right
 {
-    float: right;
-    width: 55%;
+    width: 30em;
     margin: 1%;
     padding: 1%;
-    clear: left;
+
+}
+
+#right p
+{
+    text-align: justify;
 }

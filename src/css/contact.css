@@ -1,13 +1,16 @@
 form
 {
-    margin: auto;
+    display: block;
+    width: 80%;
+    margin: 0 auto;
 }
 
 label,
 input
 {
     display: block;
-    width: 200px;
+    width: 100px;
+
 
 }
 
@@ -17,12 +20,18 @@ label
     float: left;
 }
 
-/* input
+input
 {
-    float: right;
-} */
+    margin: 0.5em 0;
+}
 
 input:last-child
 {
-    margin: 0 0 0 200px;
+    margin: 0 0 0 100px;
+
+}
+
+textarea
+{
+    resize: none;
 }
