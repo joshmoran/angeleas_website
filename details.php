@@ -98,7 +98,8 @@ if (!empty($_POST['addToBasket'])) {
 ?>
 <!DOCTYPE html>
 <html>
-<link href="src/css/css.css" rel="stylesheet">
+<link href="src/css/css.css" rel="stylesheet" type="text/css">
+<link href="src/css/details.css" rel="stylesheet" type="text/css">
 <title><?php $websiteName . ' - Details'; ?></title>
 </head>
 
@@ -129,19 +130,19 @@ if (!empty($_POST['addToBasket'])) {
 		$results = mysqli_query($db, $sqlItem);
 		while ($products = mysqli_fetch_assoc($results)) {
 			$string .= "<div id='leftSide'>";
-			$string .= "<img src='" . $products['image_src'] . "' alt='" . $products['description'] . '" />';
+			$string .= "<img src='" . $products['image_src'] . "' alt='" . $products['description'] . "' />";
 			$string .= "</div>";
 			$string .= "<div id='rightSide'>";
 			$string .= "<form method='post'>";
 			$string .= "<h2>" . $products['name'] . "</h2>";
 			$string .= "<p>" . $products['description'] . "</p>";
-			$string .= "<input type='number' value='" . $products['price'] . "' name='cost' />";
+			$string .= "<label for='cost'>Price: </label><input type='number' value='" . $products['price'] . "' name='cost' />";
 
 			$sqlCheckInCart = "SELECT quantity FROM cart WHERE basket_id = " . $_SESSION['basket_id'] . " AND product_id = " . $_GET['id'];
 			$sqlCheckInCartQuery = mysqli_query($db, $sqlCheckInCart);
 			if (mysqli_num_rows($sqlCheckInCartQuery) > 0) {
 				while ($inCart = mysqli_fetch_array($sqlCheckInCartQuery)) {
-					$string .= "<input type='number' value='" . $inCart['quantity'] . "' name='quantity' />";
+					$string .= "<label for='quantity'>Quantity: </label><input type='number' value='" . $inCart['quantity'] . "' name='quantity' />";
 					break;
 				}
 			} else {

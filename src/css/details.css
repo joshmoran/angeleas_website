@@ -1,4 +1,4 @@
-#contentSplit > *
+#contentSplit
 {
     display: inline-block;
     position: relative;
@@ -9,16 +9,19 @@
     /* box-sizing: content-box; */
 }
 
+#left,
+#right
+{
+    width: 46%;
+    margin: 0.5%;
+    padding: 0.5%;
+}
+
 #leftSide
 {
     box-sizing: content-box;
     float: left;
     left: 0px;
-}
-
-#leftSide img
-{
-    max-width: 20%;
 }
 
 #rightSide
