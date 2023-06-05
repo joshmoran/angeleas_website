@@ -140,15 +140,17 @@ if (!empty($_POST['addToBasket'])) {
 
 			$sqlCheckInCart = "SELECT quantity FROM cart WHERE basket_id = " . $_SESSION['basket_id'] . " AND product_id = " . $_GET['id'];
 			$sqlCheckInCartQuery = mysqli_query($db, $sqlCheckInCart);
+			$string .= '<br>';
 			if (mysqli_num_rows($sqlCheckInCartQuery) > 0) {
 				while ($inCart = mysqli_fetch_array($sqlCheckInCartQuery)) {
 					$string .= "<label for='quantity'>Quantity: </label><input type='number' value='" . $inCart['quantity'] . "' name='quantity' />";
 					break;
 				}
 			} else {
-				$string .= "<input type='number' placeholder='1' name='quantity' value='1'/>";
+				$string .= "<label for='quantity'>Quantity: </label><input type='number' placeholder='1' name='quantity' value='1'/>";
 			}
 			$string .= "<input type='hidden' value='" . $products['id'] . "' name='item' />";
+			$string .= '<br>';
 			$string .= "<input type='submit' name='addToBasket' value='Add to basket' />";
 			$string .= "</form>";
 			$string .= "</div>";
