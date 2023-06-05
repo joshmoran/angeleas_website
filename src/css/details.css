@@ -1,40 +1,20 @@
 #contentSplit
 {
-    display: inline-block;
     position: relative;
-    clear: both;
-    width: 100%;
+    display: block;
     margin: 10px;
     padding: 5px;
-    /* box-sizing: content-box; */
 }
 
-#leftSide,
-#rightSide
+#contentSplit div
 {
-    width: 46%;
-    max-width: 46%;
+
+    display: inline-block;
     margin: 0.5%;
     padding: 0.5%;
 }
 
 #leftSide
 {
-    box-sizing: content-box;
-
+    width: fit-content;
 }
-
-#leftSide img
-{
-    width: 90%;
-}
-
-label
-{
-    display: flexbox;
-    width: 20em;
-    text-align: left;
-}
-
-#rightSide
-{}
