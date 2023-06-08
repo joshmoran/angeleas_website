@@ -10,14 +10,29 @@ function carousel () {
 
     if ( btnSelect == 'home0' ) {
         banner.src = './src/img/banner/0.jpg'
+        btn0.firstChild.src = './src/img/banner/selected.jpg'
+        btn1.firstChild.src = './src/img/banner/unselected.jpg'
+        btn2.firstChild.src = './src/img/banner/unselected.jpg'
     } else if ( btnSelect == 'home1' ) {
         banner.src = './src/img/banner/1.jpg'
+        btn0.firstChild.src = './src/img/banner/unselected.jpg'
+        btn1.firstChild.src = './src/img/banner/selected.jpg'
+        btn2.firstChild.src = './src/img/banner/unselected.jpg'
     } else if ( btnSelect == 'home2' ) {
         banner.src = './src/img/banner/2.jpg'
+        btn0.firstChild.src = './src/img/banner/unselected.jpg'
+        btn1.firstChild.src = './src/img/banner/unselected.jpg'
+        btn2.firstChild.src = './src/img/banner/selected.jpg'
     } else {
 
     }
 }
+
+document.onload = function () {
+    alerrt( 'working onloas' )
+}
+
+
 
 // btn0.addEventListener( , carousel() )
 
