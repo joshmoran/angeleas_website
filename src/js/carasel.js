@@ -2,7 +2,7 @@ let btn0 = document.getElementById( 'home0' )
 let btn1 = document.getElementById( 'home1' )
 let btn2 = document.getElementById( 'home2' )
 
-
+let interval = 3000
 function carousel () {
     btnSelect = this.id
 
@@ -28,9 +28,9 @@ function carousel () {
     }
 }
 
-document.onload = function () {
-    alerrt( 'working onloas' )
-}
+window.body.addEventListener( 'load', async () => {
+    alert( 'working' )
+} )
 
 
 

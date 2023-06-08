@@ -10,28 +10,35 @@ if (isset($_GET['del'])) {
 	$queryDel = mysqli_query($db, $sqlDelete);
 }
 
-if (!isset($_SESSION['basket_id'])) {
-	// Check if outstanding basket none
-	$sql = "SELECT basket_id FROM basket WHERE customer_id = " . $_SESSION['customer_id'] . " AND complete = false";
-	$basketResult = mysqli_query($db, $sql);
+if (!isset($basketID)) {
+	$basketID = 0;
+}
 
-	if (mysqli_num_rows($basketResult) === 0) {
-		do {
-			$no = randomNumber();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+	if (!isset($_SESSION['basket_id'])) {
+		// Check if outstanding basket none
+		$sql = "SELECT basket_id FROM basket WHERE customer_id = " . $_SESSION['customer_id'] . " AND complete = false";
+		$basketResult = mysqli_query($db, $sql);
 
-			$sql = "SELECT basket_id FROM cart WHERE basket_id = " . $no;
-			$result = mysqli_query($db, $sql);
+		if (mysqli_num_rows($basketResult) === 0) {
+			do {
+				$no = randomNumber();
 
-			$_SESSION['basket_id'] = $no;
-		} while (mysqli_num_rows($result) > 0);
+				$sql = "SELECT basket_id FROM cart WHERE basket_id = " . $no;
+				$result = mysqli_query($db, $sql);
+
+				$_SESSION['basket_id'] = $no;
+			} while (mysqli_num_rows($result) > 0);
+		}
+	}
+
+	if (isset($_SESSION['loggedIn'])) {
+		(int)$basketID = $_SESSION['basket_id'];
+	} else {
+		header("Location: index.php");
 	}
 }
 
-if (isset($_SESSION['loggedIn'])) {
-	(int)$basketID = $_SESSION['basket_id'];
-} else {
-	header("Location: index.php");
-}
 $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = products.id WHERE basket_id = '$basketID'";
 
 ?>
