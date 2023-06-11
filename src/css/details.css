@@ -1,14 +1,15 @@
 #contentSplit
 {
     height: max-content;
-    display: block;
-    margin: 10px;
+    display: inline-flex;
+    margin: 0 20%;
     padding: 5px;
+    width: 80%;
 }
 
 #contentSplit div
 {
-    display: inline-block;
+    display: inline-flex;
 
     margin: 0;
     /*
@@ -19,18 +20,36 @@
 #leftSide
 {
     width: fit-content;
+    width: 50%;
 
 }
 
 #leftSide img
 {
-    width: 60%;
+    width: 90%;
 }
 
-#rightSide
+#rightSide,
 {
-    height: auto;
+    width: 50em;
+    height: max-content;
     top: 1000px;
+    margin: 0 auto 0 auto;
+}
+
+label
+{
+    width: 5em;
+    min-width: 5em;
+    display: flex;
+    height: 1.2em;
+}
+
+input
+{
+    width: 5em;
+    height: 1.2em;
+    clear: both;
 }
 
 #form
