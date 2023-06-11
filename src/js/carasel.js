@@ -24,14 +24,9 @@ function carousel () {
         btn1.firstChild.src = './src/img/banner/unselected.jpg'
         btn2.firstChild.src = './src/img/banner/selected.jpg'
     } else {
-
+        alert( 'Their was a problem displaying the banner, please try again' )
     }
 }
-
-window.body.addEventListener( 'load', async () => {
-    alert( 'working' )
-} )
-
 
 
 // btn0.addEventListener( , carousel() )

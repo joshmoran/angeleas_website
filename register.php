@@ -231,9 +231,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					</tr>
 					<tr>
 						<td><label for="firstname">First name: </label></td>
-						<td><input type="text" name="firstname" value="<?php if (!empty($_POST['firstname'])) {
-																			print($_POST['firstname']);
-																		} ?>" required /></td>
+						<td><input type="text" name="firstname" <?php if (!empty($_POST['firstname'])) {
+																	echo 'value="' . $_POST['firstname'] . '"';
+																} else {
+																	echo "value=''";
+																} ?>" required /></td>
 						<td><?php if (isset($errorFirstName)) {
 								echo $errorFirstName;
 							} ?></td>

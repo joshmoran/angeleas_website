@@ -5,6 +5,8 @@ require "src/variables.php";
 require "src/database.php";
 require "src/random_number.php";
 
+echo $_SESSION['basket_id'];
+
 if (isset($_GET['del'])) {
 	$sqlDelete = "DELETE FROM cart WHERE product_id = " . $_GET['del'] . " AND basket_id = " . $_SESSION['basket_id'];
 	$queryDel = mysqli_query($db, $sqlDelete);
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 }
 
-$sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = products.id WHERE basket_id = '$basketID'";
+$sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = products.id WHERE cart.basket_id = '" . $_SESSION['basket_id'] . "'";
 
 ?>
 
@@ -105,7 +107,8 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 						echo "<td>" . $row['name'] . "</td>";
 						echo "<td>" . $row['description'] . "</td>";
 						echo "<td>" . $row['quantity'] . "</td>";
-						echo "<td>" . ($row['price'] * $row['quantity'])  . "</td>";
+						$itemTotal = $row['price'] * $row['quantity'];
+						echo "<td>£" . number_format($itemTotal, 2, '.', ',')  . "</td>";
 						echo "</tr>";
 					}
 
@@ -114,7 +117,7 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 					echo "<td></td>";
 					echo "<td></td>";
 					echo "<td>Total: </td>";
-					echo "<td>" . $total . "</td>";
+					echo "<td>£" . number_format($total, 2, '.', ',') . "</td>";
 					echo "</tr>";
 
 					echo "<tr>";

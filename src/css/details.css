@@ -8,7 +8,7 @@
 
 #contentSplit div
 {
-    display: inline-flex;
+    display: inline-block;
 
     margin: 0;
     /*
@@ -20,6 +20,11 @@
 {
     width: fit-content;
 
+}
+
+#leftSide img
+{
+    width: 60%;
 }
 
 #rightSide
