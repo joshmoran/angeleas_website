@@ -31,7 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	{
 		if (!$statement) {
 			echo 'option one';
-			return 'UPDATE customers SET ';
+			if (isset($_POST['makeChangesCustomer'])) {
+				return 'UPDATE customers SET ';
+			} else if (isset($_POST['makeChangesAddress'])) {
+				return 'UPDATE address SET ';
+			} else if (isset($_POST['makeChangesCreditCard'])) {
+				return 'UPDATE credit_cards SET ';
+			}
 		} else {
 			echo 'option two';
 			return ', ';
@@ -54,7 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 		$sqlCustomer = '';
-		$id = 'customer';
 
 		if (!empty($_POST['firstName'])) {
 			$comma = checkSql($sqlCustomer);
@@ -102,12 +107,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 
+	if (isset($_POST['makeChangesAddress'])){
+		$sqlAddress = '';
+	}
+
+	if (isset($_POST['makeChangesCreditCard'])){
+		$sqlCreditCard = '';
+
+		if (!empty($_POST['firstName'])) {
+			$comma = checkSql($sqlCustomer);
+
+			$sqlCustomer .= $comma . ' first_name = "' . mysqli_real_escape_string($db, $_POST['firstName']) . '" ';
+		} else {
+			$errors[] = "First Name is a required field";
+		}
+	}
+	if (isset($_POST['makeChangesCustomer']) && count($errors) < 1) {
+		echo $sqlCustomer;
+	}
+
 	if (isset($_POST['makeChangesAddress'])) {
+		echo $sqlAddress;
 	}
 
 	if (isset($_POST['makeChangesCreditCard'])) {
-	} else {
-		$errors[] = 'Could not processing your request. Please try again. If this happens again, please contact us.';
+		echo $sqlAddress;
 	}
 
 	// $name = trim(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING));

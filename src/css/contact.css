@@ -31,6 +31,12 @@ input:last-child
 
 }
 
+input[name=subject]
+{
+    width: 23.5em;
+
+}
+
 textarea
 {
     resize: none;
