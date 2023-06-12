@@ -14,7 +14,7 @@ require "src/functions.php";
 // add card to account
 // add address to account 
 $errors = array();
-if ($_SESSION['loggedIn'] == false) {
+if (isset($_SESSIOn['loggedIn']) && $_SESSION['loggedIn'] == false) {
 	header("Location: login.php");
 }
 
@@ -101,50 +101,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorCustomer[] = 'Something went wrong. Please try again later';
 			}
 		} else {
-
 		}
 		$errorCustomer = array();
 		$_POST['makeChangesCustomer'] = null;
 	}
 
-	if (isset($_POST['makeChangesAddress'])){
+	if (isset($_POST['makeChangesAddress'])) {
 		$sqlAddress = '';
 		$errorsAddress = array();
 
-		if (!empty($_POST['cardnumber'])) {
+		if (!empty($_POST['address1st'])) {
 			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' 1_line = "' . mysqli_real_escape_string($db, $_POST['cardnumber']) . '" ';
+			$sqlCreditCard .= $comma . ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
 		} else {
 			$errorsAddress[] = "First Name is a required field";
 		}
-		if (!empty($_POST['cardnumber'])) {
+		if (!empty($_POST['address2nd'])) {
 			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['cardnumber']) . '" ';
+			$sqlCreditCard .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
 		} else {
 			$errorsAddress[] = "First Name is a required field";
 		}
-		if (!empty($_POST['cardnumber'])) {
+		if (!empty($_POST['address3rd'])) {
 			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' 3_line = "' . mysqli_real_escape_string($db, $_POST['cardnumber']) . '" ';
+			$sqlCreditCard .= $comma . ' 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
 		} else {
 			$errorsAddress[] = "First Name is a required field";
 		}
-		if (!empty($_POST['cardnumber'])) {
+		if (!empty($_POST['region'])) {
 			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['cardnumber']) . '" ';
+			$sqlCreditCard .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
 		} else {
 			$errorsAddress[] = "First Name is a required field";
 		}
-		if (!empty($_POST['cardnumber'])) {
+		if (!empty($_POST['postcode'])) {
 			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['cardnumber']) . '" ';
+			$sqlCreditCard .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
 		} else {
 			$errorsAddress[] = "First Name is a required field";
 		}
 		$sqlCreditCard .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
 
 		if (count($errorsAddress)) {
-			if (mysqli_query($db, $sqlCreditCard)){
+			if (mysqli_query($db, $sqlCreditCard)) {
 				$errorsAddress[] = 'Successfully update your credit card details.';
 			} else {
 				$errorsAddress[] = 'Something went wrong. Please try again later.';
@@ -154,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 
-	if (isset($_POST['makeChangesCreditCard'])){
+	if (isset($_POST['makeChangesCreditCard'])) {
 		$sqlCreditCard = '';
 		$errorsCard = array();
 
@@ -175,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$sqlCreditCard .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
 
 		if (count($errorsCard)) {
-			if (mysqli_query($db, $sqlCreditCard)){
+			if (mysqli_query($db, $sqlCreditCard)) {
 				$errorsCard[] = 'Successfully update your credit card details.';
 			} else {
 				$errorsCard[] = 'Something went wrong. Please try again later.';
@@ -186,18 +185,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 }
 
-	// $name = trim(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING));
-	// $nameSplit = explode(' ', $name);
-	// $nameSplit[0] = $firstName;
-	// $nameSplit[1] = $lastName;
-	// $addressFirst = trim(filter_input(INPUT_POST, 'addressFirstLine', FILTER_SANITIZE_STRING));
-	// $addressSecond = trim(filter_input(INPUT_POST, 'addressSecondLine', FILTER_SANITIZE_STRING));
-	// $postcode = trim(filter_input(INPUT_POST, 'addressPostcode', FILTER_SANITIZE_STRING));
-	// $address = $addressFirst . ', ' . $addressSecond . ', ' . $postcode;
-	// // $name = trim(filter_input(INPUT_POST, 'name', FILTER_SANATIZE_STRING));
+// $name = trim(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING));
+// $nameSplit = explode(' ', $name);
+// $nameSplit[0] = $firstName;
+// $nameSplit[1] = $lastName;
+// $addressFirst = trim(filter_input(INPUT_POST, 'addressFirstLine', FILTER_SANITIZE_STRING));
+// $addressSecond = trim(filter_input(INPUT_POST, 'addressSecondLine', FILTER_SANITIZE_STRING));
+// $postcode = trim(filter_input(INPUT_POST, 'addressPostcode', FILTER_SANITIZE_STRING));
+// $address = $addressFirst . ', ' . $addressSecond . ', ' . $postcode;
+// // $name = trim(filter_input(INPUT_POST, 'name', FILTER_SANATIZE_STRING));
 
 
-}
+
 
 ?>
 

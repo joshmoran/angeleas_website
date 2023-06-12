@@ -337,8 +337,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		include "inc/footer.php";
 		?>
 		<script type="text/javascript" src="src/js/js.js"></script>
+		<script>
+			var data = <?php echo json_encode($_POST) ?>;
+
+			window.addEventListener('load', () => {
+				document.getElementsByTagName('input[name=firstname]').style.background - color = 'red';
+			});
+		</script>
 </body>
 
 </html>
-
-<?php
