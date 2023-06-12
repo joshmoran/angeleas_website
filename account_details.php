@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// Credit Card Numbers
 	require "src/database.php";
 
-
 	function checkSql($statement)
 	{
 		if (!$statement) {
@@ -44,10 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 
-	$sqlAddress = "UPDATE address SET ";
-	$sqlCreditCard = "UPDATE credit_cards SET ";
-
-
 	if (isset($_POST['makeChangesCustomer'])) {
 
 		// $sqlCustomer = "UPDATE customers SET ";
@@ -60,51 +55,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 		$sqlCustomer = '';
+		$errorCustomer = array();
 
 		if (!empty($_POST['firstName'])) {
 			$comma = checkSql($sqlCustomer);
 
 			$sqlCustomer .= $comma . ' first_name = "' . mysqli_real_escape_string($db, $_POST['firstName']) . '" ';
 		} else {
-			$errors[] = "First Name is a required field";
+			$errorCustomer[] = "First Name is a required field";
 		}
 
 		if (!empty($_POST['lastName'])) {
 			$comma = checkSql($sqlCustomer);
 			$sqlCustomer .= $comma . ' last_name = "' . mysqli_escape_string($db, $_POST['lastName']) . '" ';
 		} else {
-			$errors[] = "last Name is a required field";
+			$errorCustomer[] = "last Name is a required field";
 		}
 
 		if (!empty($_POST['email'])) {
 			$comma = checkSql($sqlCustomer);
 			$sqlCustomer .= $comma . ' email = "' . mysqli_escape_string($db, $_POST['email']) . '" ';
 		} else {
-			$errors[] = "last Name is a required field";
+			$errorCustomer[] = "last Name is a required field";
 		}
 
 		if (!empty($_POST['mobile'])) {
 			$comma = checkSql($sqlCustomer);
 			$sqlCustomer .= $comma . ' mobile = "' . mysqli_escape_string($db, $_POST['mobile']) . '" ';
 		} else {
-			$errors[] = "last Name is a required field";
+			$errorCustomer[] = "last Name is a required field";
 		}
 
 		if (!empty($_POST['home'])) {
 			$comma = checkSql($sqlCustomer);
 			$sqlCustomer .= $comma . ' home = "' . mysqli_escape_string($db, $_POST['home']) . '" ';
 		} else {
-			$errors[] = "last Name is a required field";
+			$errorCustomer[] = "last Name is a required field";
 		}
 		$sqlCustomer .= " WHERE customer_id = " . $_SESSION['customer_id'];
 
-		if (count($errors)) {
+		if (count($errorCustomer)) {
 			if (mysqli_query($db, $sqlCustomer)) {
-				$errors[] = 'Successfully updated your customer details';
+				$errorCustomer[] = 'Successfully updated your customer details';
 			} else {
-				$errors[] = 'Something went wrong. Please try again later';
+				$errorCustomer[] = 'Something went wrong. Please try again later';
 			}
+		} else {
+
 		}
+		$errorCustomer = array();
 	}
 
 	if (isset($_POST['makeChangesAddress'])){
@@ -113,13 +112,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	if (isset($_POST['makeChangesCreditCard'])){
 		$sqlCreditCard = '';
+		$errorsCard = array();
 
-		if (!empty($_POST['firstName'])) {
-			$comma = checkSql($sqlCustomer);
-
-			$sqlCustomer .= $comma . ' first_name = "' . mysqli_real_escape_string($db, $_POST['firstName']) . '" ';
+		if (!empty($_POST['cardnumber'])) {
+			$comma = checkSql($sqlCreditCard);
+			$sqlCreditCard .= $comma . ' cardnumber = "' . mysqli_real_escape_string($db, $_POST['cardnumber']) . '" ';
 		} else {
-			$errors[] = "First Name is a required field";
+			$errorsCard[] = "Card Number is invalid";
+		}
+
+		if (!empty($_POST['cardnumber'])) {
+			$comma = checkSql($sqlCreditCard);
+			$sqlCreditCard .= $comma . ' cardnumber = "' . mysqli_real_escape_string($db, $_POST['cardnumber']) . '" ';
+		} else {
+			$errorsCard[] = "Expiry is invalid";
+		}
+
+		$sqlCreditCard .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+
+		if (count($errorsCard)) {
+			if (mysqli_query($db, $sqlCreditCard)){
+				$errorsCard[] 'Successfuly update your credit card details';
+			} else {
+				$errorsCard
+			}
 		}
 	}
 	if (isset($_POST['makeChangesCustomer']) && count($errors) < 1) {
