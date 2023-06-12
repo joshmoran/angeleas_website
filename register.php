@@ -341,9 +341,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			var data = <?php echo json_encode($_POST) ?>;
 
 			window.addEventListener('load', () => {
-				document.getElementsByTagName('input[name=firstname]').style.background - color = 'red';
+				document.querySelector('input[name=firstname]').style.backgroundColor = 'red';
 			});
 		</script>
 </body>
-
-</html>
+
