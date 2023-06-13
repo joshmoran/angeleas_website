@@ -154,10 +154,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$_SESSION['loggedIn'] = true;
 			$_SESSION['admin'] = false;
 			header("Location: account.php");
-			die();
 		} else {
 			$error_message = 'Their has been a problem submitting your registration if this problem persists please contact the system administrator';
-			header("Location: register.php?" . $getMessage);
+			header("Location: register.php");
 		}
 	}
 }
@@ -307,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		?>
 		<script type="text/javascript" src="src/js/js.js"></script>
 		<script>
-			var data = <?php echo json_encode($_POST['firstname'] ?? null) ?>;
+			var data = (true) <?php echo $_POST['firstname'] ?>: null;
 
 			window.addEventListener('load', () => {
 
