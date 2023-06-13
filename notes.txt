@@ -75,9 +75,9 @@ at end of document put php ]
     - email
     - phoneHome
     - phoneMobile
-    - 1st_line
-    - 2nd_line
-    - 3rd_line
+    - line1
+    - line2
+    - line3
     - region
     - postcode
     - username

@@ -8,8 +8,6 @@ error_reporting(-1);
 require 'src/variables.php';
 require 'src/random_number.php';
 
-$_POST['firstname'] = 'johs';
-
 function sanitizeInput($data)
 {
 	$data = trim($data);
@@ -157,6 +155,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$_SESSION['admin'] = false;
 			header("Location: account.php");
 		} else {
+			echo '<script src="src/js/register.js" type="text/javascript"></script>';
+
 			$error_message = 'Their has been a problem submitting your registration if this problem persists please contact the system administrator';
 			header("Location: register.php");
 		}
@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					</tr>
 					<tr>
 						<td><label for="firstname">First name: </label></td>
-						<td><input type="text" name="firstname" value="" required /></td>
+						<td><input type="text" name="firstname" required /></td>
 						<td><?php if (isset($errorFirstName)) {
 								echo $errorFirstName;
 							} ?></td>
@@ -244,22 +244,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						</td>
 					</tr>
 					<tr>
-						<td><label for="1st_line">1st Line : </label></td>
-						<td><input type="text" name="1st_line" value="" /></td>
+						<td><label for="line1">1st Line : </label></td>
+						<td><input type="text" name="line1" value="" /></td>
 						<td><?php if (isset($errorAddress1)) {
 								echo $errorAddress1;
 							} ?></td>
 					</tr>
 					<tr>
-						<td><label for="2nd_line">2nd Line: </label></td>
-						<td><input type="text" name="2nd_line" value="" /></td>
+						<td><label for="line2">2nd Line: </label></td>
+						<td><input type="text" name="line2" value="" /></td>
 						<td><?php if (isset($errorAddress2)) {
 								echo $errorAddress2;
 							} ?></td>
 					</tr>
 					<tr>
-						<td><label for="3rd_line">3rd Line: </label></td>
-						<td><input type="text" name="3rd_line" value="" /></td>
+						<td><label for="line3">3rd Line: </label></td>
+						<td><input type="text" name="line3" value="" /></td>
 						<td><?php if (isset($errorAddress3)) {
 								echo $errorAddress3;
 							} ?></td>
@@ -307,44 +307,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		include "inc/footer.php";
 		?>
 		<script type="text/javascript" src="src/js/js.js"></script>
-		<script>
-			var data = <?php echo json_encode($_POST['firstname'] ?? null) ?>;
-
-			alert(data);
-
-			window.addEventListener('load', () => {
-
-				// Customer Details
-
-				// First Name
-				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;
-				// Last Name
-				document.querySelector('input[name=lastname]').value = <?php echo json_encode($_POST['lastname'] ?? null) ?>;
-				// Email
-				document.querySelector('input[name=email]').value = <?php echo json_encode($_POST['email'] ?? null) ?>;
-				// Phone Home
-				document.querySelector('input[name=phoneHome]').value = <?php echo json_encode($_POST['phoneHome'] ?? null) ?>;
-				// Mobile Name
-				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;
-
-				// Address 
-				
-				// First Name
-				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;
-				// First Name
-				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;;
-				// First Name
-				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;;
-				// First Name
-				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;;
-				// First Name
-				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;; 
-				// First Name
-				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;;
-				// First Name
-				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;;
-			});
-		</script>
 </body>
 
 </html>
