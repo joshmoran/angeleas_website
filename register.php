@@ -8,6 +8,8 @@ error_reporting(-1);
 require 'src/variables.php';
 require 'src/random_number.php';
 
+$errors = array();
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	//Customer details 
 	if (isset($_GET['firstName'])) {
@@ -73,15 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		// FIRST NAME 
 		if (strlen($firstName) <= 3 || $firstName == null || $firstName == '') {
-			$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-
-			$errors++;
-			$getMessage .= 'firstName=false&';
+			$$errors[] = 'First Name is required and must not be empty or less than 3 characters.';
 		}
 
 		// LAST NAME
 		if (strlen($lastName) <= 3 || $lastName == null || $lastName == '') {
-			$errorLastName = 'Last Name is required and must not be empty or less than 3 characters.';
+			$errors[] = 'Last Name is required and must not be empty or less than 3 characters.';
 			$errors++;
 		}
 
@@ -341,8 +340,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			var data = <?php echo json_encode($_POST) ?>;
 
 			window.addEventListener('load', () => {
-				document.querySelector('input[name=firstname]').style.backgroundColor = 'red';
+
+				console.log(data);
+				document.querySelector('input[name=firstname]').value = data['firstname'];
+
 			});
 		</script>
 </body>
-
+
+</html>
