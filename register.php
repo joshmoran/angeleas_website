@@ -307,11 +307,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		?>
 		<script type="text/javascript" src="src/js/js.js"></script>
 		<script>
-			console.log(firstName);
+			var data = <?php echo json_encode($_POST['firstname'] ?? null) ?>;
+
 			window.addEventListener('load', () => {
 
 				console.log(data);
-				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname']) ?>;
+				document.querySelector('input[name=firstname]').value = data;
 
 			});
 		</script>
