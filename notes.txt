@@ -69,8 +69,20 @@ at end of document put php ]
 -------------------------------------------------------
 -----------     REGISTER.PHP     -----------------------
 -------------------------------------------------------
-
-- error variables  
+- main variables
+    - firstname
+    - lastname
+    - email
+    - phoneHome
+    - phoneMobile
+    - 1st_line
+    - 2nd_line
+    - 3rd_line
+    - region
+    - postcode
+    - username
+    - password
+- error variables
     - errorFirstName
     - errorLastName
     - errorEmail

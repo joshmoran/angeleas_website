@@ -8,6 +8,8 @@ error_reporting(-1);
 require 'src/variables.php';
 require 'src/random_number.php';
 
+$_POST['firstname'] = 'johs';
+
 function sanitizeInput($data)
 {
 	$data = trim($data);
@@ -306,13 +308,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		?>
 		<script type="text/javascript" src="src/js/js.js"></script>
 		<script>
-			var data = (true) <?php echo $_POST['firstname'] ?>: null;
+			var data = <?php echo json_encode($_POST['firstname'] ?? null) ?>;
+
+			alert(data);
 
 			window.addEventListener('load', () => {
 
-				console.log(data);
-				document.querySelector('input[name=firstname]').value = data;
+				// Customer Details
 
+				// First Name
+				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;
+				// Last Name
+				document.querySelector('input[name=lastname]').value = <?php echo json_encode($_POST['lastname'] ?? null) ?>;
+				// Email
+				document.querySelector('input[name=email]').value = <?php echo json_encode($_POST['email'] ?? null) ?>;
+				// Phone Home
+				document.querySelector('input[name=phoneHome]').value = <?php echo json_encode($_POST['phoneHome'] ?? null) ?>;
+				// Mobile Name
+				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;
+
+				// Address 
+				
+				// First Name
+				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;
+				// First Name
+				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;;
+				// First Name
+				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;;
+				// First Name
+				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;;
+				// First Name
+				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;; 
+				// First Name
+				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;;
+				// First Name
+				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname'] ?? null) ?>;;
 			});
 		</script>
 </body>
