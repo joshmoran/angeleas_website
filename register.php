@@ -23,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		require "src/database.php";
 		$getMessage = '';
 
+		$errors = 0;
+
 		function checkemail($str)
 		{
 			return (preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $str)) ? true : false;
@@ -47,27 +49,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// FIRST NAME 
 		if (strlen($firstName) <= 3 || $firstName == null || $firstName == '') {
 			$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
+			$errors++;
 		}
 
 		// LAST NAME
 		if (strlen($lastName) <= 3 || $lastName == null || $lastName == '') {
 			$errorLastName = 'Last Name is required and must not be empty or less than 3 characters.';
+			$errors++;
 		}
 
 		// EMAIL - CHECK IF VALID EMAIL ADDRESS
 		$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
 		if (checkemail($email) === false || strlen($email) == '' || $email == null) {
-			$errorEmail= 'Email is required and must be a valid email address.';
+			$errorEmail = 'Email is required and must be a valid email address.';
+			$errors++;
 		}
 
 		// HOME NUMBER - ONLY CHECK IF INPUT IS ENTERED
 		if (strlen($home) != 11 || strlen($home) > 1) {
-			$errorH = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
+			$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
+			$errors++;
 		}
 
 		// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
 		if (strlen($mobile) != 11 || strlen($mobile) > 1) {
 			$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
+			$errors++;
 		}
 
 
@@ -300,12 +307,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		?>
 		<script type="text/javascript" src="src/js/js.js"></script>
 		<script>
-			var data = <?php echo json_encode($_POST) ?>;
-
+			console.log(firstName);
 			window.addEventListener('load', () => {
 
 				console.log(data);
-				document.querySelector('[name=firstname]').nodeValue = data['firstname'];
+				document.querySelector('input[name=firstname]').value = <?php echo json_encode($_POST['firstname']) ?>;
 
 			});
 		</script>

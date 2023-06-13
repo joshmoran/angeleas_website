@@ -67,5 +67,19 @@ at end of document put php ]
 
 
 -------------------------------------------------------
------------     ACCOUNT_DETAILS.PHP     -----------------------
+-----------     REGISTER.PHP     -----------------------
 -------------------------------------------------------
+
+- error variables  
+    - errorFirstName
+    - errorLastName
+    - errorEmail
+    - errorPhone
+    - errorMobile
+    - errorAddress1
+    - errorAddress2
+    - errorAddress3
+    - errorRegion
+    - errorPostcode
+    - errorUsername
+    - errorPassword
