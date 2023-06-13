@@ -8,32 +8,6 @@ error_reporting(-1);
 require 'src/variables.php';
 require 'src/random_number.php';
 
-$errors = array();
-
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-	//Customer details 
-	if (isset($_GET['firstName'])) {
-		$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-	}
-
-	if (isset($_GET['firstName'])) {
-		$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-	}
-
-	if (isset($_GET['firstName'])) {
-		$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-	}
-
-	if (isset($_GET['firstName'])) {
-		$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-	}
-
-	if (isset($_GET['firstName'])) {
-		$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-	}
-}
-
-
 function sanitizeInput($data)
 {
 	$data = trim($data);
@@ -47,9 +21,6 @@ function sanitizeInput($data)
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (isset($_POST['register'])) {
 		require "src/database.php";
-
-		$errors = 0;
-
 		$getMessage = '';
 
 		function checkemail($str)
@@ -75,32 +46,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		// FIRST NAME 
 		if (strlen($firstName) <= 3 || $firstName == null || $firstName == '') {
-			$$errors[] = 'First Name is required and must not be empty or less than 3 characters.';
+			$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
 		}
 
 		// LAST NAME
 		if (strlen($lastName) <= 3 || $lastName == null || $lastName == '') {
-			$errors[] = 'Last Name is required and must not be empty or less than 3 characters.';
-			$errors++;
+			$errorLastName = 'Last Name is required and must not be empty or less than 3 characters.';
 		}
 
 		// EMAIL - CHECK IF VALID EMAIL ADDRESS
 		$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
 		if (checkemail($email) === false || strlen($email) == '' || $email == null) {
-			$errorEmail = 'Email is required and must be a valid email address.';
-			$errors++;
+			$errorEmail= 'Email is required and must be a valid email address.';
 		}
 
 		// HOME NUMBER - ONLY CHECK IF INPUT IS ENTERED
 		if (strlen($home) != 11 || strlen($home) > 1) {
-			$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
-			$errors++;
+			$errorH = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
 		}
 
 		// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
 		if (strlen($mobile) != 11 || strlen($mobile) > 1) {
 			$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
-			$errors++;
 		}
 
 
@@ -230,11 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					</tr>
 					<tr>
 						<td><label for="firstname">First name: </label></td>
-						<td><input type="text" name="firstname" <?php if (!empty($_POST['firstname'])) {
-																	echo 'value="' . $_POST['firstname'] . '"';
-																} else {
-																	echo "value=''";
-																} ?>" required /></td>
+						<td><input type="text" name="firstname" value="" required /></td>
 						<td><?php if (isset($errorFirstName)) {
 								echo $errorFirstName;
 							} ?></td>
@@ -342,7 +305,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			window.addEventListener('load', () => {
 
 				console.log(data);
-				document.querySelector('input[name=firstname]').value = data['firstname'];
+				document.querySelector('[name=firstname]').nodeValue = data['firstname'];
 
 			});
 		</script>
