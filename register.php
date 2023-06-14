@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 				$sqlCheckID = "SELECT customer_id from customers where customer_id = " . $customerNo;
 				$checkID = mysqli_query($db, $sqlCheckID);
-			} while (mysqli_num_rows($checkID) > 1);
+			} while (mysqli_num_rows($checkID) != 0);
 
 			// if (strlen($address_1st) >= 1 || $address_1st != null || $address_1st != '' || strlen($postcode) >= 1 || $postcode != null || $postcode != '' || strlen($region) >= 1 || $region != null || $region != '') {
 			$addressIm = $address_1st . ', ' . $address_2nd . ', ' . $address_3rd . ', ' . $region . ',' . $postcode;

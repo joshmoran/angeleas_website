@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "src/functions.php";
+require "src/database.php";
 
 //$_SESSION['loggedIn'] = false;
 
@@ -255,29 +256,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						- MOBILE NO
 				 -->
 				<tr>
-					<td><label for="firstName">First Name: </label></td>
-					<td><input type="text" name="firstName" /></td>
+					<?php
+
+					$sqlCustomer = "SELECT * FROM customers WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
+
+					foreach (mysqli_query($db, $sqlCustomer) as $user) :
+
+					?>
+
+						<td><label for="firstName">First Name: </label></td>
+						<td><input type="text" name="firstName" <?php if (isset($user['first_name'])) {
+																	echo 'value="' . $user['first_name'] . '"';
+																} ?> /></td>
 				</tr>
 				<tr>
 					<td><label for="lastName">Last Name: </label></td>
-					<td><input type="text" name="lastName" /></td>
+					<td><input type="text" name="lastName" <?php if (isset($user['last_name'])) {
+																echo 'value="' . $user['last_name'] . '"';
+															} ?> /></td>
 				</tr>
 				<tr>
 					<td><label for="email">Email: </label></td>
-					<td><input type="text" name="email" /></td>
-				</tr>
-				<tr>
-					<td><label for="mobile">Mobile Number: </label></td>
-					<td><input type="text" name="mobile" /></td>
+					<td><input type="text" name="email" <?php if (isset($user['email'])) {
+															echo 'value="' . $user['email'] . '"';
+														} ?> /></td>
 				</tr>
 				<tr>
 					<td><label for="home">Home Number: </label></td>
-					<td><input type="text" name="home" /></td>
+					<td><input type="text" name="home" <?php if (!empty($user['home'])) {
+															echo 'value="' . $user['home'] . '"';
+														} ?> /></td>
+				</tr>
+				<tr>
+					<td><label for="mobile">Mobile Number: </label></td>
+					<td><input type="text" name="mobile" <?php if (!empty($user['mobile'])) {
+																echo 'value="' . $user['mobile'] . '"';
+															} ?> /></td>
 				</tr>
 				<tr>
 					<td colspan="2"><button type="submit" name="makeChangesCustomer" value="Submit">Submit</button></td>
 				</tr>
-				<!--
+
+			<?php
+					endforeach;
+			?>
+			<!--
 					CHANGE ADDRESS DETAILS
 						- first line 
 						- second line 
@@ -285,62 +308,78 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						- region
 						- postcode
 				 -->
-				<tr>
-					<th colspan="2">Change address details</th>
-				</tr>
-				<tr>
-					<td><label for="personalChanges">Make changes to my personal details</label></td>
-					<td><input type="checkbox" id="personalChanges" name="personalChanges" /></td>
-				</tr>
-				<tr>
-					<td><label for="address1st">First Line</label></td>
-					<td><input type="text" name="address1st" /></td>
-				</tr>
-				<tr>
-					<td><label for="address2nd">Second Line</label></td>
-					<td><input type="text" name="address2nd" /></td>
-				</tr>
-				<tr>
-					<td><label for="address3rd">Third Line</label></td>
-					<td><input type="text" name="address3rd" /></td>
-				</tr>
-				<tr>
-					<td><label for="region">Region</label></td>
-					<td><input type="text" name="region" /></td>
-				</tr>
-				<tr>
-					<td><label for="postcode">Postcode</label></td>
-					<td><input type="text" name="postcode"></td>
-				</tr>
-				<tr>
-					<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
-				</tr>
-				<!-- 
+			<tr>
+				<th colspan="2">Change address details</th>
+			</tr>
+			<tr>
+				<td><label for="personalChanges">Make changes to my personal details</label></td>
+				<td><input type="checkbox" id="personalChanges" name="personalChanges" /></td>
+			</tr>
+			<?php
+			$sqlAddress = 'SELECT * FROM address WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+
+			for (mysqli_query($db, $sqlAddress)):
+
+				?>
+			<tr>
+				<td><label for="address1st">First Line</label></td>
+				<td><input type="text" name="address1st" /></td>
+			</tr>
+			<tr>
+				<td><label for="address2nd">Second Line</label></td>
+				<td><input type="text" name="address2nd" /></td>
+			</tr>
+			<tr>
+				<td><label for="address3rd">Third Line</label></td>
+				<td><input type="text" name="address3rd" /></td>
+			</tr>
+			<tr>
+				<td><label for="region">Region</label></td>
+				<td><input type="text" name="region" /></td>
+			</tr>
+			<tr>
+				<td><label for="postcode">Postcode</label></td>
+				<td><input type="text" name="postcode"></td>
+			</tr>
+
+			<?php
+
+			endfor;
+
+			?>
+			<tr>
+				<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
+			</tr>
+			<!-- 
 					CHANGE CREDIT CARD
 				  -->
-				<tr>
-					<th colspan="3">
-						<h2>Payment Details</h2>
-					</th>
-				</tr>
-				<tr>
-					<td><label for="paymentChange">Make payment details changes</label></td>
-					<td colspan="2"><input type="checkbox" name="paymentChange" /></td>
-				</tr>
+			<tr>
+				<th colspan="3">
+					<h2>Payment Details</h2>
+				</th>
+			</tr>
+			<?php
+				$sqlCreditCard = "SELECT * FROM ";
+				
+			?>
+			<tr>
+				<td><label for="paymentChange">Make payment details changes</label></td>
+				<td colspan="2"><input type="checkbox" name="paymentChange" /></td>
+			</tr>
 
 
-				<tr>
-					<td><label for="cardnumber">Card Number: </label></td>
-					<td><input type="text" name="cardnumber" /></td>
-				</tr>
-				<tr>
-					<td><label for="expiry">Expiry</label></td>
-					<td><input type="text" name="expiry" /></td>
-				</tr>
+			<tr>
+				<td><label for="cardnumber">Card Number: </label></td>
+				<td><input type="text" name="cardnumber" /></td>
+			</tr>
+			<tr>
+				<td><label for="expiry">Expiry</label></td>
+				<td><input type="text" name="expiry" /></td>
+			</tr>
 
-				<tr>
-					<td colspan="2"><button type="submit" name="makeChanges">Submit</button></td>
-				</tr>
+			<tr>
+				<td colspan="2"><button type="submit" name="makeChanges">Submit</button></td>
+			</tr>
 
 			</table>
 		</form>

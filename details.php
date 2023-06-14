@@ -71,7 +71,7 @@ if (!empty($_POST['addToBasket'])) {
 			$checkID = mysqli_query($db, $sqlCheckID);
 
 			$_SESSION['basket_id'] = $basketNo;
-		} while (mysqli_num_rows($checkID) > 1);
+		} while (mysqli_num_rows($checkID) != 0);
 
 		$sqlAddToOrder = "INSERT INTO orders ( order_id, customer_id, complete)  VALUES ( '" . $_SESSION['basket_id']  . "', '" .  $_SESSION['customer_id'] . "', 0 )";
 
