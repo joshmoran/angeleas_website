@@ -120,13 +120,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		// HOME NUMBER - ONLY CHECK IF INPUT IS ENTERED
-		if (strlen($home) != 11 || strlen($home) > 1) {
+		if (strlen($home) != 11 && strlen($home) > 0) {
 			$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
 			$errors++;
 		}
 
 		// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
-		if (strlen($mobile) != 11 || strlen($mobile) > 1) {
+		if (strlen($mobile) != 11 && strlen($mobile) > 1) {
 			$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
 			$errors++;
 		}
@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$postcode = sanitizeInput($_POST['postcode']);
 
 		// Address - line 1
-		if (strlen($address_1st) < 4 ) {
+		if (strlen($address_1st) < 4) {
 			$errorAddress1 = 'Address line 1 must be more than 4 characters';
 			$errors++;
 		}
@@ -161,13 +161,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$username = sanitizeInput($_POST['username']);
 		$password = sanitizeInput($_POST['password']);
 
-		$checkUsername = mysqli_query($db, 'SELECT * FROM ')
+		$checkUsername = mysqli_query($db, 'SELECT * FROM accounts WHERE username = "' . $username . '"');
+
+		if (strlen($username) < 7) {
+			$errorUsername = 'Username must be more than 6 characters long.';
+		} else if (mysqli_num_rows($checkUsername) > 0) {
+			$errorUsername = 'Username already in use';
+		}
 
 		// Important Values - |first_name, last_name, $email, username, password
 
 		//Checking if customer id already exists
 
-
+		echo 'There are ' . $errors . ' found.';
 		if ($errors == 0) {
 			// for table -- customers
 			do {
@@ -175,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 				$sqlCheckID = "SELECT customer_id from customers where customer_id = " . $customerNo;
 				$checkID = mysqli_query($db, $sqlCheckID);
-			} while (mysqli_num_rows($checkID) > 0);
+			} while (mysqli_num_rows($checkID) > 1);
 
 			// if (strlen($address_1st) >= 1 || $address_1st != null || $address_1st != '' || strlen($postcode) >= 1 || $postcode != null || $postcode != '' || strlen($region) >= 1 || $region != null || $region != '') {
 			$addressIm = $address_1st . ', ' . $address_2nd . ', ' . $address_3rd . ', ' . $region . ',' . $postcode;
@@ -206,7 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$checkBasket = mysqli_query($db, $sqlBasket);
 			} while (mysqli_num_rows($checkBasket) > 0);
 
-			$sqlCart = "INSERT INTO orders VALUES ( '$basketNo', '$customerNo', null, false )";
+			$sqlCart = "INSERT INTO orders ( order_id, customer_id, complete) VALUES ( '$basketNo', '$customerNo', false )";
 
 			if (mysqli_query($db, $sqlCart)) {
 				$error_message = 'Successfully added to Cart';
@@ -267,10 +273,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<p>Address and credit cards can be added later, through the account portal and through the basket</p>
 			<form method="post" action="register.php">
 				<table>
-					<?php
-					echo $_POST['firstname'];
-					?>
-
 					<tr>
 						<th colspan="3">
 							<h2>Registration</h2>
