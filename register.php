@@ -90,7 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// USERNAME 
 		// PASSWORD
 
-		// Import Customers details from the form
+		//
+		// Customer details
+		//
 		$firstName = sanitizeInput($_POST['firstname']);
 		$lastName = sanitizeInput($_POST['lastname']);
 		$email = sanitizeInput($_POST['email']);
@@ -129,23 +131,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$errors++;
 		}
 
-
+		//
+		// Address
+		//
 		$address_1st = sanitizeInput($_POST['line1']);
 		$address_2nd = sanitizeInput($_POST['line2']);
 		$address_3rd = sanitizeInput($_POST['line3']);
 		$region = sanitizeInput($_POST['region']);
 		$postcode = sanitizeInput($_POST['postcode']);
 
-		// Adcdress - line 1
-		if 
+		// Address - line 1
+		if (strlen($address_1st) < 4 ) {
+			$errorAddress1 = 'Address line 1 must be more than 4 characters';
+			$errors++;
+		}
+
+		// Address - Line 2 
+		if (strlen($address_2nd) < 4) {
+			$errorAddress2 = 'Address line 2 must be more than 4 characters.';
+			$errors++;
+		}
+
+		// Postcode
 		if (strlen($postcode) != 7) {
 			$errorPostcode = 'Please enter a valid postcode.';
 			$errors++;
-			$getMessage .= 'postcode=false&';
 		}
 
 		$username = sanitizeInput($_POST['username']);
 		$password = sanitizeInput($_POST['password']);
+
+		$checkUsername = mysqli_query($db, 'SELECT * FROM ')
 
 		// Important Values - |first_name, last_name, $email, username, password
 
