@@ -8,54 +8,54 @@ error_reporting(-1);
 require 'src/variables.php';
 require 'src/random_number.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-	//Customer details 
-	if (isset($_GET['firstName'])) {
-		$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-	}
+// if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+// 	//Customer details 
+// 	if (isset($_GET['firstName'])) {
+// 		$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
+// 	}
 
-	if (isset($_GET['lastname'])) {
-		$errorLastName = 'Last Name is required and must not be empty or less than 3 characters.';
-	}
+// 	if (isset($_GET['lastname'])) {
+// 		$errorLastName = 'Last Name is required and must not be empty or less than 3 characters.';
+// 	}
 
-	if (isset($_GET['email'])) {
-		$errorEmail = 'First Name is required and must not be empty or less than 3 characters.';
-	}
+// 	if (isset($_GET['email'])) {
+// 		$errorEmail = 'First Name is required and must not be empty or less than 3 characters.';
+// 	}
 
-	if (isset($_GET['phoneHome'])) {
-		$errorHome = 'First Name is required and must not be empty or less than 3 characters.';
-	}
+// 	if (isset($_GET['phoneHome'])) {
+// 		$errorHome = 'First Name is required and must not be empty or less than 3 characters.';
+// 	}
 
-	if (isset($_GET['phoneMobile'])) {
-		$errorMobile = 'First Name is required and must not be empty or less than 3 characters.';
-	}
+// 	if (isset($_GET['phoneMobile'])) {
+// 		$errorMobile = 'First Name is required and must not be empty or less than 3 characters.';
+// 	}
 
-	// Address
-	if (isset($_GET['line1'])) {
-		$errorAddress1 = 'First Name is required and must not be empty or less than 3 characters.';
-	}
-	if (isset($_GET['line2'])) {
-		$errorAddress2 = 'First Name is required and must not be empty or less than 3 characters.';
-	}
-	if (isset($_GET['line3'])) {
-		$errorAddress3 = 'First Name is required and must not be empty or less than 3 characters.';
-	}
-	if (isset($_GET['region'])) {
-		$errorRegion = 'First Name is required and must not be empty or less than 3 characters.';
-	}
+// 	// Address
+// 	if (isset($_GET['line1'])) {
+// 		$errorAddress1 = 'First Name is required and must not be empty or less than 3 characters.';
+// 	}
+// 	if (isset($_GET['line2'])) {
+// 		$errorAddress2 = 'First Name is required and must not be empty or less than 3 characters.';
+// 	}
+// 	if (isset($_GET['line3'])) {
+// 		$errorAddress3 = 'First Name is required and must not be empty or less than 3 characters.';
+// 	}
+// 	if (isset($_GET['region'])) {
+// 		$errorRegion = 'First Name is required and must not be empty or less than 3 characters.';
+// 	}
 
-	if (isset($_GET['postcode'])) {
-		$errorPhone = 'First Name is required and must not be empty or less than 3 characters.';
-	}
+// 	if (isset($_GET['postcode'])) {
+// 		$errorPhone = 'First Name is required and must not be empty or less than 3 characters.';
+// 	}
 
-	// Account
-	if (isset($_GET['username'])) {
-		$errorUsername = 'Us.';
-	}
-	if (isset($_GET['password'])) {
-		$errorPassword = 'First Name is required and must not be empty or less than 3 characters.';
-	}
-}
+// 	// Account
+// 	if (isset($_GET['username'])) {
+// 		$errorUsername = 'Us.';
+// 	}
+// 	if (isset($_GET['password'])) {
+// 		$errorPassword = 'First Name is required and must not be empty or less than 3 characters.';
+// 	}
+// }
 
 
 
@@ -101,16 +101,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// FIRST NAME 
 		if (strlen($firstName) <= 3 || $firstName == null || $firstName == '') {
 			$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-
 			$errors++;
-			$getMessage .= 'firstName=false&';
 		}
 
 		// LAST NAME
 		if (strlen($lastName) <= 3 || $lastName == null || $lastName == '') {
 			$errorLastName = 'Last Name is required and must not be empty or less than 3 characters.';
 			$errors++;
-			$getMessage .= 'lastName=false&';
 		}
 
 		// EMAIL - CHECK IF VALID EMAIL ADDRESS
@@ -118,30 +115,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (checkemail($email) === false || strlen($email) == '' || $email == null) {
 			$errorEmail = 'Email is required and must be a valid email address.';
 			$errors++;
-			$getMessage .= 'email=false&';
 		}
 
 		// HOME NUMBER - ONLY CHECK IF INPUT IS ENTERED
 		if (strlen($home) != 11 || strlen($home) > 1) {
 			$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
 			$errors++;
-			$getMessage .= 'phoneHome=false&';
 		}
 
 		// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
 		if (strlen($mobile) != 11 || strlen($mobile) > 1) {
 			$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
 			$errors++;
-			$getMessage .= 'phoneMobile=false&';
 		}
 
 
-		$address_1st = sanitizeInput($_POST['1st_line']);
-		$address_2nd = sanitizeInput($_POST['2nd_line']);
-		$address_3rd = sanitizeInput($_POST['3rd_line']);
+		$address_1st = sanitizeInput($_POST['line1']);
+		$address_2nd = sanitizeInput($_POST['line2']);
+		$address_3rd = sanitizeInput($_POST['line3']);
 		$region = sanitizeInput($_POST['region']);
 		$postcode = sanitizeInput($_POST['postcode']);
 
+		// Adcdress - line 1
+		if 
 		if (strlen($postcode) != 7) {
 			$errorPostcode = 'Please enter a valid postcode.';
 			$errors++;
@@ -221,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			die();
 		} else {
 			$error_message = 'Their has been a problem submitting your registration if this problem persists please contact the system administrator';
-			header("Location: register.php?" . $getMessage);
+			//header("Location: register.php?" . $getMessage);
 		}
 	}
 }
@@ -255,6 +251,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<p>Address and credit cards can be added later, through the account portal and through the basket</p>
 			<form method="post" action="register.php">
 				<table>
+					<?php
+					echo $_POST['firstname'];
+					?>
 
 					<tr>
 						<th colspan="3">
@@ -268,8 +267,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					</tr>
 					<tr>
 						<td><label for="firstname">First name: </label></td>
-						<td><input type="text" name="firstname" value="<?php if (!empty($_POST['firstname'])) {
-																			print($_POST['firstname']);
+						<td><input type="text" name="firstname" value="<?php if (isset($_POST['firstname'])) {
+																			echo $_POST['firstname'];
 																		} ?>" required /></td>
 						<td><?php if (isset($errorFirstName)) {
 								echo $errorFirstName;
@@ -277,28 +276,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					</tr>
 					<tr>
 						<td><label for="lastname">Last Name: </label></td>
-						<td><input type="text" name="lastname" value="" required /></td>
+						<td><input type="text" name="lastname" value="<?php if (isset($_POST['lastname'])) {
+																			echo $_POST['lastname'];
+																		} ?>" required /></td>
 						<td><?php if (isset($errorLastName)) {
 								echo $errorLastName;
 							} ?></td>
 					</tr>
 					<tr>
 						<td><label for="email">Email: </label></td>
-						<td><input type="text" name="email" value="" required /></td>
+						<td><input type="text" name="email" value="<?php if (isset($_POST['email'])) {
+																		echo $_POST['email'];
+																	} ?>" required /></td>
 						<td><?php if (isset($errorEmail)) {
 								echo $errorEmail;
 							} ?></td>
 					</tr>
 					<tr>
 						<td><label for="phoneHome">Home Phone Number:</label></td>
-						<td><input type="text" name="phoneHome" value="" /></td>
+						<td><input type="text" name="phoneHome" value="<?php if (isset($_POST['phoneHome'])) {
+																			echo $_POST['phoneHome'];
+																		} ?>" /></td>
 						<td><?php if (isset($errorPhone)) {
 								echo $errorPhone;
 							} ?></td>
 					</tr>
 					<tr>
 						<td><label for="phoneMobile">Mobile Number</label></td>
-						<td><input type="text" name="phoneMobile" value="" /></td>
+						<td><input type="text" name="phoneMobile" value="<?php if (isset($_POST['phoneMobile'])) {
+																				echo $_POST['phoneMobile'];
+																			} ?>" /></td>
 						<td><?php if (isset($errorMobile)) {
 								echo $errorMobile;
 							} ?></td>
@@ -309,36 +316,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						</td>
 					</tr>
 					<tr>
-						<td><label for="1st_line">1st Line : </label></td>
-						<td><input type="text" name="1st_line" value="" /></td>
+						<td><label for="line1">1st Line : </label></td>
+						<td><input type="text" name="line1" value="<?php if (isset($_POST['line1'])) {
+																		echo $_POST['line1'];
+																	} ?>" /></td>
 						<td><?php if (isset($errorAddress1)) {
 								echo $errorAddress1;
 							} ?></td>
 					</tr>
 					<tr>
-						<td><label for="2nd_line">2nd Line: </label></td>
-						<td><input type="text" name="2nd_line" value="" /></td>
+						<td><label for=" line2">2nd Line: </label></td>
+						<td><input type="text" name="line2" value="<?php if (isset($_POST['line2'])) {
+																		echo $_POST['line2'];
+																	} ?>" /></td>
 						<td><?php if (isset($errorAddress2)) {
 								echo $errorAddress2;
 							} ?></td>
 					</tr>
 					<tr>
-						<td><label for="3rd_line">3rd Line: </label></td>
-						<td><input type="text" name="3rd_line" value="" /></td>
+						<td><label for="line3">3rd Line: </label></td>
+						<td><input type="text" name="line3" value="<?php if (isset($_POST['line3'])) {
+																		echo $_POST['line3'];
+																	} ?>" /></td>
 						<td><?php if (isset($errorAddress3)) {
 								echo $errorAddress3;
 							} ?></td>
 					</tr>
 					<tr>
 						<td><label for="region">Region: </label></td>
-						<td><input type="text" name="region" value="" /></td>
+						<td><input type="text" name="region" value="<?php if (isset($_POST['region'])) {
+																		echo $_POST['region'];
+																	} ?>" /></td>
 						<td><?php if (isset($errorRegion)) {
 								echo $errorRegion;
 							} ?></td>
 					</tr>
 					<tr>
 						<td><label for="postcode">Postcode: </label></td>
-						<td><input type="text" name="postcode" value="" /></td>
+						<td><input type="text" name="postcode" value="<?php if (isset($_POST['postcode'])) {
+																			echo $_POST['postcode'];
+																		} ?>" /></td>
 						<td><?php if (isset($errorPostcode)) {
 								echo $errorPostcode;
 							} ?></td>
@@ -350,14 +367,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					</tr>
 					<tr>
 						<td><label for="username">Username:</label></td>
-						<td><input type="text" name="username" value="" required /></td>
+						<td><input type="text" name="username" value="<?php if (isset($_POST['username'])) {
+																			echo $_POST['username'];
+																		} ?>" required /></td>
 						<td><?php if (isset($errorUsername)) {
 								echo $errorUsername;
 							} ?></td>
 					</tr>
 					<tr>
 						<td><label for="password">Password:</label></td>
-						<td><input type="password" name="password" value="" required /></td>
+						<td><input type="password" name="password" value="<?php if (isset($_POST['password'])) {
+																				echo $_POST['password'];
+																			} ?>" required /></td>
 						<td><?php if (isset($errorPassword)) {
 								echo $errorPassword;
 							} ?></td>
@@ -372,6 +393,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		include "inc/footer.php";
 		?>
 		<script type="text/javascript" src="src/js/js.js"></script>
+		<script type="text/javascript" src="src/js/register.js"></script>
 </body>
 
 </html>
