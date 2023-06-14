@@ -316,35 +316,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<td><input type="checkbox" id="personalChanges" name="personalChanges" /></td>
 			</tr>
 			<?php
-			$sqlAddress = 'SELECT * FROM address WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
-
-			for (mysqli_query($db, $sqlAddress)):
-
-				?>
-			<tr>
-				<td><label for="address1st">First Line</label></td>
-				<td><input type="text" name="address1st" /></td>
-			</tr>
-			<tr>
-				<td><label for="address2nd">Second Line</label></td>
-				<td><input type="text" name="address2nd" /></td>
-			</tr>
-			<tr>
-				<td><label for="address3rd">Third Line</label></td>
-				<td><input type="text" name="address3rd" /></td>
-			</tr>
-			<tr>
-				<td><label for="region">Region</label></td>
-				<td><input type="text" name="region" /></td>
-			</tr>
-			<tr>
-				<td><label for="postcode">Postcode</label></td>
-				<td><input type="text" name="postcode"></td>
-			</tr>
+			$sqlAddress = "SELECT * FROM address WHERE customer_id = '" . $_SESSION['customer_id'] . '"';
+			$count[1];
+			foreach (mysqli_query($db, $sqlAddress) as $address[$count]) :
+			?>
+				<tr>
+					<td><label for="address1st">First Line</label></td>
+					<td><input type="text" name="address1st" /></td>
+				</tr>
+				<tr>
+					<td><label for="address2nd">Second Line</label></td>
+					<td><input type="text" name="address2nd" /></td>
+				</tr>
+				<tr>
+					<td><label for="address3rd">Third Line</label></td>
+					<td><input type="text" name="address3rd" /></td>
+				</tr>
+				<tr>
+					<td><label for="region">Region</label></td>
+					<td><input type="text" name="region" /></td>
+				</tr>
+				<tr>
+					<td><label for="postcode">Postcode</label></td>
+					<td><input type="text" name="postcode"></td>
+				</tr>
 
 			<?php
-
-			endfor;
+				$count++;
+			endforeach;
 
 			?>
 			<tr>
@@ -359,8 +358,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				</th>
 			</tr>
 			<?php
-				$sqlCreditCard = "SELECT * FROM ";
-				
+			$sqlCreditCard = "SELECT * FROM ";
+
 			?>
 			<tr>
 				<td><label for="paymentChange">Make payment details changes</label></td>
