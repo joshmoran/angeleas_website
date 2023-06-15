@@ -222,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			}
 
 			// for table -- $address
-			$sqlAddress = "INSERT INTO address VALUES ( '$customerNo', '$address_1st', '$address_2nd', '$address_3rd', '$region', '$postcode' )";
+			$sqlAddress = "INSERT INTO address (`customer_id`, `1_line`, `2_line`, `3_line`, `region`, `postcode`) VALUES ( '$customerNo', '$address_1st', '$address_2nd', '$address_3rd', '$region', '$postcode' )";
 
 			if (mysqli_query($db, $sqlAddress)) {
 				$error_message = 'Successfully added to Addresses';

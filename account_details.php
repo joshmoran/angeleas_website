@@ -315,14 +315,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<td><label for="personalChanges">Make changes to my personal details</label></td>
 				<td><input type="checkbox" id="personalChanges" name="personalChanges" /></td>
 			</tr>
+
+			<select name="whichAddress">
+
+			
 			<?php
 			$sqlAddress = "SELECT * FROM address WHERE customer_id = '" . $_SESSION['customer_id'] . '"';
 			$count[1];
+
+
 			foreach (mysqli_query($db, $sqlAddress) as $address[$count]) :
 			?>
-				<tr>
+
+				<!-- <tr>
 					<td><label for="address1st">First Line</label></td>
-					<td><input type="text" name="address1st" /></td>
+					<td><input type="text" <?php if (isset($_POST['address1st'])) {
+												echo " value='" . $_POST['address1st'] . "'";
+											} ?> /></td>
 				</tr>
 				<tr>
 					<td><label for="address2nd">Second Line</label></td>
@@ -339,7 +348,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<tr>
 					<td><label for="postcode">Postcode</label></td>
 					<td><input type="text" name="postcode"></td>
-				</tr>
+				</tr> -->
 
 			<?php
 				$count++;
