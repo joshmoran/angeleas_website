@@ -327,8 +327,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			var_dump($addressRows);
 
 			while ($address = mysqli_fetch_row($addressRows)) :
-				var_dump($address);
-				echo '<label>2222222222222222222222222222222222222222222</label>';
+				$fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
+				echo 
 			?>
 
 				<!-- <tr>
