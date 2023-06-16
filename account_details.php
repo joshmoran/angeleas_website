@@ -315,20 +315,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<td><label for="personalChanges">Make changes to my personal details</label></td>
 				<td><input type="checkbox" id="personalChanges" name="personalChanges" /></td>
 			</tr>
-
-			<select name="whichAddress">
-
-
-				<?php
-				$sqlAddress = "SELECT * FROM address WHERE customer_id = '" . $_SESSION['customer_id'] . '"';
-				$count = 0;
+			<!-- 
+			<select name="whichAddress"> -->
 
 
-				foreach (mysqli_query($db, $sqlAddress) as $address[$count]) :
-					echo $address[$count]['postcode'];
-				?>
+			<?php
+			$count = 0;
+			$sqlAddress = "SELECT * FROM address WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
+			$addressRows = mysqli_query($db, $sqlAddress);
 
-					<!-- <tr>
+			var_dump($addressRows);
+
+			while ($address = mysqli_fetch_row($addressRows)) :
+				var_dump($address);
+				echo '<label>2222222222222222222222222222222222222222222</label>';
+			?>
+
+				<!-- <tr>
 					<td><label for="address1st">First Line</label></td>
 					<td><input type="text" <?php if (isset($_POST['address1st'])) {
 												echo " value='" . $_POST['address1st'] . "'";
@@ -351,44 +354,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><input type="text" name="postcode"></td>
 				</tr> -->
 
-				<?php
-					$count++;
-				endforeach;
+			<?php
+				$count++;
+			endwhile;
 
-				?>
-				<tr>
-					<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
-				</tr>
-				<!-- 
+			?>
+			<tr>
+				<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
+			</tr>
+			<!-- 
 					CHANGE CREDIT CARD
 				  -->
-				<tr>
-					<th colspan="3">
-						<h2>Payment Details</h2>
-					</th>
-				</tr>
-				<?php
-				$sqlCreditCard = "SELECT * FROM ";
+			<tr>
+				<th colspan="3">
+					<h2>Payment Details</h2>
+				</th>
+			</tr>
+			<?php
+			$sqlCreditCard = "SELECT * FROM ";
 
-				?>
-				<tr>
-					<td><label for="paymentChange">Make payment details changes</label></td>
-					<td colspan="2"><input type="checkbox" name="paymentChange" /></td>
-				</tr>
+			?>
+			<tr>
+				<td><label for="paymentChange">Make payment details changes</label></td>
+				<td colspan="2"><input type="checkbox" name="paymentChange" /></td>
+			</tr>
 
 
-				<tr>
-					<td><label for="cardnumber">Card Number: </label></td>
-					<td><input type="text" name="cardnumber" /></td>
-				</tr>
-				<tr>
-					<td><label for="expiry">Expiry</label></td>
-					<td><input type="text" name="expiry" /></td>
-				</tr>
+			<tr>
+				<td><label for="cardnumber">Card Number: </label></td>
+				<td><input type="text" name="cardnumber" /></td>
+			</tr>
+			<tr>
+				<td><label for="expiry">Expiry</label></td>
+				<td><input type="text" name="expiry" /></td>
+			</tr>
 
-				<tr>
-					<td colspan="2"><button type="submit" name="makeChanges">Submit</button></td>
-				</tr>
+			<tr>
+				<td colspan="2"><button type="submit" name="makeChanges">Submit</button></td>
+			</tr>
 
 			</table>
 		</form>
