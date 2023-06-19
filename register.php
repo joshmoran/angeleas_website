@@ -1,63 +1,8 @@
 <?php
 session_start();
 
-ini_set('display_startup_errors', 1);
-ini_set('display_errors', 1);
-error_reporting(-1);
-
 require 'src/variables.php';
 require 'src/random_number.php';
-
-// if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-// 	//Customer details 
-// 	if (isset($_GET['firstName'])) {
-// 		$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-// 	}
-
-// 	if (isset($_GET['lastname'])) {
-// 		$errorLastName = 'Last Name is required and must not be empty or less than 3 characters.';
-// 	}
-
-// 	if (isset($_GET['email'])) {
-// 		$errorEmail = 'First Name is required and must not be empty or less than 3 characters.';
-// 	}
-
-// 	if (isset($_GET['phoneHome'])) {
-// 		$errorHome = 'First Name is required and must not be empty or less than 3 characters.';
-// 	}
-
-// 	if (isset($_GET['phoneMobile'])) {
-// 		$errorMobile = 'First Name is required and must not be empty or less than 3 characters.';
-// 	}
-
-// 	// Address
-// 	if (isset($_GET['line1'])) {
-// 		$errorAddress1 = 'First Name is required and must not be empty or less than 3 characters.';
-// 	}
-// 	if (isset($_GET['line2'])) {
-// 		$errorAddress2 = 'First Name is required and must not be empty or less than 3 characters.';
-// 	}
-// 	if (isset($_GET['line3'])) {
-// 		$errorAddress3 = 'First Name is required and must not be empty or less than 3 characters.';
-// 	}
-// 	if (isset($_GET['region'])) {
-// 		$errorRegion = 'First Name is required and must not be empty or less than 3 characters.';
-// 	}
-
-// 	if (isset($_GET['postcode'])) {
-// 		$errorPhone = 'First Name is required and must not be empty or less than 3 characters.';
-// 	}
-
-// 	// Account
-// 	if (isset($_GET['username'])) {
-// 		$errorUsername = 'Us.';
-// 	}
-// 	if (isset($_GET['password'])) {
-// 		$errorPassword = 'First Name is required and must not be empty or less than 3 characters.';
-// 	}
-// }
-
-
 
 function sanitizeInput($data)
 {
@@ -240,6 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 			$error_message = 'Their has been a problem submitting your registration if this problem persists please contact the system administrator';
 			//header("Location: register.php?" . $getMessage);
+			exit();
 		}
 	}
 }
@@ -413,7 +359,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		<script type="text/javascript" src="src/js/js.js"></script>
 		<script type="text/javascript" src="src/js/register.js"></script>
 </body>
-
 </html>
-
-<?php

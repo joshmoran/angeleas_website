@@ -15,7 +15,7 @@ require "src/database.php";
 // add card to account
 // add address to account 
 $errors = array();
-if (isset($_SESSIOn['loggedIn']) && $_SESSION['loggedIn'] == false) {
+if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == false) {
 	header("Location: login.php");
 }
 
@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	function checkSql($statement)
 	{
 		if (!$statement) {
-			echo 'option one';
 			if (isset($_POST['makeChangesCustomer'])) {
 				return 'UPDATE customers SET ';
 			} else if (isset($_POST['makeChangesAddress'])) {
@@ -39,12 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				return 'UPDATE credit_cards SET ';
 			}
 		} else {
-			echo 'option two';
 			return ', ';
 		}
 	}
 
-	if (isset($_POST['makeChangesCustomer'])) {
+	if (isset($_POST['makeChangesCustomer']) && !empty($_POST['personalChanges'])) {
 
 		// $sqlCustomer = "UPDATE customers SET ";
 		// Check if variables are empty, if empty and not required, move on
@@ -57,6 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		$sqlCustomer = '';
 		$errorCustomer = array();
+
+		echo 'customer';
 
 		if (!empty($_POST['firstName'])) {
 			$comma = checkSql($sqlCustomer);
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$_POST['makeChangesCustomer'] = null;
 	}
 
-	if (isset($_POST['makeChangesAddress'])) {
+	if (isset($_POST['makeChangesAddress']) && isset($_POST['paymentChange'])) {
 		$sqlAddress = '';
 		$errorsAddress = array();
 
@@ -154,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 
-	if (isset($_POST['makeChangesCreditCard'])) {
+	if (isset($_POST['makeChangesCreditCard']) && isset($_POST['paymentChange'])) {
 		$sqlCreditCard = '';
 		$errorsCard = array();
 
@@ -315,8 +315,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<td><label for="personalChanges">Make changes to my personal details</label></td>
 				<td><input type="checkbox" id="personalChanges" name="personalChanges" /></td>
 			</tr>
-			<!-- 
-			<select name="whichAddress"> -->
+			<tr id="frameLocation">
+				<td colspan="1">
+			<select id="selectAddress" name="whichAddress"> 
 
 
 			<?php
@@ -324,12 +325,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$sqlAddress = "SELECT * FROM address WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
 			$addressRows = mysqli_query($db, $sqlAddress);
 
-			var_dump($addressRows);
-
 			while ($address = mysqli_fetch_row($addressRows)) :
-				$fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
-				echo 
+				$fullAddress = $address[1] . ', ' . $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5];
+				echo '<option value="' . $fullAddress . '">' . $fullAddress . '</option>';
 			?>
+			<option value="new">Add a new address</option>
+			</select>
+			</td>
+				<td><button onclick="changeAddressBtn()">Change this address</button></td>
+		</tr>
+			
 
 				<!-- <tr>
 					<td><label for="address1st">First Line</label></td>
@@ -376,7 +381,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			?>
 			<tr>
 				<td><label for="paymentChange">Make payment details changes</label></td>
-				<td colspan="2"><input type="checkbox" name="paymentChange" /></td>
+				<td colspan="2"><input type="checkbox" name="accountChange" /></td>
 			</tr>
 
 
@@ -399,6 +404,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		include "inc/footer.php";
 		?>
 		<script src="src/js/js.js"></script>
+		<script src="src/js/account_details.js"></script>
 </body>
 
 </html>

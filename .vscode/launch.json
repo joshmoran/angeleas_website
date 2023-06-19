@@ -16,7 +16,6 @@
             ],
             "program": "",
             "cwd": "${workspaceRoot}",
-            "port": 9000,
             "serverReadyAction": {
                 "pattern": "Development Server \\(http://localhost:([0-9]+)\\) started",
                 "uriFormat": "http://localhost:%s",
@@ -34,8 +33,7 @@
     {
         "name": "Listen for XDebug",
         "type": "php",
-        "request": "launch",
-        "port": 9003
+        "request": "launch"
     }
 ]
 }
