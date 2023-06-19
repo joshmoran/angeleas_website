@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	function checkSql($statement)
 	{
 		if (!$statement) {
-			if (isset($_POST['makeChangesCustomer'])) {
+			if (isset( $statement == 'personal'))) {
 				return 'UPDATE customers SET ';
 			} else if (isset($_POST['makeChangesAddress'])) {
 				return 'UPDATE address SET ';
@@ -158,6 +158,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$sqlAccounts = '';
 		$errorsAccount = array();
 
+		echo 'accout changes';
+
 		if (!empty($_POST['username'])) {
 			$comma = checkSql($sqlAccounts);
 			$sqlAccounts .= $comma . ' username = "' . mysqli_real_escape_string($db, $_POST['username']) . '" ';
@@ -174,6 +176,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		$sqlAccounts .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
 
+		echo $sqlAccounts; 
+
 		if (count($errorsAccount)) {
 			if (mysqli_query($db, $sqlAccounts)) {
 				$errorsAccount[] = 'Successfully update your credit card details.';
@@ -185,19 +189,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 }
-
-// $name = trim(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING));
-// $nameSplit = explode(' ', $name);
-// $nameSplit[0] = $firstName;
-// $nameSplit[1] = $lastName;
-// $addressFirst = trim(filter_input(INPUT_POST, 'addressFirstLine', FILTER_SANITIZE_STRING));
-// $addressSecond = trim(filter_input(INPUT_POST, 'addressSecondLine', FILTER_SANITIZE_STRING));
-// $postcode = trim(filter_input(INPUT_POST, 'addressPostcode', FILTER_SANITIZE_STRING));
-// $address = $addressFirst . ', ' . $addressSecond . ', ' . $postcode;
-// // $name = trim(filter_input(INPUT_POST, 'name', FILTER_SANATIZE_STRING));
-
-
-
 
 ?>
 

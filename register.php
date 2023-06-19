@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		$getMessage = '';
 
-		function checkemail($str)
+		function checkEmail($str)
 		{
 			return (preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $str)) ? true : false;
 		}
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		// EMAIL - CHECK IF VALID EMAIL ADDRESS
 		$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
-		if (checkemail($email) === false || strlen($email) == '' || $email == null) {
+		if (checkEmail($email) === false || strlen($email) == '' || $email == null) {
 			$errorEmail = 'Email is required and must be a valid email address.';
 			$errors++;
 		}
