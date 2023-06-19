@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				return 'UPDATE customers SET ';
 			} else if (isset($_POST['makeChangesAddress'])) {
 				return 'UPDATE address SET ';
-			} else if (isset($_POST['makeChangesCreditCard'])) {
-				return 'UPDATE credit_cards SET ';
+			} else if (isset($_POST['makeChangesAccount'])) {
+				return 'UPDATE accounts SET ';
 			}
 		} else {
 			return ', ';
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 		$sqlCustomer .= " WHERE customer_id = " . $_SESSION['customer_id'];
 
-		if (count($errorCustomer)) {
+		if (count($errorCustomer) === 0 ) {
 			if (mysqli_query($db, $sqlCustomer)) {
 				$errorCustomer[] = 'Successfully updated your customer details';
 			} else {
@@ -154,34 +154,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 
-	if (isset($_POST['makeChangesCreditCard']) && isset($_POST['paymentChange'])) {
-		$sqlCreditCard = '';
-		$errorsCard = array();
+	if (isset($_POST['makeChangesAccount']) && !empty($_POST['accountChange'])) {
+		$sqlAccounts = '';
+		$errorsAccount = array();
 
-		if (!empty($_POST['cardnumber'])) {
-			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' cardnumber = "' . mysqli_real_escape_string($db, $_POST['cardnumber']) . '" ';
+		if (!empty($_POST['username'])) {
+			$comma = checkSql($sqlAccounts);
+			$sqlAccounts .= $comma . ' username = "' . mysqli_real_escape_string($db, $_POST['username']) . '" ';
 		} else {
-			$errorsCard[] = "Card Number is invalid";
+			$errorsAccount[] = "Username is invalid";
 		}
 
-		if (!empty($_POST['expiry'])) {
-			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' expiry = "' . mysqli_real_escape_string($db, $_POST['expiry']) . '" ';
+		if (!empty($_POST['password'])) {
+			$comma = checkSql($sqlAccounts);
+			$sqlAccounts .= $comma . ' pass = "' . mysqli_real_escape_string($db, $_POST['password']) . '" ';
 		} else {
-			$errorsCard[] = "Expiry is invalid";
+			$errorsAccount[] = "Password is invalid";
 		}
 
-		$sqlCreditCard .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+		$sqlAccounts .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
 
-		if (count($errorsCard)) {
-			if (mysqli_query($db, $sqlCreditCard)) {
-				$errorsCard[] = 'Successfully update your credit card details.';
+		if (count($errorsAccount)) {
+			if (mysqli_query($db, $sqlAccounts)) {
+				$errorsAccount[] = 'Successfully update your credit card details.';
 			} else {
-				$errorsCard[] = 'Something went wrong. Please try again later.';
+				$errorsAccount[] = 'Something went wrong. Please try again later.';
 			}
 		} else {
-			$errorsCard[] = 'Please resolve the issues to continue with the change.';
+			$errorsAccount[] = 'Please resolve the issues to continue with the change.';
 		}
 	}
 }
@@ -208,6 +208,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	<meta charset="utf-8">
 	<title>Template</title>
 	<link type="text/css" href="src/css/css.css" rel="stylesheet" />
+	
+	<link type="text/css" href="src/css/account_details.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -240,9 +242,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				 -->
 				<tr>
 					<th colspan="2">
-						<h2>Change account details</h2>
+						<h1>Change account details</h1>
 					</th>
 				</tr>
+				<tr>
+				<th colspan="3">
+					<h2>Personal</h2>
+				</th>
+			</tr>
 				<tr>
 					<td><label for="personalChanges">Make changes to my personal details</label></td>
 					<td><input type="checkbox" id="personalChanges" name="personalChanges" /></td>
@@ -309,7 +316,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						- postcode
 				 -->
 			<tr>
-				<th colspan="2">Change address details</th>
+				<th colspan="2"><h2>Addresses</h2></th>
 			</tr>
 			<tr>
 				<td><label for="personalChanges">Make changes to my personal details</label></td>
@@ -332,47 +339,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<option value="new">Add a new address</option>
 			</select>
 			</td>
-				<td><button onclick="changeAddressBtn()">Change this address</button></td>
+				<td><button type="button" onclick="changeAddressBtn()">Change this address</button></td>
 		</tr>
-			
-
-				<!-- <tr>
+				<?php
+				while ($address = mysqli_fetch_assoc( $addressRows));
+				var_dump($address);
+				?>
+				<tr class="hiddenAddress">
 					<td><label for="address1st">First Line</label></td>
-					<td><input type="text" <?php if (isset($_POST['address1st'])) {
-												echo " value='" . $_POST['address1st'] . "'";
-											} ?> /></td>
+					<td><input type="text" <?php echo " value='" . $address[1] . "'"; ?> /></td>
 				</tr>
-				<tr>
+				<tr class="hiddenAddress">
 					<td><label for="address2nd">Second Line</label></td>
 					<td><input type="text" name="address2nd" /></td>
 				</tr>
-				<tr>
+				<tr class="hiddenAddress">
 					<td><label for="address3rd">Third Line</label></td>
 					<td><input type="text" name="address3rd" /></td>
 				</tr>
-				<tr>
+				<tr class="hiddenAddress">
 					<td><label for="region">Region</label></td>
 					<td><input type="text" name="region" /></td>
 				</tr>
-				<tr>
+				<tr class="hiddenAddress">
 					<td><label for="postcode">Postcode</label></td>
 					<td><input type="text" name="postcode"></td>
-				</tr> -->
+				</tr>
 
 			<?php
 				$count++;
 			endwhile;
 
 			?>
-			<tr>
-				<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
+			<tr class="hiddenAddress">
+				<td><button type="submit" name="updateAddress" value="Update">Update</button></td>
+				<td><button type="submit" name="deleteAddress" value="Delete">Delete</button></td>
 			</tr>
 			<!-- 
 					CHANGE CREDIT CARD
 				  -->
 			<tr>
 				<th colspan="3">
-					<h2>Payment Details</h2>
+					<h2>Account</h2>
 				</th>
 			</tr>
 			<?php
@@ -380,22 +388,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			?>
 			<tr>
-				<td><label for="paymentChange">Make payment details changes</label></td>
+				<td><label for="accountChange">Make payment details changes</label></td>
 				<td colspan="2"><input type="checkbox" name="accountChange" /></td>
 			</tr>
 
 
 			<tr>
-				<td><label for="cardnumber">Card Number: </label></td>
-				<td><input type="text" name="cardnumber" /></td>
+				<td><label for="username">Username: </label></td>
+				<td><input type="text" name="username" /></td>
 			</tr>
 			<tr>
-				<td><label for="expiry">Expiry</label></td>
-				<td><input type="text" name="expiry" /></td>
+				<td><label for="password">Password: </label></td>
+				<td><input type="password" name="password" /></td>
 			</tr>
 
 			<tr>
-				<td colspan="2"><button type="submit" name="makeChanges">Submit</button></td>
+				<td colspan="2"><button type="submit" name="makeChangesAccount">Submit</button></td>
 			</tr>
 
 			</table>
