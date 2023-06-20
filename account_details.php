@@ -328,7 +328,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			while ($address = mysqli_fetch_row($addressRows)) :
 				$fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
-				echo 
+				
+				echo '<option onclick="changeAddress(' . $address[1] . '';
 			?>
 
 				<!-- <tr>
