@@ -8,6 +8,7 @@ require "src/variables.php";
 <head>
     <meta charset="UTF-8">
     <title><?php echo $websiteName . ' - Home'; ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="src/css/css.css" type="text/css" />
     <link rel="stylesheet" href="src/css/index.css" type="text/css" />
 </head>

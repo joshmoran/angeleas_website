@@ -17,6 +17,7 @@ if ($_SESSION['loggedIn'] == false) {
 <head>
 	<meta charset="utf-8">
 	<title>Template</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link type="text/css" href="src/css/css.css" rel="stylesheet" />
 	<link type="text/css" href="src/css/account_orders.css" rel="stylesheet" />
 </head>

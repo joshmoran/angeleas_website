@@ -1,3 +1,25 @@
+Main pages
+- about
+- account - admin
+- account - details
+- account - orders
+- account
+- basket
+- complete
+- contact 
+- customers
+- details
+- home
+- index                 complete
+- login
+- logout                complete                no accessability
+- order history
+- products 
+- purchase
+- register
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 customer
     firstName           $errorFirstName
     lastName            $errorLastName
