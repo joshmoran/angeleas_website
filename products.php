@@ -45,7 +45,7 @@ if (!empty($_POST['pages'])) {
         $basket = array();
     }
 }
-if (!empty($_POST['category'])) {
+if (isset($_POST['categorySelected'])) {
     (int)$filter = $_POST['cat'];
 }
 
@@ -151,14 +151,18 @@ if (!empty($_POST['category'])) {
                 </div>
             </form>
             <form action="products.php" id="category" method="post">
-                <label for="category">Category: </label>
-                <select id="category" name="cat" selected="<?php echo $filter; ?>">
+                <label for="categorySelected">Category: </label>
+                <select id="category" name="categorySelected" selected="<?php echo $filter; ?>">
                     <option value="0">All Products</option>
                     <?php
                     $result = mysqli_query($db, "SELECT * FROM types");
 
                     while ($type = mysqli_fetch_assoc($result)) {
-                        echo '<option type="submit" form="category" value="' . $type['id'] . '" name="cat">' . $type['name'] . '</option>';
+                        if ($_POST['categorySelected'] == $type['id']) {
+                            echo '<option type="submit" form="category" value="' . $type['id'] . '" name="cat">-->' . $type['name'] . '<--</option>';
+                        } else {
+                            echo '<option type="submit" form="category" value="' . $type['id'] . '" name="cat">' . $type['name'] . '</option>';
+                        }
                     }
                     ?>
 
