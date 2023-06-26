@@ -104,13 +104,17 @@ if (!empty($_POST['category'])) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="View all products in our catalog">
     <title><?php echo $websiteName . ' - All Products'; ?></title>
+
     <link rel="stylesheet" href="src/css/css.css" type="text/css " />
     <link rel="stylesheet" href="src/css/products.css" type="text/css " />
+
 </head>
 
 <body>
@@ -127,7 +131,7 @@ if (!empty($_POST['category'])) {
         </div>
         <div id="top">
             <h1>All Products</h1>
-            <form method="POST" action="products.php" id='pages'>
+            <form method="POST" action="products.php">
                 <div id="pagination">
                     <?php
                     $sql = "SELECT * FROM products";
@@ -189,11 +193,8 @@ if (!empty($_POST['category'])) {
                     $string = '';
                     while ($products = mysqli_fetch_assoc($result)) {
                         //(int)$no =  $products['id'];
-                        echo '<li><a href="details.php?id=' . $products['id'] . '"><img src="' . $products['image_src'] . '" alt="' . $products['description'] . '" /></a><h3>' . $products['name'] . '</h3>
-						<input type="text" name="price" value="' . $products['price'] . '" />
-						
-						
-						</li>';
+                        echo '<li><a href="details.php?id=' . $products['id'] . '"><img src="' . $products['image_src'] . '" alt="' . $products['description'] . '" /></a><h2>' . $products['name'] . '</h2>
+						<p>' . $products['price'] . '</p></li>';
                     }
 
                     //$0counter = $counter + 1;

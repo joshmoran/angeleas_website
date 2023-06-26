@@ -2,6 +2,7 @@
 session_start();
 // Important Columns to be include - Order No,
 require "src/database.php";
+require "src/variables.php";
 
 $basketID = $_SESSION['basket_id'];
 $customerID = $_SESSION['customer_id'];
@@ -16,8 +17,9 @@ if ($_SESSION['loggedIn'] == false) {
 
 <head>
 	<meta charset="utf-8">
-	<title>Template</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="View existing and old orders you have ordered.">
+	<title><?php echo $websiteName; ?> - Orders</title>
 	<link type="text/css" href="src/css/css.css" rel="stylesheet" />
 	<link type="text/css" href="src/css/account_orders.css" rel="stylesheet" />
 </head>

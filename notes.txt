@@ -11,7 +11,7 @@ Main pages
 - details
 - home
 - index                 complete          accessability
-- login                 complete
+- login                 complete          accessability
 - logout                complete          accessability
 - order history
 - products 
