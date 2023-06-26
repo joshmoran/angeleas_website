@@ -46,7 +46,7 @@ if (!empty($_POST['pages'])) {
     }
 }
 if (isset($_POST['categorySelected'])) {
-    (int)$filter = $_POST['cat'];
+    (int)$filter = $_POST['categorySelected'];
 }
 
 //if (!empty($_POST['item'])) {
@@ -152,12 +152,14 @@ if (isset($_POST['categorySelected'])) {
             </form>
             <form action="products.php" id="category" method="post">
                 <label for="categorySelected">Category: </label>
-                <select id="category" name="categorySelected" selected="<?php echo $filter; ?>">
+                <select id="categories" name="categorySelected" selected="<?php echo $filter; ?>">
                     <option value="0">All Products</option>
                     <?php
                     $result = mysqli_query($db, "SELECT * FROM types");
 
                     while ($type = mysqli_fetch_assoc($result)) {
+                        (int)$category = $_POST['categorySelected'];
+                        echo $category;
                         if ($_POST['categorySelected'] == $type['id']) {
                             echo '<option type="submit" form="category" value="' . $type['id'] . '" name="cat">-->' . $type['name'] . '<--</option>';
                         } else {
@@ -177,9 +179,9 @@ if (isset($_POST['categorySelected'])) {
                 <ul id="listParent">
                     <?php
                     $sql = "SELECT * FROM products";
-                    if (isset($filter) && $filter !== 0) {
-                        $pageNo = $_POST['cat'];
-                        $sql .= " WHERE category = " . (int)$filter;
+                    if (isset($filter) && $filter != 0) {
+                        $pageNo = $_POST['categorySelected'];
+                        $sql .= " WHERE category = " . $_POST['categorySelected'];
                     }
                     $sql .= " LIMIT " . (int)$itemsPerPage;
                     if (isset($_POST['page'])) {

@@ -2,19 +2,17 @@ Main pages
 - about
 - account - admin
 - account - details
-- account - orders
 - account
 - basket
 - complete
-- contact 
+- contact
 - customers
 - details
-- home
 - index                 complete          accessability
 - login                 complete          accessability
 - logout                complete          accessability
-- order history
-- products 
+- order history         complete          accessability
+- products              complete          accessability
 - purchase
 - register
 
