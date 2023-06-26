@@ -97,10 +97,15 @@ if (!empty($_POST['addToBasket'])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
-<link href="src/css/css.css" rel="stylesheet" type="text/css">
-<link href="src/css/details.css" rel="stylesheet" type="text/css">
-<title><?php $websiteName . ' - Details'; ?></title>
+<html lan="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="View a item from the Angela Websites Store">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="src/css/css.css" rel="stylesheet" type="text/css">
+	<link href="src/css/details.css" rel="stylesheet" type="text/css">
+	<title><?php $websiteName . ' - Details'; ?></title>
 </head>
 
 <body>
@@ -136,7 +141,7 @@ if (!empty($_POST['addToBasket'])) {
 			$string .= "<form method='post'>";
 			$string .= "<h2>" . $products['name'] . "</h2>";
 			$string .= "<p>" . $products['description'] . "</p>";
-			$string .= "<label for='cost'>Price: </label><input type='text' value='£" . $products['price'] . "' id='costInput'  name='cost' />";
+			$string .= "<label for='cost'>Price: </label><input type='text' value='£" . $products['price'] . "' id='cost'  name='cost' />";
 
 			$sqlCheckInCart = "SELECT quantity FROM cart WHERE basket_id = " . $_SESSION['basket_id'] . " AND product_id = " . $_GET['id'];
 			$sqlCheckInCartQuery = mysqli_query($db, $sqlCheckInCart);

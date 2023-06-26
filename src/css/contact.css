@@ -9,7 +9,7 @@ label,
 input
 {
     display: block;
-    width: 100px;
+    width: 10em;
 
 
 }
@@ -29,7 +29,7 @@ input:last-child
 {
     margin: 0 0 0 100px;
     width: 23.5em;
-    margin: 0 1.5em;
+    margin: 1.5em 0 1.5em 12em;
 }
 
 input[name=subject]
