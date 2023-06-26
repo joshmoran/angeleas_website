@@ -12,10 +12,12 @@ if (isset($_GET['message'])) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 	<meta charset="utf-8">
+	<meta name="description" content="Login to an existing account">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?php echo $websiteName . ' - Login'; ?></title>
 	<link type="text/css" href="src/css/css.css" rel="stylesheet" />
 </head>
@@ -33,7 +35,7 @@ if (isset($_GET['message'])) {
 			}
 			?>
 		</div>
-		<form method="post" action="">
+		<form method="post" action="" id="login">
 			<table>
 				<tr>
 					<th colspan="2">

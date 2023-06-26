@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "src/functions.php";
+require "src/variables.php";
 require "src/database.php";
 
 //$_SESSION['loggedIn'] = false;
@@ -207,7 +207,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Template</title>
+	<meta name="description" content="Account Portal allowing the user to change details. Split into 3 sections: customer details, address and account details">
+	<title><?php echo $websiteName; ?> - Change Account Details</title>
 	<link type="text/css" href="src/css/css.css" rel="stylesheet" />
 </head>
 

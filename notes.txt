@@ -10,9 +10,9 @@ Main pages
 - customers
 - details
 - home
-- index                 complete
-- login
-- logout                complete                no accessability
+- index                 complete          accessability
+- login                 complete
+- logout                complete          accessability
 - order history
 - products 
 - purchase
