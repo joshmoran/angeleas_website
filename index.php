@@ -3,7 +3,7 @@ session_start();
 require "src/variables.php";
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -17,11 +17,11 @@ require "src/variables.php";
     <?php include("inc/header.php"); ?>
     <div id="container">
         <div id="imgScroll">
-            <img src="src/img/banner/0.jpg" id="banner" alt="banner">
+            <img src="src/img/banner/0.jpg" id="banner" alt="Banner Image">
             <ul id="btnImg">
-                <li><button id="home0"><img src="src/img/banner/selected.jpg" /></button></li>
-                <li><button id="home1"><img src="src/img/banner/unselected.jpg" /></button></li>
-                <li><button id="home2"><img src="src/img/banner/unselected.jpg" /></button></li>
+                <li><button id="home0"><img src="src/img/banner/selected.jpg" alt="Banner Button 1" /></button></li>
+                <li><button id="home1"><img src="src/img/banner/unselected.jpg" alt="Banner Button 2" /></button></li>
+                <li><button id="home2"><img src="src/img/banner/unselected.jpg" alt="Banner Button 3" /></button></li>
             </ul>
         </div>
         <div id="contentSplit">

@@ -75,9 +75,9 @@ REQUIRED
         - address3rd
         - region
         - postcode
-    - card
-        - cardnumber
-        - expiry
+    - account
+        - username
+        - password
 -------------------------------------------------------
 -----------     ACCOUNT_DETAILS.PHP     -----------------------
 -------------------------------------------------------

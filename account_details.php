@@ -382,16 +382,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 			<tr>
-				<td><label for="cardnumber">Card Number: </label></td>
-				<td><input type="text" name="cardnumber" /></td>
+				<td><label for="username">Username: </label></td>
+				<td><input type="text" name="username" /></td>
 			</tr>
 			<tr>
-				<td><label for="expiry">Expiry</label></td>
-				<td><input type="text" name="expiry" /></td>
+				<td><label for="passwordc">Password: </label></td>
+				<td><input type="text" name="passwordc" /></td>
 			</tr>
 
 			<tr>
-				<td colspan="2"><button type="submit" name="makeChanges">Submit</button></td>
+				<td colspan="2"><button type="submit" name="makeChangesAccount">Submit</button></td>
 			</tr>
 
 			</table>
