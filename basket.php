@@ -5,8 +5,6 @@ require "src/variables.php";
 require "src/database.php";
 require "src/random_number.php";
 
-echo $_SESSION['basket_id'];
-
 if (isset($_GET['del'])) {
 	$sqlDelete = "DELETE FROM cart WHERE product_id = " . $_GET['del'] . " AND basket_id = " . $_SESSION['basket_id'];
 	$queryDel = mysqli_query($db, $sqlDelete);
@@ -46,11 +44,13 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 	<meta charset="utf-8">
-	<title>Basket</title>
+	<meta name="description" content="View the current items you have in the basket, before you purchase and order the them.">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title><?php echo $websiteName; ?> - Basket</title>
 	<link rel="stylesheet" href="src/css/css.css" type="text/css " />
 	<link rel="stylesheet" href="src/css/basket.css" type="text/css " />
 </head>
@@ -103,7 +103,7 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 					while ($row = mysqli_fetch_assoc($query)) {
 						(float)$total += (float)$row['price'] * (int)$row['quantity'];
 						echo "<tr>";
-						echo "<td><a href='basket.php?del=" . $row['id'] . "'><img src='src/img/ui/delete-f.svg' value='" . $row['id'] . "' /></a></td>";
+						echo "<td><a href='basket.php?del=" . $row['id'] . "'><img src='src/img/ui/delete-f.svg' value='" . $row['id'] . "' alt='Delete selected item from the basket' /></a></td>";
 						echo "<td>" . $row['name'] . "</td>";
 						echo "<td>" . $row['description'] . "</td>";
 						echo "<td>" . $row['quantity'] . "</td>";

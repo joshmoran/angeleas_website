@@ -7,7 +7,7 @@ Main pages
 - complete
 - contact
 - customers
-- details
+- details               complete          accessability
 - index                 complete          accessability
 - login                 complete          accessability
 - logout                complete          accessability

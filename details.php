@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "src/database.php";
+require "src/variables.php";
 require "src/random_number.php";
 
 $error_message  = '';
@@ -97,15 +98,16 @@ if (!empty($_POST['addToBasket'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lan="en">
+<html lang="en">
 
 <head>
 	<meta charset="utf-8">
 	<meta name="description" content="View a item from the Angela Websites Store">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title><?php echo $websiteName . ' - Details'; ?></title>
 	<link href="src/css/css.css" rel="stylesheet" type="text/css">
 	<link href="src/css/details.css" rel="stylesheet" type="text/css">
-	<title><?php $websiteName . ' - Details'; ?></title>
+
 </head>
 
 <body>
