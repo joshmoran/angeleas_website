@@ -268,33 +268,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						<td><input type="text" name="firstName" <?php if (isset($user['first_name'])) {
 																	echo 'value="' . $user['first_name'] . '"';
 																} ?> /></td>
+						<td><?php if (isset($errorFirstName)) {
+								echo $errorFirstName;
+							} ?></td>
 				</tr>
 				<tr>
 					<td><label for="lastName">Last Name: </label></td>
 					<td><input type="text" name="lastName" <?php if (isset($user['last_name'])) {
 																echo 'value="' . $user['last_name'] . '"';
 															} ?> /></td>
+					<td><?php if (isset($errorLastName)) {
+							echo $errorLastName;
+						} ?></td>
 				</tr>
 				<tr>
 					<td><label for="email">Email: </label></td>
 					<td><input type="text" name="email" <?php if (isset($user['email'])) {
 															echo 'value="' . $user['email'] . '"';
 														} ?> /></td>
+					<td><?php if (isset($errorEmail)) {
+							echo $errorEmail;
+						} ?></td>
 				</tr>
 				<tr>
 					<td><label for="home">Home Number: </label></td>
 					<td><input type="text" name="home" <?php if (!empty($user['home'])) {
 															echo 'value="' . $user['home'] . '"';
 														} ?> /></td>
+
+					<td><?php if (isset($errorHome)) {
+							echo $errorHome;
+						} ?></td>
 				</tr>
 				<tr>
 					<td><label for="mobile">Mobile Number: </label></td>
 					<td><input type="text" name="mobile" <?php if (!empty($user['mobile'])) {
 																echo 'value="' . $user['mobile'] . '"';
 															} ?> /></td>
+					<td><?php if (isset($errorMobile)) {
+							echo $errorMobile;
+						} ?></td>
 				</tr>
 				<tr>
-					<td colspan="2"><button type="submit" name="makeChangesCustomer" value="Submit">Submit</button></td>
+					<td colspan="3"><button type="submit" name="makeChangesCustomer" value="Submit">Submit</button></td>
 				</tr>
 
 			<?php
@@ -328,7 +344,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			while ($address = mysqli_fetch_row($addressRows)) :
 				$fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
-				
+
 				echo '<option onclick="changeAddress(' . $address[1] . '';
 			?>
 
@@ -364,34 +380,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
 			</tr>
 			<!-- 
-					CHANGE CREDIT CARD
+					CHANGE ACCOUNT
 				  -->
 			<tr>
 				<th colspan="3">
-					<h2>Payment Details</h2>
+					<h2>Account Details</h2>
 				</th>
 			</tr>
-			<?php
-			$sqlCreditCard = "SELECT * FROM ";
-
-			?>
 			<tr>
-				<td><label for="paymentChange">Make payment details changes</label></td>
-				<td colspan="2"><input type="checkbox" name="paymentChange" /></td>
+				<td><label for="accountChange">Make payment details changes</label></td>
+				<td colspan="2"><input type="checkbox" name="accountChange" /></td>
 			</tr>
-
-
 			<tr>
 				<td><label for="username">Username: </label></td>
 				<td><input type="text" name="username" /></td>
+				<td><?php if (isset($errorUsername)) {
+						echo $errorUsername;
+					} ?></td>
 			</tr>
 			<tr>
-				<td><label for="passwordc">Password: </label></td>
-				<td><input type="text" name="passwordc" /></td>
+				<td><label for="password">Password: </label></td>
+				<td><input type="text" name="password" /></td>
+				<td><?php if (isset($errorPassword)) {
+						echo $errorPassword;
+					} ?></td>
 			</tr>
 
 			<tr>
-				<td colspan="2"><button type="submit" name="makeChangesAccount">Submit</button></td>
+				<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
 			</tr>
 
 			</table>
