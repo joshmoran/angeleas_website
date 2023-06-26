@@ -136,7 +136,7 @@ if (!empty($_POST['addToBasket'])) {
 			$string .= "<form method='post'>";
 			$string .= "<h2>" . $products['name'] . "</h2>";
 			$string .= "<p>" . $products['description'] . "</p>";
-			$string .= "<label for='cost'>Price: </label><input type='number' value='£" . $products['price'] . "' name='cost' />";
+			$string .= "<label for='cost'>Price: </label><input type='text' value='£" . $products['price'] . "' id='costInput'  name='cost' />";
 
 			$sqlCheckInCart = "SELECT quantity FROM cart WHERE basket_id = " . $_SESSION['basket_id'] . " AND product_id = " . $_GET['id'];
 			$sqlCheckInCartQuery = mysqli_query($db, $sqlCheckInCart);

@@ -28,7 +28,8 @@ input
 input:last-child
 {
     margin: 0 0 0 100px;
-
+    width: 23.5em;
+    margin: 0 1.5em;
 }
 
 input[name=subject]

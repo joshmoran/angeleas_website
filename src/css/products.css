@@ -1,6 +1,6 @@
 #listParent
 {
-    display: block;
+    display: inline-block;
     width: 100% !important;
     margin: 0 auto;
     left: 0px;
@@ -13,8 +13,7 @@
     display: inline-block;
     position: relative;
     box-sizing: border-box;
-    width: 300px;
-    min-width: 300px;
+    width: 30%;
     padding: 2.5px;
     margin: 1px auto;
 }

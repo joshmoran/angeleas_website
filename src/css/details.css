@@ -47,13 +47,25 @@ label
 
 input
 {
-    width: 5em;
+    width: 15em;
     height: 1.2em;
     clear: both;
 }
 
-#form
+input[type=submit]
+{
+    height: 2em;
+    width: 15em;
+    margin: 1.5em 0;
+}
+
+#costInput
+{
+    border: none;
+}
+
+form
 {
     margin: inherit;
-
+    padding: 0.75em;
 }
