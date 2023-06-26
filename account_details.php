@@ -202,10 +202,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Template</title>
 	<link type="text/css" href="src/css/css.css" rel="stylesheet" />
 </head>
@@ -256,18 +257,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						- MOBILE NO
 				 -->
 				<tr>
-					<?php
-
-					$sqlCustomer = "SELECT * FROM customers WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
-
-					foreach (mysqli_query($db, $sqlCustomer) as $user) :
-
-					?>
-
 						<td><label for="firstName">First Name: </label></td>
 						<td><input type="text" name="firstName" <?php if (isset($user['first_name'])) {
 																	echo 'value="' . $user['first_name'] . '"';
-																} ?> /></td>
+																} ?> placeholder="John"/></td>
 						<td><?php if (isset($errorFirstName)) {
 								echo $errorFirstName;
 							} ?></td>
@@ -276,7 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><label for="lastName">Last Name: </label></td>
 					<td><input type="text" name="lastName" <?php if (isset($user['last_name'])) {
 																echo 'value="' . $user['last_name'] . '"';
-															} ?> /></td>
+															} ?> placeholder="Smith" /></td>
 					<td><?php if (isset($errorLastName)) {
 							echo $errorLastName;
 						} ?></td>
@@ -285,7 +278,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><label for="email">Email: </label></td>
 					<td><input type="text" name="email" <?php if (isset($user['email'])) {
 															echo 'value="' . $user['email'] . '"';
-														} ?> /></td>
+														} ?> placeholder="johnsmith@email.com"/></td>
 					<td><?php if (isset($errorEmail)) {
 							echo $errorEmail;
 						} ?></td>
@@ -294,7 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><label for="home">Home Number: </label></td>
 					<td><input type="text" name="home" <?php if (!empty($user['home'])) {
 															echo 'value="' . $user['home'] . '"';
-														} ?> /></td>
+														} ?> placeholder="01661827937"></td>
 
 					<td><?php if (isset($errorHome)) {
 							echo $errorHome;
@@ -304,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><label for="mobile">Mobile Number: </label></td>
 					<td><input type="text" name="mobile" <?php if (!empty($user['mobile'])) {
 																echo 'value="' . $user['mobile'] . '"';
-															} ?> /></td>
+															} ?> placeholder="07826384781" /></td>
 					<td><?php if (isset($errorMobile)) {
 							echo $errorMobile;
 						} ?></td>
@@ -328,8 +321,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<th colspan="2">Change address details</th>
 			</tr>
 			<tr>
-				<td><label for="personalChanges">Make changes to my personal details</label></td>
-				<td><input type="checkbox" id="personalChanges" name="personalChanges" /></td>
+				<td><label for="addressChanges">Make changes to my personal details</label></td>
+				<td><input type="checkbox" id="addressChanges" name="addressChanges" /></td>
 			</tr>
 			<!-- 
 			<select name="whichAddress"> -->
