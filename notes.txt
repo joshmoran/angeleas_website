@@ -1,8 +1,8 @@
 Main pages
-- about
+- about                 complete          accessability
 - account - admin
 - account - details
-- account
+- account               complete         accessability
 - basket
 - complete
 - contact

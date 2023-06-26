@@ -1,13 +1,7 @@
 #container
 {
-    width: 80%;
-    display: block;
-}
-
-#container div
-{
-    display: inline-block;
-    margin: auto;
+    margin: 0 auto;
+    display: inline-flex;
 }
 
 #left
@@ -22,6 +16,7 @@
     margin: 0 auto;
     margin: 1%;
     padding: 1%;
+    height: 26em;
 }
 
 
