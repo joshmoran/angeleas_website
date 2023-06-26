@@ -3,7 +3,7 @@ Main pages
 - account - admin
 - account - details
 - account               complete         accessability
-- basket
+- basket                complete         accessability
 - complete
 - contact
 - customers

@@ -25,43 +25,51 @@ if (!empty($_POST['email'])) {
 
 ?>
 
-<DOCTYPE html>
-	<html>
+<!DOCTYPE html>
+<html lang="en">
 
-	<head>
-		<meta charset="utf-8">
-		<title><?php echo $websiteName;
-				?> - Contact</title>
-		<link href="src/css/css.css" rel="stylesheet" type="text/css" />
-		<link href="src/css/contact.css" rel="stylesheet" type="text/css" />
-	</head>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="Please fill out the form to submit a message to out team. We will be back in touch within 72 hours">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title><?php echo $websiteName;
+			?> - Contact</title>
+	<link href="src/css/css.css" rel="stylesheet" type="text/css" />
+	<link href="src/css/contact.css" rel="stylesheet" type="text/css" />
+</head>
 
-	<body>
-		<?php include("inc/header.php"); ?>
-		<div id="container">
-			<div id="errors">
-				<?php
-				if (isset($error_message)) {
-					echo "<h3 id='error_message'>" . $error_message . "</h3>";
-				}
-				?>
-			</div>
-			<form action="contact.php" id="email" method="post">
-				<h2>Contact Us</h1>
-					<p>Please contact us for any quieries, issues or questions that you want answered.</p>
-					<p>Please allow for 72 hours for a response</p>
-					<label for="subject">Subject: </label>
-					<input type="text" name="subject" placeholder="Reason for contacting">
-
-					<label for="message">Message: </label>
-					<textarea name="message" cols="40" rows="8">Write Something</textarea>
-
-					<input type="submit" name="email" value="Submit">
-			</form>
+<body>
+	<?php include("inc/header.php"); ?>
+	<div id="container">
+		<div id="errors">
+			<?php
+			if (isset($error_message)) {
+				echo "<h3 id='error_message'>" . $error_message . "</h3>";
+			}
+			?>
 		</div>
+		<form action="contact.php" id="email" method="post">
+			<h2>Contact Us</h1>
+				<p>Please contact us for any quieries, issues or questions that you want answered.</p>
+				<p>Please allow for 72 hours for a response</p>
 
-		<?php include("inc/footer.php"); ?>
-		<script src="src/css/css.css"></script>
-	</body>
+				<label for="name">Your Name: </label>
+				<input type="text" name="name" id="name" placeholder="John Smith">
 
-	</html>
+				<label for="subject">Subject: </label>
+				<input type="text" name="subject" id="subject" placeholder="Reason for contacting">
+
+				<label for="message">Message: </label>
+				<textarea name="message" id="message" cols="40" rows="8">Write Something</textarea>
+
+				<input type="hidden" value="'<?php echo if(isset($_SESSION['loggedIn'])){echo $_SESSION['customer_id']; } ?>" ?>
+
+				<input type="submit" name="email" value="Submit">
+		</form>
+	</div>
+
+	<?php include("inc/footer.php"); ?>
+	<script src="src/css/css.css"></script>
+</body>
+
+</html>
