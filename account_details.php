@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			} else if (isset($_POST['addressChanges'])) {
 				return 'UPDATE address SET ';
 			} else if (isset($_POST['accountChanges'])) {
-				return 'UPDATE credit_cards SET ';
+				return 'UPDATE accounts SET ';
 			}
 		} else {
 			return ', ';
@@ -157,10 +157,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$sqlAccount = '';
 		$errorsAccount = array();
 
-		if (!empty($_POST['username'])) {
-			$sqlUsername = "SELECT * FROM account "
-			$comma = checkSql($sqlAccount);
-			$sqlAccount .= $comma . ' username = "' . mysqli_real_escape_string($db, $_POST['username']) . '" ';
+		if (isset($_POST['username'])) {
+			$sqlUsername = "SELECT username FROM accounts WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
+			$usernameQuery = mysqli_query($db, $sqlUsername);
+
+			var_dump($usernameQuery);
+
+			if (mysqli_num_rows($usernameQuery) < 1) {
+				$comma = checkSql($sqlAccount);
+				$sqlAccount .= $comma . ' username = "' . mysqli_real_escape_string($db, $_POST['username']) . '" ';
+			} else {
+				$errorsAccount[] = 'Username is already used';
+				$errorUsername = 'Username is already used. Please try another.';
+			}
 		} else {
 			$errorsAccount[] = "Card Number is invalid";
 		}
@@ -171,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorPassword = 'Password is not long enough.';
 			} else {
 				$comma = checkSql($sqlAccount);
-				$sqlAccount .= $comma . ' password = "' . mysqli_real_escape_string($db, $_POST['password']) . '" ';
+				$sqlAccount .= $comma . ' pass = "' . mysqli_real_escape_string($db, $_POST['password']) . '" ';
 			}
 		} else {
 			$errorsAccount[] = "Password is invalid";
@@ -390,30 +399,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<!-- 
 					CHANGE ACCOUNT
 				  -->
-			<tr>
-				<th colspan="3">
-					<h2>Account Details</h2>
-				</th>
-			</tr>
-			<tr>
-				<td><label for="accountChanges">Make payment details changes</label></td>
-				<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
-			</tr>
-			<tr>
-				<td><label for="username">Username: </label></td>
-				<td><input type="text" name="username" /></td>
-				<td><?php if (isset($errorUsername)) {
-						echo $errorUsername;
-					} ?></td>
-			</tr>
-			<tr>
-				<td><label for="password">Password: </label></td>
-				<td><input type="text" name="password" /></td>
-				<td><?php if (isset($errorPassword)) {
-						echo $errorPassword;
-					} ?></td>
-			</tr>
+			<?php
+			$sqlAccount = "SELECT * FROM accounts WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
+			$accountQuery = mysqli_query($db, $sqlAccount);
 
+			while ($account = mysqli_fetch_assoc($accountQuery)) :
+			?>
+				<tr>
+					<th colspan="3">
+						<h2>Account Details</h2>
+					</th>
+				</tr>
+				<tr>
+					<td><label for="accountChanges">Make payment details changes</label></td>
+					<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
+				</tr>
+				<tr>
+					<td><label for="username">Username: </label></td>
+					<td><input type="text" name="username" value="<?php echo $account['username']; ?>" /></td>
+					<td><?php if (isset($errorUsername)) {
+							echo $errorUsername;
+						} ?></td>
+				</tr>
+				<tr>
+					<td><label for="password">Password: </label></td>
+					<td><input type="password" name="password" valu="<?php echo $account['pass']; ?>" /></td>
+					<td><?php if (isset($errorPassword)) {
+							echo $errorPassword;
+						} ?></td>
+				</tr>
+			<?php
+			endwhile;
+			?>
 			<tr>
 				<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
 			</tr>
