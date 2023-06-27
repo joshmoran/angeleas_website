@@ -5,6 +5,13 @@ require "src/database.php";
 
 //$_SESSION['loggedIn'] = false;
 
+if (isset($_POST['deleteAddress'])) {
+	echo 'del add';
+}
+if (isset($_POST['updateAddress'])) {
+	echo 'update add';
+}
+
 // Important information
 
 // customer name = split into first and second namer 
@@ -106,50 +113,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$_POST['makeChangesCustomer'] = null;
 	}
 
-	if (isset($_POST['makeChangesAddress'])) {
+	if (isset($_POST['updateAddress'])) {
 		$sqlAddress = '';
 		$errorsAddress = array();
 
 		if (!empty($_POST['address1st'])) {
-			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
+			$comma = checkSql($sqlAddress);
+			$sqlAddress .= $comma . ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
 		} else {
-			$errorsAddress[] = "First Name is a required field";
+			$errorsAddress[] = 'Address Line 1';
+			$addressLine1 = "Line 1 is a required field";
 		}
 		if (!empty($_POST['address2nd'])) {
-			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
+			$comma = checkSql($sqlAddress);
+			$sqlAddress .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
 		} else {
-			$errorsAddress[] = "First Name is a required field";
+			$errorsAddress[] = "Line 2 is a required field";
 		}
 		if (!empty($_POST['address3rd'])) {
-			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
-		} else {
-			$errorsAddress[] = "First Name is a required field";
+			$comma = checkSql($sqlAddress);
+			$sqlAddress .= $comma . ' 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
 		}
 		if (!empty($_POST['region'])) {
-			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
+			$comma = checkSql($sqlAddress);
+			$sqlAddress .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
 		} else {
-			$errorsAddress[] = "First Name is a required field";
+			$errorsAddress[] = "Region is a required field";
 		}
 		if (!empty($_POST['postcode']) && strlen($_POST['postcode']) == 7) {
-			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
+			$comma = checkSql($sqlAddress);
+			$sqlAddress .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
 		} else {
-			$errorsAddress[] = "First Name is a required field";
+			$errorsAddress[] = "Postcode is a required field";
 		}
-		$sqlCreditCard .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+		$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
 
 		if (count($errorsAddress)) {
-			if (mysqli_query($db, $sqlCreditCard)) {
-				$errorsAddress[] = 'Successfully update your credit card details.';
+			if (mysqli_query($db, $sqlAddress)) {
+				$error_message = 'Successfully update your credit card details.';
 			} else {
-				$errorsAddress[] = 'Something went wrong. Please try again later.';
+				$error_message = 'Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
 			}
 		} else {
-			$errorsAddress[] = 'Please resolve the issues to continue with the change.';
+			$error_message = 'Please resolve the issues to continue with the change.';
 		}
 	}
 
