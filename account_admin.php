@@ -4,7 +4,7 @@ session_start();
 require "src/database.php";
 
 
-if ($_SESSION['admin'] == false) {
+if ($_SESSION['admin'] == false || !isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) {
     header("Location:login.php");
 }
 $errors = array();
@@ -40,14 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="The interface for administration staff to view pending orders and change their current order status">
     <link rel=" stylesheet" href="src/css/css.css" type="text/css" />
-    <title><?php echo $websiteName; ?> - </title>
+    <title><?php echo $websiteName; ?> - Admin</title>
 </head>
 
 <body>
@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     echo $string;
                 } else {
                     echo '<tr>';
-                    echo '<td>There are no outstaning orders</td>';
+                    echo '<td>There are no outstanding orders</td>';
                     echo '</tr>';
                 }
 

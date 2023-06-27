@@ -154,15 +154,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 
-	if (isset($_POST['makeChangesCreditCard'])) {
+	if (isset($_POST['makeChangesAccount'])) {
 		$sqlCreditCard = '';
-		$errorsCard = array();
+		$errorsAccount = array();
 
 		if (!empty($_POST['cardnumber'])) {
 			$comma = checkSql($sqlCreditCard);
 			$sqlCreditCard .= $comma . ' cardnumber = "' . mysqli_real_escape_string($db, $_POST['cardnumber']) . '" ';
 		} else {
-			$errorsCard[] = "Card Number is invalid";
+			$errorUSername = "Card Number is invalid";
 		}
 
 		if (!empty($_POST['expiry'])) {
@@ -258,13 +258,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						- MOBILE NO
 				 -->
 				<tr>
-						<td><label for="firstName">First Name: </label></td>
-						<td><input type="text" name="firstName" <?php if (isset($user['first_name'])) {
-																	echo 'value="' . $user['first_name'] . '"';
-																} ?> placeholder="John"/></td>
-						<td><?php if (isset($errorFirstName)) {
-								echo $errorFirstName;
-							} ?></td>
+					<td><label for="firstName">First Name: </label></td>
+					<td><input type="text" name="firstName" <?php if (isset($user['first_name'])) {
+																echo 'value="' . $user['first_name'] . '"';
+															} ?> placeholder="John" /></td>
+					<td><?php if (isset($errorFirstName)) {
+							echo $errorFirstName;
+						} ?></td>
 				</tr>
 				<tr>
 					<td><label for="lastName">Last Name: </label></td>
@@ -279,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><label for="email">Email: </label></td>
 					<td><input type="text" name="email" <?php if (isset($user['email'])) {
 															echo 'value="' . $user['email'] . '"';
-														} ?> placeholder="johnsmith@email.com"/></td>
+														} ?> placeholder="johnsmith@email.com" /></td>
 					<td><?php if (isset($errorEmail)) {
 							echo $errorEmail;
 						} ?></td>
@@ -307,10 +307,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td colspan="3"><button type="submit" name="makeChangesCustomer" value="Submit">Submit</button></td>
 				</tr>
 
-			<?php
-					endforeach;
-			?>
-			<!--
+				<?php
+				// endforeach;
+				?>
+				<!--
 					CHANGE ADDRESS DETAILS
 						- first line 
 						- second line 
@@ -318,31 +318,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						- region
 						- postcode
 				 -->
-			<tr>
-				<th colspan="2">Change address details</th>
-			</tr>
-			<tr>
-				<td><label for="addressChanges">Make changes to my personal details</label></td>
-				<td><input type="checkbox" id="addressChanges" name="addressChanges" /></td>
-			</tr>
-			<!-- 
+				<tr>
+					<th colspan="2">Change address details</th>
+				</tr>
+				<tr>
+					<td><label for="addressChanges">Make changes to my personal details</label></td>
+					<td><input type="checkbox" id="addressChanges" name="addressChanges" /></td>
+				</tr>
+				<!-- 
 			<select name="whichAddress"> -->
 
 
-			<?php
-			$count = 0;
-			$sqlAddress = "SELECT * FROM address WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
-			$addressRows = mysqli_query($db, $sqlAddress);
+				<?php
+				$count = 0;
+				$sqlAddress = "SELECT * FROM address WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
+				$addressRows = mysqli_query($db, $sqlAddress);
 
-			var_dump($addressRows);
+				var_dump($addressRows);
 
-			while ($address = mysqli_fetch_row($addressRows)) :
-				$fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
+				while ($address = mysqli_fetch_row($addressRows)) :
+					// $fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
+					// echo $fullAddress;
+					echo '<option onclick="changeAddress(' . $address[1] . ')">';
+				?>
 
-				echo '<option onclick="changeAddress(' . $address[1] . '';
-			?>
-
-				<!-- <tr>
+					<!-- <tr>
 					<td><label for="address1st">First Line</label></td>
 					<td><input type="text" <?php if (isset($_POST['address1st'])) {
 												echo " value='" . $_POST['address1st'] . "'";
@@ -365,44 +365,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><input type="text" name="postcode"></td>
 				</tr> -->
 
-			<?php
-				$count++;
-			endwhile;
+				<?php
+					$count++;
+				endwhile;
 
-			?>
-			<tr>
-				<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
-			</tr>
-			<!-- 
+				?>
+				<tr>
+					<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
+				</tr>
+				<!-- 
 					CHANGE ACCOUNT
 				  -->
-			<tr>
-				<th colspan="3">
-					<h2>Account Details</h2>
-				</th>
-			</tr>
-			<tr>
-				<td><label for="accountChange">Make payment details changes</label></td>
-				<td colspan="2"><input type="checkbox" name="accountChange" /></td>
-			</tr>
-			<tr>
-				<td><label for="username">Username: </label></td>
-				<td><input type="text" name="username" /></td>
-				<td><?php if (isset($errorUsername)) {
-						echo $errorUsername;
-					} ?></td>
-			</tr>
-			<tr>
-				<td><label for="password">Password: </label></td>
-				<td><input type="text" name="password" /></td>
-				<td><?php if (isset($errorPassword)) {
-						echo $errorPassword;
-					} ?></td>
-			</tr>
+				<tr>
+					<th colspan="3">
+						<h2>Account Details</h2>
+					</th>
+				</tr>
+				<tr>
+					<td><label for="accountChange">Make payment details changes</label></td>
+					<td colspan="2"><input type="checkbox" name="accountChange" /></td>
+				</tr>
+				<tr>
+					<td><label for="username">Username: </label></td>
+					<td><input type="text" name="username" /></td>
+					<td><?php if (isset($errorUsername)) {
+							echo $errorUsername;
+						} ?></td>
+				</tr>
+				<tr>
+					<td><label for="password">Password: </label></td>
+					<td><input type="text" name="password" /></td>
+					<td><?php if (isset($errorPassword)) {
+							echo $errorPassword;
+						} ?></td>
+				</tr>
 
-			<tr>
-				<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
-			</tr>
+				<tr>
+					<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
+				</tr>
 
 			</table>
 		</form>
