@@ -45,26 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Admin Portal ">
-    <link rel="stylesheet" href="src/css/css.css" type="text/css" />
-    <title></title>
-    <style>
-        table,
-        td,
-        th,
-        tr {
-            border: 1px solid #000;
-        }
-
-        th {
-            width: 5em;
-        }
-
-        td {
-            width: 10em;
-        }
-    </style>
-
+    <meta name="description" content="The interface for administration staff to view pending orders and change their current order status">
+    <link rel=" stylesheet" href="src/css/css.css" type="text/css" />
+    <title><?php echo $websiteName; ?> - </title>
 </head>
 
 <body>

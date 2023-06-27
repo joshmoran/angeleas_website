@@ -4,14 +4,11 @@ require "src/variables.php";
 
 if (!empty($_POST['email'])) {
 	try {
-		if (isset($_POST['customer_id'])) {
-			$id = $_POST['customer_id'];
-		} else {
-			$id = 'Guest';
-		}
+		if (isset($_POST['']))
 		$to = 'josh@lovingfamily.co.uk';
 		$subject = $_POST['subject'];
-		$message = "Name: " . $_POST['name'] . ".\nCustomer Number: " . $id . ".\nMessage: " . $_POST['message'];
+
+		$message = "Name: " . $_POST['name'] . ".<br>Customer Number $_POST['message'];
 		echo $subject . ' ' . $message;
 		// Always set content-type when sending HTML email
 		$headers = "MIME-Version: 1.0" . "\r\n";
@@ -25,8 +22,6 @@ if (!empty($_POST['email'])) {
 	} catch (Exception $e) {
 		$error_message = $e->getMessage();
 	}
-
-	$_POST['email'] = '';
 }
 // to, subject, message, header, parameters
 
@@ -69,9 +64,9 @@ if (!empty($_POST['email'])) {
 				<label for="message">Message: </label>
 				<textarea name="message" id="message" cols="40" rows="8">Write Something</textarea>
 
-				<input type="hidden" name="customer_id" value="'<?php if (isset($_SESSION['loggedIn'])) {
-																	echo $_SESSION['customer_id'];
-																} ?>" ?>
+				<input type="hidden" name="customerid"value="'<?php if (isset($_SESSION['loggedIn'])) {
+													echo $_SESSION['customer_id'];
+												} ?>" ?>
 
 				<input type="submit" name="email" value="Submit">
 		</form>
