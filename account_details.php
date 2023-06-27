@@ -157,21 +157,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$sqlAccount = '';
 		$errorsAccount = array();
 
-		if (isset($_POST['username'])) {
-			$sqlUsername = "SELECT username FROM accounts WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
+		if (!empty($_POST['username'])) {
+			$sqlUsername = "SELECT username FROM accounts WHERE username = '" . mysqli_real_escape_string($db, $_POST['username']) . "'";
 			$usernameQuery = mysqli_query($db, $sqlUsername);
 
 			var_dump($usernameQuery);
-
-			if (mysqli_num_rows($usernameQuery) < 1) {
-				$comma = checkSql($sqlAccount);
-				$sqlAccount .= $comma . ' username = "' . mysqli_real_escape_string($db, $_POST['username']) . '" ';
+			if (strlen($_POST['username']) > 7) {
+				if (mysqli_num_rows($usernameQuery) === 0) {
+					$comma = checkSql($sqlAccount);
+					$sqlAccount .= $comma . ' username = "' . mysqli_real_escape_string($db, $_POST['username']) . '" ';
+				} else {
+					$errorsAccount[] = 'Username is already used';
+					$errorUsername = 'Username is already used. Please try another.';
+				}
 			} else {
-				$errorsAccount[] = 'Username is already used';
-				$errorUsername = 'Username is already used. Please try another.';
+				$errorsAccount[] = 'Username is not long enough.';
+				$errorUsername = 'Username is not long enough.';
 			}
 		} else {
-			$errorsAccount[] = "Card Number is invalid";
+			$errorsAccount[] = "Username is empty";
 		}
 
 		if (!empty($_POST['password'])) {
@@ -186,16 +190,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$errorsAccount[] = "Password is invalid";
 		}
 
-		$sqlAccount .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+		$sqlAccount .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '";';
+
 
 		if (count($errorsAccount)) {
 			if (mysqli_query($db, $sqlAccount)) {
-				$errorsCard[] = 'Successfully update your credit card details.';
+				$error_message = 'Successfully update your credit card details.';
 			} else {
-				$errorsCard[] = 'Something went wrong. Please try again later.';
+				$error_message = 'Something went wrong. Please try again later.';
 			}
 		} else {
-			$errorsCard[] = 'Please resolve the issues to continue with the change.';
+			$error_message = 'Please resolve the issues to continue with the change.';
 		}
 	}
 }
