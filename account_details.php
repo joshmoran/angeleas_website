@@ -15,7 +15,7 @@ require "src/database.php";
 // add card to account
 // add address to account 
 $errors = array();
-if (isset($_SESSIOn['loggedIn']) && $_SESSION['loggedIn'] == false) {
+if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == false) {
 	header("Location: login.php");
 }
 
@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	function checkSql($statement)
 	{
 		if (!$statement) {
-			echo 'option one';
 			if (isset($_POST['personalChanges'])) {
 				return 'UPDATE customers SET ';
 			} else if (isset($_POST['addressChanges'])) {
@@ -39,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				return 'UPDATE credit_cards SET ';
 			}
 		} else {
-			echo 'option two';
 			return ', ';
 		}
 	}
@@ -53,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		//	- email
 		//	- home
 		//	- mobile
-
 
 		$sqlCustomer = '';
 		$errorCustomer = array();
@@ -93,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 			$errorCustomer[] = "last Name is a required field";
 		}
+
 		$sqlCustomer .= " WHERE customer_id = " . $_SESSION['customer_id'];
 
 		if (count($errorCustomer)) {
@@ -102,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorCustomer[] = 'Something went wrong. Please try again later';
 			}
 		} else {
+			$error_message = 'There has been a problem submitting your results. Please try again.';
 		}
 		$errorCustomer = array();
 		$_POST['makeChangesCustomer'] = null;
@@ -154,28 +153,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 
-	if (isset($_POST['makeChangesAccount'])) {
-		$sqlCreditCard = '';
+	if (isset($_POST['accountChanges'])) {
+		$sqlAccount = '';
 		$errorsAccount = array();
 
-		if (!empty($_POST['cardnumber'])) {
-			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' cardnumber = "' . mysqli_real_escape_string($db, $_POST['cardnumber']) . '" ';
+		if (!empty($_POST['username'])) {
+			$sqlUsername = "SELECT * FROM account "
+			$comma = checkSql($sqlAccount);
+			$sqlAccount .= $comma . ' username = "' . mysqli_real_escape_string($db, $_POST['username']) . '" ';
 		} else {
-			$errorUSername = "Card Number is invalid";
+			$errorsAccount[] = "Card Number is invalid";
 		}
 
-		if (!empty($_POST['expiry'])) {
-			$comma = checkSql($sqlCreditCard);
-			$sqlCreditCard .= $comma . ' expiry = "' . mysqli_real_escape_string($db, $_POST['expiry']) . '" ';
+		if (!empty($_POST['password'])) {
+			if (strlen($_POST['password']) < 7) {
+				$errorsAccount[] = 'Increase the length of the password';
+				$errorPassword = 'Password is not long enough.';
+			} else {
+				$comma = checkSql($sqlAccount);
+				$sqlAccount .= $comma . ' password = "' . mysqli_real_escape_string($db, $_POST['password']) . '" ';
+			}
 		} else {
-			$errorsCard[] = "Expiry is invalid";
+			$errorsAccount[] = "Password is invalid";
 		}
 
-		$sqlCreditCard .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+		$sqlAccount .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
 
-		if (count($errorsCard)) {
-			if (mysqli_query($db, $sqlCreditCard)) {
+		if (count($errorsAccount)) {
+			if (mysqli_query($db, $sqlAccount)) {
 				$errorsCard[] = 'Successfully update your credit card details.';
 			} else {
 				$errorsCard[] = 'Something went wrong. Please try again later.';
@@ -245,7 +250,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$sqlCustomer = "SELECT * FROM customers WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
 				$customerQuery = mysqli_query($db, $sqlCustomer);
 
-				foreach (mysqli_fetch_assoc($customerQuery) as $user) :
+				while ($user  = mysqli_fetch_assoc($customerQuery)) :
 					var_dump($user);
 				?>
 					<tr>
@@ -316,7 +321,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					</tr>
 
 				<?php
-				endforeach;
+				endwhile;
 				?>
 				<!--
 					CHANGE ADDRESS DETAILS
