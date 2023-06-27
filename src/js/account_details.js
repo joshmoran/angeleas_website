@@ -1,3 +1,4 @@
-function changeAddress( no ) {
-    alert( no )
+function changeAddress () {
+    let value = document.getElementById( 'whichAddress' ).value
+    window.open( 'account_details.php?address=' + value )
 }

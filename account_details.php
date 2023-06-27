@@ -361,39 +361,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$sqlAddress = "SELECT * FROM address WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
 					$addressRows = mysqli_query($db, $sqlAddress);
 
-					var_dump($addressRows);
-					echo '<td colspan="3"><select name="whichAddress">';
+					$address_id = mysqli_fetch_row($addressRows);
+					var_dump($address_id);
+
+					echo '<td colspan="3"><select onchange="changeAddress()" name="whichAddress" id="whichAddress">';
 					while ($address = mysqli_fetch_row($addressRows)) {
 						$fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
 						// echo $fullAddress;
-						echo '<option onclick="changeAddress(' . $address[1] . ')">' . $fullAddress . '</option>';
+						echo '<option value="' . $address[1] . '">' . $fullAddress . '</option>';
 					}
 					echo '</select></td>';
 					?>
 				</tr>
-				<!-- <tr>
-					<td><label for="address1st">First Line</label></td>
-					<td><input type="text" <?php if (isset($_POST['address1st'])) {
-												echo " value='" . $_POST['address1st'] . "'";
-											} ?> /></td>
-				</tr>
-				<tr>
-					<td><label for="address2nd">Second Line</label></td>
-					<td><input type="text" name="address2nd" /></td>
-				</tr>
-				<tr>
-					<td><label for="address3rd">Third Line</label></td>
-					<td><input type="text" name="address3rd" /></td>
-				</tr>
-				<tr>
-					<td><label for="region">Region</label></td>
-					<td><input type="text" name="region" /></td>
-				</tr>
-				<tr>
-					<td><label for="postcode">Postcode</label></td>
-					<td><input type="text" name="postcode"></td>
-				</tr> -->
 
+				<div id="address">
+					<?php
+					$sqlAddress = "SELECT * FROM address WHERE address_id = '";
+					?>
+
+					<tr>
+						<td><label for="address1st">First Line</label></td>
+						<td><input type="text" <?php if (isset($_POST['address1st'])) {
+													echo " value='" . $_POST['address1st'] . "'";
+												} ?> /></td>
+					</tr>
+					<tr>
+						<td><label for="address2nd">Second Line</label></td>
+						<td><input type="text" name="address2nd" /></td>
+					</tr>
+					<tr>
+						<td><label for="address3rd">Third Line</label></td>
+						<td><input type="text" name="address3rd" /></td>
+					</tr>
+					<tr>
+						<td><label for="region">Region</label></td>
+						<td><input type="text" name="region" /></td>
+					</tr>
+					<tr>
+						<td><label for="postcode">Postcode</label></td>
+						<td><input type="text" name="postcode"></td>
+					</tr>
+				</div>
 
 				<tr>
 					<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
