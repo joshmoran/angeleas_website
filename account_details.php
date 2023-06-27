@@ -193,11 +193,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$sqlAccount .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '";';
 
 
-		if (count($errorsAccount)) {
-			if (mysqli_query($db, $sqlAccount)) {
-				$error_message = 'Successfully update your credit card details.';
-			} else {
-				$error_message = 'Something went wrong. Please try again later.';
+		if (!count($errorsAccount)) {
+			try {
+				mysqli_query($db, $sqlAccount);
+				$error_message = 'Successfully update your account details.';
+			} catch (Exception $e) {
+				$error_message = $e->getMessage() . ', something went wrong. Please try again later.';
 			}
 		} else {
 			$error_message = 'Please resolve the issues to continue with the change.';
@@ -265,7 +266,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$customerQuery = mysqli_query($db, $sqlCustomer);
 
 				while ($user  = mysqli_fetch_assoc($customerQuery)) :
-					var_dump($user);
 				?>
 					<tr>
 						<th colspan="2">
@@ -353,23 +353,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><input type="checkbox" id="addressChanges" name="addressChanges" /></td>
 				</tr>
 
-				<select name="whichAddress">
 
 
+				<tr>
 					<?php
 					$count = 0;
 					$sqlAddress = "SELECT * FROM address WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
 					$addressRows = mysqli_query($db, $sqlAddress);
 
 					var_dump($addressRows);
-
-					while ($address = mysqli_fetch_row($addressRows)) :
-						// $fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
+					echo '<td colspan="3"><select name="whichAddress">';
+					while ($address = mysqli_fetch_row($addressRows)) {
+						$fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
 						// echo $fullAddress;
-						echo '<option onclick="changeAddress(' . $address[1] . ')">';
+						echo '<option onclick="changeAddress(' . $address[1] . ')">' . $fullAddress . '</option>';
+					}
+					echo '</select></td>';
 					?>
-				</select>
-
+				</tr>
 				<!-- <tr>
 					<td><label for="address1st">First Line</label></td>
 					<td><input type="text" <?php if (isset($_POST['address1st'])) {
@@ -393,52 +394,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td><input type="text" name="postcode"></td>
 				</tr> -->
 
-			<?php
-						$count++;
-					endwhile;
 
-			?>
-			<tr>
-				<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
-			</tr>
-			<!-- 
+				<tr>
+					<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
+				</tr>
+				<!-- 
 					CHANGE ACCOUNT
 				  -->
-			<?php
-			$sqlAccount = "SELECT * FROM accounts WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
-			$accountQuery = mysqli_query($db, $sqlAccount);
+				<?php
+				$sqlAccount = "SELECT * FROM accounts WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
+				$accountQuery = mysqli_query($db, $sqlAccount);
 
-			while ($account = mysqli_fetch_assoc($accountQuery)) :
-			?>
+				while ($account = mysqli_fetch_assoc($accountQuery)) :
+				?>
+					<tr>
+						<th colspan="3">
+							<h2>Account Details</h2>
+						</th>
+					</tr>
+					<tr>
+						<td><label for="accountChanges">Make payment details changes</label></td>
+						<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
+					</tr>
+					<tr>
+						<td><label for="username">Username: </label></td>
+						<td><input type="text" name="username" value="<?php echo $account['username']; ?>" /></td>
+						<td><?php if (isset($errorUsername)) {
+								echo $errorUsername;
+							} ?></td>
+					</tr>
+					<tr>
+						<td><label for="password">Password: </label></td>
+						<td><input type="password" name="password" valu="<?php echo $account['pass']; ?>" /></td>
+						<td><?php if (isset($errorPassword)) {
+								echo $errorPassword;
+							} ?></td>
+					</tr>
+				<?php
+				endwhile;
+				?>
 				<tr>
-					<th colspan="3">
-						<h2>Account Details</h2>
-					</th>
+					<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
 				</tr>
-				<tr>
-					<td><label for="accountChanges">Make payment details changes</label></td>
-					<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
-				</tr>
-				<tr>
-					<td><label for="username">Username: </label></td>
-					<td><input type="text" name="username" value="<?php echo $account['username']; ?>" /></td>
-					<td><?php if (isset($errorUsername)) {
-							echo $errorUsername;
-						} ?></td>
-				</tr>
-				<tr>
-					<td><label for="password">Password: </label></td>
-					<td><input type="password" name="password" valu="<?php echo $account['pass']; ?>" /></td>
-					<td><?php if (isset($errorPassword)) {
-							echo $errorPassword;
-						} ?></td>
-				</tr>
-			<?php
-			endwhile;
-			?>
-			<tr>
-				<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
-			</tr>
 
 			</table>
 		</form>
@@ -446,6 +443,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		include "inc/footer.php";
 		?>
 		<script src="src/js/js.js"></script>
+		<script src="src/js/account_details.js"></script>
 </body>
 
 </html>
