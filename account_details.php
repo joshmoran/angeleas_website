@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 			$errorsAddress[] = "First Name is a required field";
 		}
-		if (!empty($_POST['postcode'])) {
+		if (!empty($_POST['postcode']) && strlen($_POST['postcode']) == 7) {
 			$comma = checkSql($sqlCreditCard);
 			$sqlCreditCard .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
 		} else {
@@ -268,8 +268,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				while ($user  = mysqli_fetch_assoc($customerQuery)) :
 				?>
 					<tr>
-						<th colspan="2">
-							<h2>Change account details</h2>
+						<th colspan="3">
+							<h1>Change account details</h1>
+						</th>
+					</tr>
+					<tr>
+						<th colspan="3">
+							Change Personal Details
 						</th>
 					</tr>
 					<tr>
@@ -346,7 +351,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						- postcode
 				 -->
 				<tr>
-					<th colspan="2">Change address details</th>
+					<th colspan="3">Change Address Details</th>
 				</tr>
 				<tr>
 					<td><label for="addressChanges">Make changes to my personal details</label></td>
@@ -385,12 +390,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					if (isset($_GET['address'])) {
 						$addressID = $_GET['address'];
 					}
-					echo $addressID;
+
 					$sqlAddress = "SELECT * FROM address WHERE address_id = '" . $addressID . "' AND customer_id = '" . $_SESSION['customer_id'] . "'";
 					$addressQuery = mysqli_query($db, $sqlAddress);
 
 					while ($address = mysqli_fetch_assoc($addressQuery)) :
-						var_dump($address);
 					?>
 
 						<tr>
@@ -418,7 +422,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					endwhile;
 			?>
 			<tr>
-				<td colspan="2"><button type="submit" name="makeChanges" value="Submit">Submit</button></td>
+				<td colspan="2"><button type="submit" name="updateAddress">Update Address</button><button type="submit" name="deleteAddress">Delete Address</button></td>
 			</tr>
 			<!-- 
 					CHANGE ACCOUNT
@@ -431,7 +435,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			?>
 				<tr>
 					<th colspan="3">
-						<h2>Account Details</h2>
+						Change Account Details
 					</th>
 				</tr>
 				<tr>
