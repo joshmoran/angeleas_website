@@ -361,14 +361,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$sqlAddress = "SELECT * FROM address WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
 					$addressRows = mysqli_query($db, $sqlAddress);
 
-					$address_id = mysqli_fetch_row($addressRows);
-					var_dump($address_id);
+					//$address_id = mysqli_fetch_row($addressRows);
 
 					echo '<td colspan="3"><select onchange="changeAddress()" name="whichAddress" id="whichAddress">';
-					while ($address = mysqli_fetch_row($addressRows)) {
+					while ($address = mysqli_fetch_array($addressRows)) {
 						$fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
 						// echo $fullAddress;
-						echo '<option value="' . $address[1] . '">' . $fullAddress . '</option>';
+						if (!isset($addressID)) {
+							$addressID = $address[1];
+						}
+						echo '<option value="' . $address[1] . '"';
+						if (isset($_GET['address']) && $_GET['address'] == $address[1]) {
+							echo ' selected';
+						}
+						echo '>' . $fullAddress . '</option>';
 					}
 					echo '</select></td>';
 					?>
@@ -376,6 +382,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 				<div id="address">
 					<?php
+					if (isset($_GET['address'])) {
+						$addressID = $_GET['address'];
+					}
+					echo $addressID;
 					$sqlAddress = "SELECT * FROM address WHERE address_id = '";
 					?>
 
