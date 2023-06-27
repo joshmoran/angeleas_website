@@ -45,8 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Admin Portal ">
     <link rel="stylesheet" href="src/css/css.css" type="text/css" />
     <title></title>
     <style>
@@ -119,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                         }
                         $string .=  '</ul></td>';
                         // Customer Address
-                        $address = explode(",", $user['addres']);
+                        $address = explode(",", $user['address']);
                         $string .=  '<td>' . $user['name'] . '<br>' . trim($address[0]) . '<br>' . trim($address[1]) . '<br>' . trim($address[2]) . '<br>' . trim($address[3]) . '<br>' . trim($address[4]) . '</td>';
                         // $sqlAddress = "SELECT * FROM address WHERE customer_id = $customerID";
                         // $sqlQueryAddress = mysqli_query($db, $sqlAddress);

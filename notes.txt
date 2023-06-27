@@ -4,9 +4,8 @@ Main pages
 - account - details
 - account               complete         accessability
 - basket                complete         accessability
-- complete
-- contact
-- customers
+- complete              complete         accessability
+- contact               complete         accessability
 - details               complete          accessability
 - index                 complete          accessability
 - login                 complete          accessability
