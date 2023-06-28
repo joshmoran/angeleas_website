@@ -468,10 +468,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					}
 					$sqlAddress = "SELECT * FROM address WHERE address_id = '" . $addressID . "' AND customer_id = '" . $_SESSION['customer_id'] . "'";
 					$addressQuery = mysqli_query($db, $sqlAddress);
-					do {
-					 $address = mysqli_fetch_assoc($addressQuery);
-					} while ( count($addressQuery)) finally {
-						
+					try {
+						while ( $address = mysqli_fetch_assoc($addressQuery) )
+					} catch ( Exception $e ) {
+						$address = 'working';
 					}
 
 					?>

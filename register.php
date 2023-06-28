@@ -18,9 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (isset($_POST['register'])) {
 		require "src/database.php";
 
-		$errors = 0;
-
-		$getMessage = '';
+		$errors = array():
 
 		function checkEmail($str)
 		{
@@ -46,9 +44,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// Check Requirements for inputted values meet the Requirements
 
 		// FIRST NAME 
-		if (strlen($firstName) <= 3 || $firstName == null || $firstName == '') {
-			$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-			$errors++;
+		if (!empty($_POST['firstname']))
+			if (strlen($firstName) <= 3 || $firstName == null || $firstName == '') {
+				$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
+				$errors++;
+			} else {
+				$errors[] 'First Name';
+				
+			}
+		} else {
+			$errorFirstName = 'First Name is a reqiured feild.';
 		}
 
 		// LAST NAME
