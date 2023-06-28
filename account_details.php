@@ -22,7 +22,7 @@ if (isset($_POST['updateAddress'])) {
 // add card to account
 // add address to account 
 $errors = array();
-if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == false) {
+if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] == false) {
 	header("Location: login.php");
 }
 
@@ -34,14 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// Credit Card Numbers
 	require "src/database.php";
 
-	function checkSql($statement)
+	function checkSql($statement, $identifier)
 	{
 		if (!$statement) {
-			if (isset($_POST['personalChanges'])) {
+			if ($identifier == 'customer') {
 				return 'UPDATE customers SET ';
-			} else if (isset($_POST['addressChanges'])) {
+			} else if ($identifier == 'address') {
 				return 'UPDATE address SET ';
-			} else if (isset($_POST['accountChanges'])) {
+			} else if ($identifier == 'account') {
 				return 'UPDATE accounts SET ';
 			}
 		} else {
@@ -62,8 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$sqlCustomer = '';
 		$errorCustomer = array();
 
+		echo 'customer';
+
 		if (!empty($_POST['firstName'])) {
-			$comma = checkSql($sqlCustomer);
+			$comma = checkSql($sqlCustomer, 'customer');
 
 			$sqlCustomer .= $comma . ' first_name = "' . mysqli_real_escape_string($db, $_POST['firstName']) . '" ';
 		} else {
@@ -71,28 +73,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		if (!empty($_POST['lastName'])) {
-			$comma = checkSql($sqlCustomer);
+			$comma = checkSql($sqlCustomer, 'customer');
 			$sqlCustomer .= $comma . ' last_name = "' . mysqli_escape_string($db, $_POST['lastName']) . '" ';
 		} else {
 			$errorCustomer[] = "last Name is a required field";
 		}
 
 		if (!empty($_POST['email'])) {
-			$comma = checkSql($sqlCustomer);
+			$comma = checkSql($sqlCustomer, 'customer');
 			$sqlCustomer .= $comma . ' email = "' . mysqli_escape_string($db, $_POST['email']) . '" ';
 		} else {
 			$errorCustomer[] = "last Name is a required field";
 		}
 
 		if (!empty($_POST['mobile'])) {
-			$comma = checkSql($sqlCustomer);
+			$comma = checkSql($sqlCustomer, 'customer');
 			$sqlCustomer .= $comma . ' mobile = "' . mysqli_escape_string($db, $_POST['mobile']) . '" ';
 		} else {
 			$errorCustomer[] = "last Name is a required field";
 		}
 
 		if (!empty($_POST['home'])) {
-			$comma = checkSql($sqlCustomer);
+			$comma = checkSql($sqlCustomer, 'customer');
 			$sqlCustomer .= $comma . ' home = "' . mysqli_escape_string($db, $_POST['home']) . '" ';
 		} else {
 			$errorCustomer[] = "last Name is a required field";
@@ -100,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		$sqlCustomer .= " WHERE customer_id = " . $_SESSION['customer_id'];
 
-		if (count($errorCustomer)) {
+		if (count($errorCustomer) === 0) {
 			if (mysqli_query($db, $sqlCustomer)) {
 				$errorCustomer[] = 'Successfully updated your customer details';
 			} else {
@@ -109,8 +111,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 			$error_message = 'There has been a problem submitting your results. Please try again.';
 		}
-		$errorCustomer = array();
-		$_POST['makeChangesCustomer'] = null;
+
+		$errorCustomer = null;
+		$_POST['personalChanges'] = null;
+	}
+if( isset($))
+	if (isset($_POST['deleteAddress'])) {
+		if (mysqli_query($db, "DELETE FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $_POST['whichAddress'])) {
+			$error_message = 'Successfully deleted the address';
+		} else {
+			$error_message = 'There has been a problem deleting the address. Please try again.';
+		}
+
+		$_POST['deleteAddress'] = null;
 	}
 
 	if (isset($_POST['updateAddress'])) {
@@ -118,36 +131,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$errorsAddress = array();
 
 		if (!empty($_POST['address1st'])) {
-			$comma = checkSql($sqlAddress);
+			$comma = checkSql($sqlAddress, 'address');
 			$sqlAddress .= $comma . ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
 		} else {
-			$errorsAddress[] = 'Address Line 1';
+			$errorsAddress[] = 'Address line 1';
 			$addressLine1 = "Line 1 is a required field";
 		}
 		if (!empty($_POST['address2nd'])) {
-			$comma = checkSql($sqlAddress);
+			$comma = checkSql($sqlAddress, 'address');
 			$sqlAddress .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
 		} else {
-			$errorsAddress[] = "Line 2 is a required field";
+			$errorsAddress[] = "Address line 2";
+			$errorLine2 = 'Line 2 is a required field.';
 		}
 		if (!empty($_POST['address3rd'])) {
-			$comma = checkSql($sqlAddress);
+			$comma = checkSql($sqlAddress, 'address');
 			$sqlAddress .= $comma . ' 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
 		}
 		if (!empty($_POST['region'])) {
-			$comma = checkSql($sqlAddress);
+			$comma = checkSql($sqlAddress, 'address');
 			$sqlAddress .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
 		} else {
+			$errorsAddress[] = 'Region';
 			$errorsAddress[] = "Region is a required field";
 		}
 		if (!empty($_POST['postcode']) && strlen($_POST['postcode']) == 7) {
-			$comma = checkSql($sqlAddress);
+			$comma = checkSql($sqlAddress, 'address');
 			$sqlAddress .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
 		} else {
 			$errorsAddress[] = "Postcode is a required field";
 		}
 
 		$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+
+		echo $sqlAddress;
 
 		if (count($errorsAddress)) {
 			if (mysqli_query($db, $sqlAddress)) {
@@ -158,6 +175,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 			$error_message = 'Please resolve the issues to continue with the change.';
 		}
+		$errorsAddress = null;
+		$_POST['updateAddress'] = null;
 	}
 
 	if (isset($_POST['accountChanges'])) {
@@ -171,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			var_dump($usernameQuery);
 			if (strlen($_POST['username']) > 7) {
 				if (mysqli_num_rows($usernameQuery) === 0) {
-					$comma = checkSql($sqlAccount);
+					$comma = checkSql($sqlAccount, 'account');
 					$sqlAccount .= $comma . ' username = "' . mysqli_real_escape_string($db, $_POST['username']) . '" ';
 				} else {
 					$errorsAccount[] = 'Username is already used';
@@ -190,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorsAccount[] = 'Increase the length of the password';
 				$errorPassword = 'Password is not long enough.';
 			} else {
-				$comma = checkSql($sqlAccount);
+				$comma = checkSql($sqlAccount, 'account');
 				$sqlAccount .= $comma . ' pass = "' . mysqli_real_escape_string($db, $_POST['password']) . '" ';
 			}
 		} else {
@@ -215,19 +234,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 }
 
-// $name = trim(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING));
-// $nameSplit = explode(' ', $name);
-// $nameSplit[0] = $firstName;
-// $nameSplit[1] = $lastName;
-// $addressFirst = trim(filter_input(INPUT_POST, 'addressFirstLine', FILTER_SANITIZE_STRING));
-// $addressSecond = trim(filter_input(INPUT_POST, 'addressSecondLine', FILTER_SANITIZE_STRING));
-// $postcode = trim(filter_input(INPUT_POST, 'addressPostcode', FILTER_SANITIZE_STRING));
-// $address = $addressFirst . ', ' . $addressSecond . ', ' . $postcode;
-// // $name = trim(filter_input(INPUT_POST, 'name', FILTER_SANATIZE_STRING));
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -239,6 +245,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	<meta name="description" content="Account Portal allowing the user to change details. Split into 3 sections: customer details, address and account details">
 	<title><?php echo $websiteName; ?> - Change Account Details</title>
 	<link type="text/css" href="src/css/css.css" rel="stylesheet" />
+
+	<link type="text/css" href="src/css/account_details.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -409,22 +417,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						<tr>
 							<td><label for="address1st">First Line</label></td>
 							<td><input type="text" value="<?php echo $address['1_line']; ?>" /></td>
+							<td><?php if (isset($errorLine1)) {
+									echo $errorLine1;
+								} ?></td>
 						</tr>
 						<tr>
 							<td><label for="address2nd">Second Line</label></td>
 							<td><input type="text" name="address2nd" value="<?php echo $address['2_line']; ?>" /></td>
+							<td><?php if (isset($errorLine2)) {
+									echo $errorLine2;
+								} ?></td>
 						</tr>
 						<tr>
 							<td><label for="address3rd">Third Line</label></td>
 							<td><input type="text" name="address3rd" value="<?php echo $address['3_line']; ?>" /></td>
+							<td><?php if (isset($errorLine3)) {
+									echo $errorLine3;
+								} ?></td>
 						</tr>
 						<tr>
 							<td><label for="region">Region</label></td>
 							<td><input type="text" name="region" value="<?php echo $address['region']; ?>" /></td>
+							<td><?php if (isset($errorRegion)) {
+									echo $errorRegion;
+								} ?></td>
 						</tr>
 						<tr>
 							<td><label for="postcode">Postcode</label></td>
 							<td><input type="text" name="postcode" value="<?php echo $address['postcode']; ?>"></td>
+							<td><?php if (isset($errorPostcode)) {
+									echo $errorPostcode;
+								} ?></td>
 						</tr>
 				</div>
 			<?php
@@ -460,7 +483,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				</tr>
 				<tr>
 					<td><label for="password">Password: </label></td>
-					<td><input type="password" name="password" valu="<?php echo $account['pass']; ?>" /></td>
+					<td><input type="password" name="password" value="<?php echo $account['pass']; ?>" /></td>
 					<td><?php if (isset($errorPassword)) {
 							echo $errorPassword;
 						} ?></td>
