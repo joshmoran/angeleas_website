@@ -179,8 +179,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$_POST['updateAddress'] = null;
 		}
 
-		if (isset($_POST['addAddress']){
-			$			
+		if (isset($_POST['addAddress'])){
+			$sqlAddAddress = "INSERT INTO address ( customer_id, 1_line, 2_line, region, postcode) VALUES ( '";
+			$errorAddAddress = array();
+
+			if ( !empty($_POST['address1st'])){
+				$sqlAddAddress.= mysqli_real_escape_string($db, $_POST['address1st']). "', '";
+			} else {
+				$errorAddAddress[] = 'Address line 1';
+				$errorLine1 = 'Please enter your address line 1 to continue.'
+			}
+
+			if ( !empty($_POST['address2nd'])){
+				$sqlAddAddress.= mysqli_real_escape_string($db, $_POST['address2nd']). "', '";
+			} else {
+				$errorAddAddress[] = 'Address line 2';
+				$errorLine2 = 'Please enter your address line 2 to continue.'
+			}
+
+			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address3rd']) . "', '";
+
+			if ( !empty($_POST['region'])){
+				$sqlAddAddress.= mysqli_real_escape_string($db, $_POST['region']). "', '";
+			} else {
+				$errorAddAddress[] = 'Address region';
+				$errorRegion = 'Please enter your region to continue.'
+			}
+
+			if ( !empty($_POST['postcode'])){
+				if (strlen())
+				$sqlAddAddress.= mysqli_real_escape_string($db, $_POST['postcode']). "', '";
+			} else {
+				$errorAddAddress[] = 'Postcode';;
+				$errorPostcode = 'Please enter your postcode to continue.'
+			}
 		}
 	}
 	if (isset($_POST['accountChanges'])) {
