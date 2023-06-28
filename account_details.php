@@ -444,14 +444,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 				<div id="address">
 					<?php
-					if (isset($_GET['address'])) {
-						$addressID = $_GET['address'];
-					}
+					$sqlAddress = "SELECT * FROM address WHERE address_id = '";
 
-					$sqlAddress = "SELECT * FROM address WHERE address_id = '" . $addressID . "' AND customer_id = '" . $_SESSION['customer_id'] . "'";
+					if (isset($_GET['address'])) {
+						if ($_GET['address'] != 'new') {
+							$sqlAddress = "SELECT * FROM address WHERE address_id = '" . $addressID . "' AND customer_id = '" . $_SESSION['customer_id'] . "'";
+						} else {
+							$sqlAddress = null;
+						}
+					}
 					$addressQuery = mysqli_query($db, $sqlAddress);
 
 					while ($address = mysqli_fetch_assoc($addressQuery)) :
+
 					?>
 
 						<tr>
@@ -491,6 +496,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						</tr>
 				</div>
 			<?php
+
 					endwhile;
 			?>
 			<tr>
@@ -508,34 +514,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			while ($account = mysqli_fetch_assoc($accountQuery)) :
 			?>
 				<tr>
-					<th colspan="3">
-						Change Account Details
-					</th>
-				</tr>
-				<tr>
-					<td><label for="accountChanges">Make payment details changes</label></td>
-					<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
-				</tr>
-				<tr>
-					<td><label for="username">Username: </label></td>
-					<td><input type="text" name="username" value="<?php echo $account['username']; ?>" /></td>
-					<td><?php if (isset($errorUsername)) {
-							echo $errorUsername;
-						} ?></td>
-				</tr>
-				<tr>
-					<td><label for="password">Password: </label></td>
-					<td><input type="password" name="password" value="<?php echo $account['pass']; ?>" /></td>
-					<td><?php if (isset($errorPassword)) {
-							echo $errorPassword;
-						} ?></td>
-				</tr>
-			<?php
-			endwhile;
-			?>
-			<tr>
-				<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
+					<th colspan=" 3">
+							Change Account Details
+							</th>
 			</tr>
+			<tr>
+				<td><label for="accountChanges">Make payment details changes</label></td>
+				<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
+			</tr>
+			<tr>
+				<td><label for="username">Username: </label></td>
+				<td><input type="text" name="username" value="<?php echo $account['username']; ?>" /></td>
+				<td><?php if (isset($errorUsername)) {
+						echo $errorUsername;
+					} ?></td>
+			</tr>
+			<tr>
+				<td><label for="password">Password: </label></td>
+				<td><input type="password" name="password" value="<?php echo $account['pass']; ?>" /></td>
+				<td><?php if (isset($errorPassword)) {
+						echo $errorPassword;
+					} ?></td>
+			</tr>
+		<?php
+			endwhile;
+		?>
+		<tr>
+			<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
+		</tr>
 
 			</table>
 		</form>
