@@ -115,70 +115,74 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$errorCustomer = null;
 		$_POST['personalChanges'] = null;
 	}
-if( isset($))
-	if (isset($_POST['deleteAddress'])) {
-		if (mysqli_query($db, "DELETE FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $_POST['whichAddress'])) {
-			$error_message = 'Successfully deleted the address';
-		} else {
-			$error_message = 'There has been a problem deleting the address. Please try again.';
-		}
-
-		$_POST['deleteAddress'] = null;
-	}
-
-	if (isset($_POST['updateAddress'])) {
-		$sqlAddress = '';
-		$errorsAddress = array();
-
-		if (!empty($_POST['address1st'])) {
-			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
-		} else {
-			$errorsAddress[] = 'Address line 1';
-			$addressLine1 = "Line 1 is a required field";
-		}
-		if (!empty($_POST['address2nd'])) {
-			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
-		} else {
-			$errorsAddress[] = "Address line 2";
-			$errorLine2 = 'Line 2 is a required field.';
-		}
-		if (!empty($_POST['address3rd'])) {
-			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
-		}
-		if (!empty($_POST['region'])) {
-			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
-		} else {
-			$errorsAddress[] = 'Region';
-			$errorsAddress[] = "Region is a required field";
-		}
-		if (!empty($_POST['postcode']) && strlen($_POST['postcode']) == 7) {
-			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
-		} else {
-			$errorsAddress[] = "Postcode is a required field";
-		}
-
-		$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
-
-		echo $sqlAddress;
-
-		if (count($errorsAddress)) {
-			if (mysqli_query($db, $sqlAddress)) {
-				$error_message = 'Successfully update your credit card details.';
+	if (isset($_POST['addressChanges'])) {
+		if (isset($_POST['deleteAddress'])) {
+			if (mysqli_query($db, "DELETE FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $_POST['whichAddress'])) {
+				$error_message = 'Successfully deleted the address';
 			} else {
-				$error_message = 'Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
+				$error_message = 'There has been a problem deleting the address. Please try again.';
 			}
-		} else {
-			$error_message = 'Please resolve the issues to continue with the change.';
-		}
-		$errorsAddress = null;
-		$_POST['updateAddress'] = null;
-	}
 
+			$_POST['deleteAddress'] = null;
+		}
+
+		if (isset($_POST['updateAddress'])) {
+			$sqlAddress = '';
+			$errorsAddress = array();
+
+			if (!empty($_POST['address1st'])) {
+				$comma = checkSql($sqlAddress, 'address');
+				$sqlAddress .= $comma . ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
+			} else {
+				$errorsAddress[] = 'Address line 1';
+				$addressLine1 = "Line 1 is a required field";
+			}
+			if (!empty($_POST['address2nd'])) {
+				$comma = checkSql($sqlAddress, 'address');
+				$sqlAddress .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
+			} else {
+				$errorsAddress[] = "Address line 2";
+				$errorLine2 = 'Line 2 is a required field.';
+			}
+			if (!empty($_POST['address3rd'])) {
+				$comma = checkSql($sqlAddress, 'address');
+				$sqlAddress .= $comma . ' 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
+			}
+			if (!empty($_POST['region'])) {
+				$comma = checkSql($sqlAddress, 'address');
+				$sqlAddress .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
+			} else {
+				$errorsAddress[] = 'Region';
+				$errorsAddress[] = "Region is a required field";
+			}
+			if (!empty($_POST['postcode']) && strlen($_POST['postcode']) == 7) {
+				$comma = checkSql($sqlAddress, 'address');
+				$sqlAddress .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
+			} else {
+				$errorsAddress[] = "Postcode is a required field";
+			}
+
+			$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+
+			echo $sqlAddress;
+
+			if (count($errorsAddress)) {
+				if (mysqli_query($db, $sqlAddress)) {
+					$error_message = 'Successfully update your credit card details.';
+				} else {
+					$error_message = 'Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
+				}
+			} else {
+				$error_message = 'Please resolve the issues to continue with the change.';
+			}
+			$errorsAddress = null;
+			$_POST['updateAddress'] = null;
+		}
+
+		if (isset($_POST['addAddress']){
+			$			
+		}
+	}
 	if (isset($_POST['accountChanges'])) {
 		$sqlAccount = '';
 		$errorsAccount = array();
@@ -454,7 +458,9 @@ if( isset($))
 					endwhile;
 			?>
 			<tr>
-				<td colspan="2"><button type="submit" name="updateAddress">Update Address</button><button type="submit" name="deleteAddress">Delete Address</button></td>
+				<td><button type="submit" name="updateAddress">Update Address</button></td>
+				<td><button type="submit" name="deleteAddress">Delete Address</button></td>
+				<td><button type="submit" name="addAddress">Add Address</button></td>
 			</tr>
 			<!-- 
 					CHANGE ACCOUNT
