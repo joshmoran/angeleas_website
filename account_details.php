@@ -146,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 			$errorsAddress[] = "Postcode is a required field";
 		}
+
 		$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
 
 		if (count($errorsAddress)) {
@@ -202,13 +203,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (!count($errorsAccount)) {
 			try {
 				mysqli_query($db, $sqlAccount);
-				$error_message = 'Successfully update your account details.';
+				$error_message = 'Successfully updated your account details.';
 			} catch (Exception $e) {
-				$error_message = $e->getMessage() . ', something went wrong. Please try again later.';
+				$error_message = $e->getMessage() . ', Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
 			}
 		} else {
-			$error_message = 'Please resolve the issues to continue with the change.';
+			$error_message = 'Please resolve the errors to continue with the change.';
 		}
+
+		$_POST['accountChanges'] = null;
 	}
 }
 
