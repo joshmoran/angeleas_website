@@ -496,7 +496,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<tr>
 				<td><button type="submit" name="updateAddress">Update Address</button></td>
 				<td><button type="submit" name="deleteAddress">Delete Address</button></td>
-				<td><button type="submit" name="addAddress">Add Address</button></td>
+				<td><button type="submit" name="addAddress"><a href="account_details.phpAdd Address</button></td>
 			</tr>
 			<!-- 
 					CHANGE ACCOUNT
