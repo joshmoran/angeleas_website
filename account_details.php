@@ -62,8 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$sqlCustomer = '';
 		$errorCustomer = array();
 
-		echo 'customer';
-
 		if (!empty($_POST['firstName'])) {
 			$comma = checkSql($sqlCustomer, 'customer');
 
@@ -112,7 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$error_message = 'There has been a problem submitting your results. Please try again.';
 		}
 
-		$errorCustomer = null;
 		$_POST['personalChanges'] = null;
 	}
 	if (isset($_POST['addressChanges'])) {
@@ -165,8 +162,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
 
-			echo $sqlAddress;
-
 			if (count($errorsAddress)) {
 				if (mysqli_query($db, $sqlAddress)) {
 					$error_message = 'Successfully update your credit card details.';
@@ -181,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		if (isset($_POST['addAddress'])) {
-			$sqlAddAddress = "INSERT INTO address ( customer_id, 1_line, 2_line, region, postcode) VALUES ( '";
+			$sqlAddAddress = "INSERT INTO address ( customer_id, 1_line, 2_line, region, postcode) VALUES ( '" . $_SESSION['customer_id'] . "', '";
 			$errorAddAddress = array();
 
 			if (!empty($_POST['address1st'])) {
@@ -209,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			if (!empty($_POST['postcode'])) {
 				if (strlen($_POST['postcode']) == 7) {
-					$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['postcode']) . "', '";
+					$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['postcode']) . "')";
 				} else {
 					$errorAddAddress[] = 'Postcode Invalid';
 					$errorPostcode = 'Please enter a valid postcode to continue.';
@@ -219,18 +214,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorPostcode = 'Please enter your postcode to continue.';
 			}
 
-			if (!count($errorsAddress) ){
+			if (!count($errorsAddress)) {
 				try {
 					mysqli_query($db, $sqlAddAddress);
 					$error_message = 'Successfully added the address to your account.';
-				} else {
+				} catch (Exception $w) {
 					$error_message = 'Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
 				}
 			} else {
 				$error_message = 'Please resolve the issues to continue with the change.';
 			}
 			$_POST['addressChanges'] = null;
-			$_
+			$_POST['addAddress'] = null;
 		}
 	}
 	if (isset($_POST['accountChanges'])) {
@@ -452,7 +447,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						}
 						echo '>' . $fullAddress . '</option>';
 					}
-					echo '<option value="new">Add a new Address</option>';
+					echo '<option value="new"';
+					if ( isset($_GET['address'] && $_GET['address'] == 'new') {
+						echo ' selected ';
+					}
+					echo '>Addd a new Address</option>';
 					echo '</select></td>';
 					?>
 				</tr>
