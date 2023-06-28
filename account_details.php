@@ -123,6 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$error_message = 'There has been a problem deleting the address. Please try again.';
 			}
 
+			$_POST['addressChanges'] = null;
 			$_POST['deleteAddress'] = null;
 		}
 
@@ -217,6 +218,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorAddAddress[] = 'Postcode';
 				$errorPostcode = 'Please enter your postcode to continue.';
 			}
+
+			if (!count($errorsAddress) ){
+				try {
+					mysqli_query($db, $sqlAddAddress);
+					$error_message = 'Successfully added the address to your account.';
+				} else {
+					$error_message = 'Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
+				}
+			} else {
+				$error_message = 'Please resolve the issues to continue with the change.';
+			}
+			$_POST['addressChanges'] = null;
+			$_
 		}
 	}
 	if (isset($_POST['accountChanges'])) {
@@ -438,20 +452,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						}
 						echo '>' . $fullAddress . '</option>';
 					}
+					echo '<option value="new">Add a new Address</option>';
 					echo '</select></td>';
 					?>
 				</tr>
 
 				<div id="address">
 					<?php
-					$sqlAddress = "SELECT * FROM address WHERE address_id = '";
 
 					if (isset($_GET['address'])) {
 						if ($_GET['address'] != 'new') {
 							$sqlAddress = "SELECT * FROM address WHERE address_id = '" . $addressID . "' AND customer_id = '" . $_SESSION['customer_id'] . "'";
-						} else {
-							$sqlAddress = null;
 						}
+					}
+
+					if (!isset($sqlAddress)) {
+						$sqlAddress = '';
 					}
 					$addressQuery = mysqli_query($db, $sqlAddress);
 
@@ -502,7 +518,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<tr>
 				<td><button type="submit" name="updateAddress">Update Address</button></td>
 				<td><button type="submit" name="deleteAddress">Delete Address</button></td>
-				<td><button type="submit" name="addAddress"><a href="account_details.phpAdd Address</button></td>
+				<td><button type="submit" name="addAddress">Add Address</button></td>
 			</tr>
 			<!-- 
 					CHANGE ACCOUNT
@@ -515,33 +531,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			?>
 				<tr>
 					<th colspan=" 3">
-							Change Account Details
-							</th>
-			</tr>
-			<tr>
-				<td><label for="accountChanges">Make payment details changes</label></td>
-				<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
-			</tr>
-			<tr>
-				<td><label for="username">Username: </label></td>
-				<td><input type="text" name="username" value="<?php echo $account['username']; ?>" /></td>
-				<td><?php if (isset($errorUsername)) {
-						echo $errorUsername;
-					} ?></td>
-			</tr>
-			<tr>
-				<td><label for="password">Password: </label></td>
-				<td><input type="password" name="password" value="<?php echo $account['pass']; ?>" /></td>
-				<td><?php if (isset($errorPassword)) {
-						echo $errorPassword;
-					} ?></td>
-			</tr>
-		<?php
+						Change Account Details
+					</th>
+				</tr>
+				<tr>
+					<td><label for="accountChanges">Make payment details changes</label></td>
+					<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
+				</tr>
+				<tr>
+					<td><label for="username">Username: </label></td>
+					<td><input type="text" name="username" value="<?php echo $account['username']; ?>" /></td>
+					<td><?php if (isset($errorUsername)) {
+							echo $errorUsername;
+						} ?></td>
+				</tr>
+				<tr>
+					<td><label for="password">Password: </label></td>
+					<td><input type="password" name="password" value="<?php echo $account['pass']; ?>" /></td>
+					<td><?php if (isset($errorPassword)) {
+							echo $errorPassword;
+						} ?></td>
+				</tr>
+			<?php
 			endwhile;
-		?>
-		<tr>
-			<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
-		</tr>
+			?>
+			<tr>
+				<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
+			</tr>
 
 			</table>
 		</form>
