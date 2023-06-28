@@ -448,10 +448,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						echo '>' . $fullAddress . '</option>';
 					}
 					echo '<option value="new"';
-					if ( isset($_GET['address'] && $_GET['address'] == 'new') {
+					if (isset($_GET['address']) && $_GET['address'] == 'new') {
 						echo ' selected ';
 					}
-					echo '>Addd a new Address</option>';
+					echo '>Add a new Address</option>';
 					echo '</select></td>';
 					?>
 				</tr>
@@ -461,50 +461,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 					if (isset($_GET['address'])) {
 						if ($_GET['address'] != 'new') {
-							$sqlAddress = "SELECT * FROM address WHERE address_id = '" . $addressID . "' AND customer_id = '" . $_SESSION['customer_id'] . "'";
+							$addressID = -1;
+						} else {
+							$addressID = $_GET['address'];
 						}
 					}
-
-					if (!isset($sqlAddress)) {
-						$sqlAddress = '';
-					}
+					$sqlAddress = "SELECT * FROM address WHERE address_id = '" . $addressID . "' AND customer_id = '" . $_SESSION['customer_id'] . "'";
 					$addressQuery = mysqli_query($db, $sqlAddress);
-
-					while ($address = mysqli_fetch_assoc($addressQuery)) :
+					do {
+					 $address = mysqli_fetch_assoc($addressQuery);
+					} while ( count($addressQuery)) finally {
+						
+					}
 
 					?>
 
 						<tr>
 							<td><label for="address1st">First Line</label></td>
-							<td><input type="text" value="<?php echo $address['1_line']; ?>" /></td>
+							<td><input type="text" value="<?php if (isset($address)) {
+																echo $address['1_line'];
+															} ?>" /></td>
 							<td><?php if (isset($errorLine1)) {
 									echo $errorLine1;
 								} ?></td>
 						</tr>
 						<tr>
 							<td><label for="address2nd">Second Line</label></td>
-							<td><input type="text" name="address2nd" value="<?php echo $address['2_line']; ?>" /></td>
+							<td><input type="text" name="address2nd" value="<?php if (isset($address['2_line'])) {
+																				echo $address['2_line'];
+																			} ?>" /></td>
 							<td><?php if (isset($errorLine2)) {
 									echo $errorLine2;
 								} ?></td>
 						</tr>
 						<tr>
 							<td><label for="address3rd">Third Line</label></td>
-							<td><input type="text" name="address3rd" value="<?php echo $address['3_line']; ?>" /></td>
+							<td><input type="text" name="address3rd" value="<?php if (isset($address['3_line'])) {
+																				echo $address['3_line'];
+																			} ?>" /></td>
 							<td><?php if (isset($errorLine3)) {
 									echo $errorLine3;
 								} ?></td>
 						</tr>
 						<tr>
 							<td><label for="region">Region</label></td>
-							<td><input type="text" name="region" value="<?php echo $address['region']; ?>" /></td>
+							<td><input type="text" name="region" value="<?php if (isset($address['region'])) {
+																			echo $address['region'];
+																		} ?>" /></td>
 							<td><?php if (isset($errorRegion)) {
 									echo $errorRegion;
 								} ?></td>
 						</tr>
 						<tr>
 							<td><label for="postcode">Postcode</label></td>
-							<td><input type="text" name="postcode" value="<?php echo $address['postcode']; ?>"></td>
+							<td><input type="text" name="postcode" value="<?php if (isset($address['postcode'])) {
+																				echo $address['postcode'];
+																			} ?>"></td>
 							<td><?php if (isset($errorPostcode)) {
 									echo $errorPostcode;
 								} ?></td>
