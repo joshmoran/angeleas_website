@@ -18,7 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (isset($_POST['register'])) {
 		require "src/database.php";
 
-		$errors = array():
+		$errors = array();
+		$sql = 'INSERT INTO customers VALUES ( ';
+
+		
 
 		function checkEmail($str)
 		{
@@ -45,153 +48,152 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		// FIRST NAME 
 		if (!empty($_POST['firstname']))
-			if (strlen($firstName) <= 3 || $firstName == null || $firstName == '') {
-				$errorFirstName = 'First Name is required and must not be empty or less than 3 characters.';
-				$errors++;
+			if (strlen($firstName) < 3) {
+				$sql .=  
 			} else {
-				$errors[] 'First Name';
-				
+				$errors[] = 'First Name';
+				$errorFirstName = 'First name must be or equal to 3 characters. ';
 			}
-		} else {
-			$errorFirstName = 'First Name is a reqiured feild.';
-		}
+	} else {
+		$errorFirstName = 'First Name is a required field.';
+	}
 
-		// LAST NAME
-		if (strlen($lastName) <= 3 || $lastName == null || $lastName == '') {
+	// LAST NAME
+	if (!empty($_POST['lastname'])) {
+		if (strlen($lastName) < 3) {
 			$errorLastName = 'Last Name is required and must not be empty or less than 3 characters.';
 			$errors++;
 		}
+	}
+	// EMAIL - CHECK IF VALID EMAIL ADDRESS
+	$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
+	if (checkEmail($email) === false || strlen($email) == '' || $email == null) {
+		$errorEmail = 'Email is required and must be a valid email address.';
+		$errors++;
+	}
 
-		// EMAIL - CHECK IF VALID EMAIL ADDRESS
-		$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
-		if (checkEmail($email) === false || strlen($email) == '' || $email == null) {
-			$errorEmail = 'Email is required and must be a valid email address.';
-			$errors++;
-		}
+	// HOME NUMBER - ONLY CHECK IF INPUT IS ENTERED
+	if (strlen($home) != 11 && strlen($home) > 0) {
+		$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
+		$errors++;
+	}
 
-		// HOME NUMBER - ONLY CHECK IF INPUT IS ENTERED
-		if (strlen($home) != 11 && strlen($home) > 0) {
-			$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
-			$errors++;
-		}
+	// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
+	if (strlen($mobile) != 11 && strlen($mobile) > 1) {
+		$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
+		$errors++;
+	}
 
-		// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
-		if (strlen($mobile) != 11 && strlen($mobile) > 1) {
-			$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
-			$errors++;
-		}
+	//
+	// Address
+	//
+	$address_1st = sanitizeInput($_POST['line1']);
+	$address_2nd = sanitizeInput($_POST['line2']);
+	$address_3rd = sanitizeInput($_POST['line3']);
+	$region = sanitizeInput($_POST['region']);
+	$postcode = sanitizeInput($_POST['postcode']);
 
-		//
-		// Address
-		//
-		$address_1st = sanitizeInput($_POST['line1']);
-		$address_2nd = sanitizeInput($_POST['line2']);
-		$address_3rd = sanitizeInput($_POST['line3']);
-		$region = sanitizeInput($_POST['region']);
-		$postcode = sanitizeInput($_POST['postcode']);
+	// Address - line 1
+	if (strlen($address_1st) < 4) {
+		$errorAddress1 = 'Address line 1 must be more than 4 characters';
+		$errors++;
+	}
 
-		// Address - line 1
-		if (strlen($address_1st) < 4) {
-			$errorAddress1 = 'Address line 1 must be more than 4 characters';
-			$errors++;
-		}
+	// Address - Line 2 
+	if (strlen($address_2nd) < 4) {
+		$errorAddress2 = 'Address line 2 must be more than 4 characters.';
+		$errors++;
+	}
 
-		// Address - Line 2 
-		if (strlen($address_2nd) < 4) {
-			$errorAddress2 = 'Address line 2 must be more than 4 characters.';
-			$errors++;
-		}
+	// Postcode
+	if (strlen($postcode) != 7) {
+		$errorPostcode = 'Please enter a valid postcode.';
+		$errors++;
+	}
 
-		// Postcode
-		if (strlen($postcode) != 7) {
-			$errorPostcode = 'Please enter a valid postcode.';
-			$errors++;
-		}
+	$username = sanitizeInput($_POST['username']);
+	$password = sanitizeInput($_POST['password']);
 
-		$username = sanitizeInput($_POST['username']);
-		$password = sanitizeInput($_POST['password']);
+	$checkUsername = mysqli_query($db, 'SELECT * FROM accounts WHERE username = "' . $username . '"');
 
-		$checkUsername = mysqli_query($db, 'SELECT * FROM accounts WHERE username = "' . $username . '"');
+	if (strlen($username) < 7) {
+		$errorUsername = 'Username must be more than 6 characters long.';
+	} else if (mysqli_num_rows($checkUsername) > 0) {
+		$errorUsername = 'Username already in use';
+	}
 
-		if (strlen($username) < 7) {
-			$errorUsername = 'Username must be more than 6 characters long.';
-		} else if (mysqli_num_rows($checkUsername) > 0) {
-			$errorUsername = 'Username already in use';
-		}
+	// Important Values - |first_name, last_name, $email, username, password
 
-		// Important Values - |first_name, last_name, $email, username, password
+	//Checking if customer id already exists
 
-		//Checking if customer id already exists
+	echo 'There are ' . $errors . ' found.';
+	if ($errors == 0) {
+		// for table -- customers
+		do {
+			$customerNo = randomNumber();
 
-		echo 'There are ' . $errors . ' found.';
-		if ($errors == 0) {
-			// for table -- customers
-			do {
-				$customerNo = randomNumber();
+			$sqlCheckID = "SELECT customer_id from customers where customer_id = " . $customerNo;
+			$checkID = mysqli_query($db, $sqlCheckID);
+		} while (mysqli_num_rows($checkID) != 0);
 
-				$sqlCheckID = "SELECT customer_id from customers where customer_id = " . $customerNo;
-				$checkID = mysqli_query($db, $sqlCheckID);
-			} while (mysqli_num_rows($checkID) != 0);
+		// if (strlen($address_1st) >= 1 || $address_1st != null || $address_1st != '' || strlen($postcode) >= 1 || $postcode != null || $postcode != '' || strlen($region) >= 1 || $region != null || $region != '') {
+		$addressIm = $address_1st . ', ' . $address_2nd . ', ' . $address_3rd . ', ' . $region . ',' . $postcode;
+		$sqlCustomer = "INSERT INTO customers VALUES ('$customerNo', '$firstName', '$lastName', '$email', '$addressIm', '$home', '$mobile')";
 
-			// if (strlen($address_1st) >= 1 || $address_1st != null || $address_1st != '' || strlen($postcode) >= 1 || $postcode != null || $postcode != '' || strlen($region) >= 1 || $region != null || $region != '') {
-			$addressIm = $address_1st . ', ' . $address_2nd . ', ' . $address_3rd . ', ' . $region . ',' . $postcode;
-			$sqlCustomer = "INSERT INTO customers VALUES ('$customerNo', '$firstName', '$lastName', '$email', '$addressIm', '$home', '$mobile')";
-
-			if (mysqli_query($db, $sqlCustomer)) {
-				$error_message = 'Successfully added to customers';
-			} else {
-				$error_message = 'Could not add to Customers';
-				return false;
-			}
-			// }
-
-			// for table -- accounts
-			$encryptedPassword = password_hash($password, PASSWORD_DEFAULT);
-			$sqlAccount = "INSERT INTO accounts VALUES ( '$customerNo', '$username', '$encryptedPassword')";
-
-			if (mysqli_query($db, $sqlAccount)) {
-				$error_message = 'Successfully added to Accounts';
-			} else {
-				$error_message = 'Could not add to Accounts';
-				return false;
-			}
-			// for table -- cart
-			do {
-				$basketNo = randomNumber();
-				$sqlBasket = "SELECT order_id from orders where order_id = " . $basketNo;
-				$checkBasket = mysqli_query($db, $sqlBasket);
-			} while (mysqli_num_rows($checkBasket) > 0);
-
-			$sqlCart = "INSERT INTO orders ( order_id, customer_id, complete) VALUES ( '$basketNo', '$customerNo', false )";
-
-			if (mysqli_query($db, $sqlCart)) {
-				$error_message = 'Successfully added to Cart';
-			} else {
-				$error_message = 'Could not add to Cart';
-				return false;
-			}
-
-			// for table -- $address
-			$sqlAddress = "INSERT INTO address (`customer_id`, `1_line`, `2_line`, `3_line`, `region`, `postcode`) VALUES ( '$customerNo', '$address_1st', '$address_2nd', '$address_3rd', '$region', '$postcode' )";
-
-			if (mysqli_query($db, $sqlAddress)) {
-				$error_message = 'Successfully added to Addresses';
-			} else {
-				$error_message = 'Could not add to Addresses';
-				return false;
-			}
-
-			$_SESSION['customer_id'] = $customerNo;
-			$_SESSION['basket_id'] = $basketNo;
-			$_SESSION['loggedIn'] = true;
-			$_SESSION['admin'] = false;
-			header("Location: account.php");
-			die();
+		if (mysqli_query($db, $sqlCustomer)) {
+			$error_message = 'Successfully added to customers';
 		} else {
-			$error_message = 'Their has been a problem submitting your registration if this problem persists please contact the system administrator';
-			//header("Location: register.php?" . $getMessage);
-			exit();
+			$error_message = 'Could not add to Customers';
+			return false;
 		}
+		// }
+
+		// for table -- accounts
+		$encryptedPassword = password_hash($password, PASSWORD_DEFAULT);
+		$sqlAccount = "INSERT INTO accounts VALUES ( '$customerNo', '$username', '$encryptedPassword')";
+
+		if (mysqli_query($db, $sqlAccount)) {
+			$error_message = 'Successfully added to Accounts';
+		} else {
+			$error_message = 'Could not add to Accounts';
+			return false;
+		}
+		// for table -- cart
+		do {
+			$basketNo = randomNumber();
+			$sqlBasket = "SELECT order_id from orders where order_id = " . $basketNo;
+			$checkBasket = mysqli_query($db, $sqlBasket);
+		} while (mysqli_num_rows($checkBasket) > 0);
+
+		$sqlCart = "INSERT INTO orders ( order_id, customer_id, complete) VALUES ( '$basketNo', '$customerNo', false )";
+
+		if (mysqli_query($db, $sqlCart)) {
+			$error_message = 'Successfully added to Cart';
+		} else {
+			$error_message = 'Could not add to Cart';
+			return false;
+		}
+
+		// for table -- $address
+		$sqlAddress = "INSERT INTO address (`customer_id`, `1_line`, `2_line`, `3_line`, `region`, `postcode`) VALUES ( '$customerNo', '$address_1st', '$address_2nd', '$address_3rd', '$region', '$postcode' )";
+
+		if (mysqli_query($db, $sqlAddress)) {
+			$error_message = 'Successfully added to Addresses';
+		} else {
+			$error_message = 'Could not add to Addresses';
+			return false;
+		}
+
+		$_SESSION['customer_id'] = $customerNo;
+		$_SESSION['basket_id'] = $basketNo;
+		$_SESSION['loggedIn'] = true;
+		$_SESSION['admin'] = false;
+		header("Location: account.php");
+		die();
+	} else {
+		$error_message = 'Their has been a problem submitting your registration if this problem persists please contact the system administrator';
+		//header("Location: register.php?" . $getMessage);
+		exit();
 	}
 }
 
@@ -364,4 +366,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		<script type="text/javascript" src="src/js/js.js"></script>
 		<script type="text/javascript" src="src/js/register.js"></script>
 </body>
+
 </html>

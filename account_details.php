@@ -469,106 +469,106 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$sqlAddress = "SELECT * FROM address WHERE address_id = '" . $addressID . "' AND customer_id = '" . $_SESSION['customer_id'] . "'";
 					$addressQuery = mysqli_query($db, $sqlAddress);
 					try {
-						while ( $address = mysqli_fetch_assoc($addressQuery) )
-					} catch ( Exception $e ) {
+						while ($address = mysqli_fetch_assoc($addressQuery));
+					} catch (Exception $e) {
 						$address = 'working';
 					}
 
 					?>
 
-						<tr>
-							<td><label for="address1st">First Line</label></td>
-							<td><input type="text" value="<?php if (isset($address)) {
-																echo $address['1_line'];
-															} ?>" /></td>
-							<td><?php if (isset($errorLine1)) {
-									echo $errorLine1;
-								} ?></td>
-						</tr>
-						<tr>
-							<td><label for="address2nd">Second Line</label></td>
-							<td><input type="text" name="address2nd" value="<?php if (isset($address['2_line'])) {
-																				echo $address['2_line'];
-																			} ?>" /></td>
-							<td><?php if (isset($errorLine2)) {
-									echo $errorLine2;
-								} ?></td>
-						</tr>
-						<tr>
-							<td><label for="address3rd">Third Line</label></td>
-							<td><input type="text" name="address3rd" value="<?php if (isset($address['3_line'])) {
-																				echo $address['3_line'];
-																			} ?>" /></td>
-							<td><?php if (isset($errorLine3)) {
-									echo $errorLine3;
-								} ?></td>
-						</tr>
-						<tr>
-							<td><label for="region">Region</label></td>
-							<td><input type="text" name="region" value="<?php if (isset($address['region'])) {
-																			echo $address['region'];
+					<tr>
+						<td><label for="address1st">First Line</label></td>
+						<td><input type="text" value="<?php if (isset($address)) {
+															echo $address['1_line'];
+														} ?>" /></td>
+						<td><?php if (isset($errorLine1)) {
+								echo $errorLine1;
+							} ?></td>
+					</tr>
+					<tr>
+						<td><label for="address2nd">Second Line</label></td>
+						<td><input type="text" name="address2nd" value="<?php if (isset($address['2_line'])) {
+																			echo $address['2_line'];
 																		} ?>" /></td>
-							<td><?php if (isset($errorRegion)) {
-									echo $errorRegion;
-								} ?></td>
-						</tr>
-						<tr>
-							<td><label for="postcode">Postcode</label></td>
-							<td><input type="text" name="postcode" value="<?php if (isset($address['postcode'])) {
-																				echo $address['postcode'];
-																			} ?>"></td>
-							<td><?php if (isset($errorPostcode)) {
-									echo $errorPostcode;
-								} ?></td>
-						</tr>
+						<td><?php if (isset($errorLine2)) {
+								echo $errorLine2;
+							} ?></td>
+					</tr>
+					<tr>
+						<td><label for="address3rd">Third Line</label></td>
+						<td><input type="text" name="address3rd" value="<?php if (isset($address['3_line'])) {
+																			echo $address['3_line'];
+																		} ?>" /></td>
+						<td><?php if (isset($errorLine3)) {
+								echo $errorLine3;
+							} ?></td>
+					</tr>
+					<tr>
+						<td><label for="region">Region</label></td>
+						<td><input type="text" name="region" value="<?php if (isset($address['region'])) {
+																		echo $address['region'];
+																	} ?>" /></td>
+						<td><?php if (isset($errorRegion)) {
+								echo $errorRegion;
+							} ?></td>
+					</tr>
+					<tr>
+						<td><label for="postcode">Postcode</label></td>
+						<td><input type="text" name="postcode" value="<?php if (isset($address['postcode'])) {
+																			echo $address['postcode'];
+																		} ?>"></td>
+						<td><?php if (isset($errorPostcode)) {
+								echo $errorPostcode;
+							} ?></td>
+					</tr>
 				</div>
-			<?php
+				<?php
 
-					endwhile;
-			?>
-			<tr>
-				<td><button type="submit" name="updateAddress">Update Address</button></td>
-				<td><button type="submit" name="deleteAddress">Delete Address</button></td>
-				<td><button type="submit" name="addAddress">Add Address</button></td>
-			</tr>
-			<!-- 
+				//	endwhile;
+				?>
+				<tr>
+					<td><button type="submit" name="updateAddress">Update Address</button></td>
+					<td><button type="submit" name="deleteAddress">Delete Address</button></td>
+					<td><button type="submit" name="addAddress">Add Address</button></td>
+				</tr>
+				<!-- 
 					CHANGE ACCOUNT
 				  -->
-			<?php
-			$sqlAccount = "SELECT * FROM accounts WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
-			$accountQuery = mysqli_query($db, $sqlAccount);
+				<?php
+				$sqlAccount = "SELECT * FROM accounts WHERE customer_id = '" . $_SESSION['customer_id'] . "'";
+				$accountQuery = mysqli_query($db, $sqlAccount);
 
-			while ($account = mysqli_fetch_assoc($accountQuery)) :
-			?>
+				while ($account = mysqli_fetch_assoc($accountQuery)) :
+				?>
+					<tr>
+						<th colspan=" 3">
+							Change Account Details
+						</th>
+					</tr>
+					<tr>
+						<td><label for="accountChanges">Make payment details changes</label></td>
+						<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
+					</tr>
+					<tr>
+						<td><label for="username">Username: </label></td>
+						<td><input type="text" name="username" value="<?php echo $account['username']; ?>" /></td>
+						<td><?php if (isset($errorUsername)) {
+								echo $errorUsername;
+							} ?></td>
+					</tr>
+					<tr>
+						<td><label for="password">Password: </label></td>
+						<td><input type="password" name="password" value="<?php echo $account['pass']; ?>" /></td>
+						<td><?php if (isset($errorPassword)) {
+								echo $errorPassword;
+							} ?></td>
+					</tr>
+				<?php
+				endwhile;
+				?>
 				<tr>
-					<th colspan=" 3">
-						Change Account Details
-					</th>
+					<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
 				</tr>
-				<tr>
-					<td><label for="accountChanges">Make payment details changes</label></td>
-					<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
-				</tr>
-				<tr>
-					<td><label for="username">Username: </label></td>
-					<td><input type="text" name="username" value="<?php echo $account['username']; ?>" /></td>
-					<td><?php if (isset($errorUsername)) {
-							echo $errorUsername;
-						} ?></td>
-				</tr>
-				<tr>
-					<td><label for="password">Password: </label></td>
-					<td><input type="password" name="password" value="<?php echo $account['pass']; ?>" /></td>
-					<td><?php if (isset($errorPassword)) {
-							echo $errorPassword;
-						} ?></td>
-				</tr>
-			<?php
-			endwhile;
-			?>
-			<tr>
-				<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
-			</tr>
 
 			</table>
 		</form>

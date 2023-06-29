@@ -38,9 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		header("Location: index.php");
 	}
 }
-
-$sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = products.id WHERE cart.basket_id = '" . $_SESSION['basket_id'] . "'";
-
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +63,7 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 				<?php
 				require("src/database.php");
 
-				$query = mysqli_query($db, $sqlOrder);
+
 
 				if (mysqli_num_rows($query) < 1) {
 					$string = "<tr>";
@@ -74,6 +71,8 @@ $sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = product
 
 					echo $string;
 				} else {
+					$sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = products.id WHERE cart.basket_id = '" . $_SESSION['basket_id'] . "'";
+					$query = mysqli_query($db, $sqlOrder);
 					echo "<tr>";
 					echo "<th>Remove</th>";
 					echo "<th>Name</th>";
