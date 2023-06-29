@@ -64,68 +64,69 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				require("src/database.php");
 
 
-
-				if (mysqli_num_rows($query) < 1) {
-					$string = "<tr>";
-					$string .= "<th>Please add something to the basket</th>";
-
-					echo $string;
-				} else {
+				if (isset($_SESSION['customer_id'])) {
 					$sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = products.id WHERE cart.basket_id = '" . $_SESSION['basket_id'] . "'";
 					$query = mysqli_query($db, $sqlOrder);
-					echo "<tr>";
-					echo "<th>Remove</th>";
-					echo "<th>Name</th>";
-					echo "<th>Price</th>";
-					echo "<th>Quantity</th>";
-					echo "<th>Total</th>";
-					echo "</tr>";
+					if (mysqli_num_rows($query) < 1) {
 
-					$total = 0;
 
-					$customerID = $_SESSION['customer_id'];
-					$basketID = $_SESSION['basket_id'];
-
-					$sqlBasket = "SELECT * FROM cart WHERE basket_id = $basketID";
-					$basketQuery = mysqli_query($db, $sqlOrder);
-
-					// while ( $products = mysqli_fetch_assoc($basketQuery) ) {
-					// 	echo "<tr>";
-					// 	echo "<td><input type='submit' name='delete' /> value='" . $products['id'] . "'><img src='src/img/ui/delete-f.svg' /></a></td>";
-					// 	echo "<td>" . $products['product_name'] . "</td>";
-					// 	echo "<td>" . $products['product_price'] . "</td>";
-					// 	echo "<td>" . $products['product_quantity'] . "</td>";
-					// 	echo "<td>" . $products['product_name'] . "</td>";
-					// 	echo "</tr>";
-					// }
-
-					while ($row = mysqli_fetch_assoc($query)) {
-						(float)$total += (float)$row['price'] * (int)$row['quantity'];
 						echo "<tr>";
-						echo "<td><a href='basket.php?del=" . $row['id'] . "'><img src='src/img/ui/delete-f.svg' value='" . $row['id'] . "' alt='Delete selected item from the basket' /></a></td>";
-						echo "<td>" . $row['name'] . "</td>";
-						echo "<td>" . $row['description'] . "</td>";
-						echo "<td>" . $row['quantity'] . "</td>";
-						$itemTotal = $row['price'] * $row['quantity'];
-						echo "<td>£" . number_format($itemTotal, 2, '.', ',')  . "</td>";
+						echo "<th>Remove</th>";
+						echo "<th>Name</th>";
+						echo "<th>Price</th>";
+						echo "<th>Quantity</th>";
+						echo "<th>Total</th>";
 						echo "</tr>";
+
+						$total = 0;
+
+						$customerID = $_SESSION['customer_id'];
+						$basketID = $_SESSION['basket_id'];
+
+						$sqlBasket = "SELECT * FROM cart WHERE basket_id = $basketID";
+						$basketQuery = mysqli_query($db, $sqlOrder);
+
+						// while ( $products = mysqli_fetch_assoc($basketQuery) ) {
+						// 	echo "<tr>";
+						// 	echo "<td><input type='submit' name='delete' /> value='" . $products['id'] . "'><img src='src/img/ui/delete-f.svg' /></a></td>";
+						// 	echo "<td>" . $products['product_name'] . "</td>";
+						// 	echo "<td>" . $products['product_price'] . "</td>";
+						// 	echo "<td>" . $products['product_quantity'] . "</td>";
+						// 	echo "<td>" . $products['product_name'] . "</td>";
+						// 	echo "</tr>";
+						// }
+
+						while ($row = mysqli_fetch_assoc($query)) {
+							(float)$total += (float)$row['price'] * (int)$row['quantity'];
+							echo "<tr>";
+							echo "<td><a href='basket.php?del=" . $row['id'] . "'><img src='src/img/ui/delete-f.svg' value='" . $row['id'] . "' alt='Delete selected item from the basket' /></a></td>";
+							echo "<td>" . $row['name'] . "</td>";
+							echo "<td>" . $row['description'] . "</td>";
+							echo "<td>" . $row['quantity'] . "</td>";
+							$itemTotal = $row['price'] * $row['quantity'];
+							echo "<td>£" . number_format($itemTotal, 2, '.', ',')  . "</td>";
+							echo "</tr>";
+						}
+
+						echo "<tr>";
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "<td>Total: </td>";
+						echo "<td>£" . number_format($total, 2, '.', ',') . "</td>";
+						echo "</tr>";
+
+						echo "<tr>";
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "<td><button><a href='purchase.php'>Checkout</a></button></td>";
+						echo "</tr>";
+					} else {
+						echo "<tr><th>Please add something to the basket</th>";
 					}
-
-					echo "<tr>";
-					echo "<td></td>";
-					echo "<td></td>";
-					echo "<td></td>";
-					echo "<td>Total: </td>";
-					echo "<td>£" . number_format($total, 2, '.', ',') . "</td>";
-					echo "</tr>";
-
-					echo "<tr>";
-					echo "<td></td>";
-					echo "<td></td>";
-					echo "<td></td>";
-					echo "<td></td>";
-					echo "<td><button><a href='purchase.php'>Checkout</a></button></td>";
-					echo "</tr>";
+				} else {
 				}
 				?>
 			</form>
