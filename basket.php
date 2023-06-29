@@ -127,6 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						echo "<tr><th>Please add something to the basket</th>";
 					}
 				} else {
+					echo '<tr><th>Please login or create an account to add items to the basket</th></tr>';
 				}
 				?>
 			</form>
