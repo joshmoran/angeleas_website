@@ -20,28 +20,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		$errors = 0;
 		$sqlCustomers = 'INSERT INTO customers VALUES ( ';
+		$sqlAccount = ' INSERT INTO accounts VALUES ( ';
+
+		$checkUsername = mysqli_query($db, 'SELECT * FROM accounts WHERE username = "' . mysqli_real_escape_string($db, $_POST['username']) . '"');
+		$checkUsernameQuery = mysqli_query($db, $checkUsername);
 
 		function checkEmail($str)
 		{
 			return (preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $str)) ? true : false;
 		}
 
-		// required
-		// FIRST NAME 
-		// LAST NAME 
-		// Email
-
-		// USERNAME 
-		// PASSWORD
-
 		//
 		// Customer details
-		//
-		$firstName = sanitizeInput($_POST['firstname']);
-		$lastName = sanitizeInput($_POST['lastname']);
-		$email = sanitizeInput($_POST['email']);
-		$home = sanitizeInput($_POST['phoneHome']);
-		$mobile = sanitizeInput($_POST['phoneMobile']);
 		// Check Requirements for inputted values meet the Requirements
 
 		// FIRST NAME 
@@ -69,10 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$errorLastName = 'Last name is required.';
             $errors++;
 		}
+
 		// EMAIL - CHECK IF VALID EMAIL ADDRESS
 		$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
 		if ( !empty($_POST['email'])) {
-			if (checkEmail($email) === true || strlen($email) != '' || $email != null) {
+			if (checkEmail($_POST['email']) === true || strlen($ema_POST['email']il) != '' || $_POST['email'] != null) {
 				$sqlCustomers. ', email = '. mysqli_real_escape_string($db, $_POST['email']);
 			} else {
 				$errorEmail = 'Email is required and must be a valid email address.';
@@ -84,29 +75,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		// HOME NUMBER - ONLY CHECK IF INPUT IS ENTERED
-		if (strlen($home) != 11 && strlen($home) > 0) {
-			$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
-			$errors++;
+		if (!empty($_POST['phoneHome'])){
+			if (strlen($_POST['phoneHome']) != 11 && strlen($_POST['phoneHome']) > 0) {
+				$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
+				$errors++;
+			} else {
+				$sqlCustomers .= ', home ' . mysqli_real_escape_string($db, $_POST['phoneHome']);
+			}
+		} else {
+			$sqlCustomers .= ', home ' . mysqli_real_escape_string($db, $_POST['phoneHome']);
 		}
 
 		// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
-		if (strlen($mobile) != 11 && strlen($mobile) > 1) {
-			$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
-			$errors++;
+		if ( !empty($_POST['phoneMobile'])){
+			if (strlen($_POST['phoneMobile']) != 11 && strlen($_POST['phoneMobile']) > 1) {
+				$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
+				$errors++;
+			} else {
+				$sqlCustomers .= ', mobile ' . mysqli_real_escape_string($db, $_POST['phoneMobile']);
+			}
+		} else {
+			$sqlCustomers .= ', mobile ' . mysqli_real_escape_string($db, $_POST['phoneMobile']);
 		}
 
-		$username = sanitizeInput($_POST['username']);
-		$password = sanitizeInput($_POST['password']);
+		//
+		// Account details
+		// Check Requirements for inputted values meet the Requirements
 
-		$checkUsername = mysqli_query($db, 'SELECT * FROM accounts WHERE username = "' . $username . '"');
 
 		if ( !empty($_POST['username'])) {
 			if (mysqli_num_rows($checkUsername) > 0) {
 				$errorUsername = 'Username already in use';
+				$errors++;
 			} else if (strlen($username) > 7) {
-				
+				$sqlAccount .= ' username = ' . mysqli_real_escape_string($db, $_POST['username']);
 			} else {
 				$errorUsername = 'Username must be more than 6 characters long.';
+				$errors++;
 			}
 		
 			} else 
