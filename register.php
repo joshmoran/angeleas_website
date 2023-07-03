@@ -25,10 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			$sqlCheckID = "SELECT customer_id from customers where customer_id = " . $customerNo;
 			$checkID = mysqli_query($db, $sqlCheckID);
-		} while (mysqli_num_rows($checkID) != 0);
+			echo $customerNo . '<br>';
+		} while (mysqli_num_rows($checkID) > 1);
 
 		$sqlCustomers = 'INSERT INTO customers VALUES ( customer_id = "' . $customerNo . '"';
-		$sqlAccount = ' INSERT INTO accounts VALUES ( ';
+		$sqlAccount = ' INSERT INTO accounts VALUES ( customer_id = "' . $customerNo . '"';
 
 		$checkUsername = mysqli_query($db, 'SELECT * FROM accounts WHERE username = "' . mysqli_real_escape_string($db, $_POST['username']) . '"');
 
@@ -44,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// FIRST NAME 
 		if (!empty($_POST['firstname'])) {
 			if (strlen($_POST['firstname']) > 3) {
-				$sqlCustomers .=  ', first_name = "' . mysqli_real_escape_string($db, $_POST['firstname']) . '"';
+				$sqlCustomers .= ', "' . mysqli_real_escape_string($db, $_POST['firstname']) . '"';
 			} else {
 				$errorFirstName = 'First name must not be empty or less than 3 characters.';
 				$errors++;
@@ -57,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// LAST NAME
 		if (!empty($_POST['lastname'])) {
 			if (strlen($_POST['lastname']) > 3) {
-				$sqlCustomers .= ', last_name = "' . mysqli_real_escape_string($db, $_POST['lastname']) . '"';
+				$sqlCustomers .= ', "' . mysqli_real_escape_string($db, $_POST['lastname']) . '"';
 			} else {
 				$errorLastName = 'Last name must not be empty or less than 3 characters.';
 				$errors++;
@@ -71,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
 		if (!empty($_POST['email'])) {
 			if (checkEmail($_POST['email']) === true || strlen($ema_POST['email']) != '' || $_POST['email'] != null) {
-				$sqlCustomers . ', email = "' . mysqli_real_escape_string($db, $_POST['email']) . '"';
+				$sqlCustomers .= ', "' . mysqli_real_escape_string($db, $_POST['email']) . '"';
 			} else {
 				$errorEmail = 'Email is required and must be a valid email address.';
 				$errors++;
@@ -87,10 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
 				$errors++;
 			} else {
-				$sqlCustomers .= ', home = "' . mysqli_real_escape_string($db, $_POST['phoneHome']) . '"';
+				$sqlCustomers .= ', "' . mysqli_real_escape_string($db, $_POST['phoneHome']) . '"';
 			}
 		} else {
-			$sqlCustomers .= ', home = "' . mysqli_real_escape_string($db, $_POST['phoneHome']) . '"';
+			$sqlCustomers .= ', "' . mysqli_real_escape_string($db, $_POST['phoneHome']) . '"';
 		}
 
 		// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
@@ -99,10 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
 				$errors++;
 			} else {
-				$sqlCustomers .= ', mobile = "' . mysqli_real_escape_string($db, $_POST['phoneMobile']) . '"';
+				$sqlCustomers .= ', "' . mysqli_real_escape_string($db, $_POST['phoneMobile']) . '"';
 			}
 		} else {
-			$sqlCustomers .= ', mobile = "' . mysqli_real_escape_string($db, $_POST['phoneMobile']) . '"';
+			$sqlCustomers .= ', "' . mysqli_real_escape_string($db, $_POST['phoneMobile']) . '"';
 		}
 
 		//
@@ -115,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorUsername = 'Username already in use';
 				$errors++;
 			} else if (strlen($_POST['username']) > 7) {
-				$sqlAccount .= ' username = "' . mysqli_real_escape_string($db, $_POST['username']) . '"';
+				$sqlAccount .= ', "' . mysqli_real_escape_string($db, $_POST['username']) . '"';
 			} else {
 				$errorUsername = 'Username must be more than 6 characters long.';
 				$errors++;
@@ -127,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		if (!empty($_POST['password'])) {
 			if (strlen($_POST['password']) > 8) {
-				$sqlAccount .= ', pass = "' . mysqli_real_escape_string($db, password_hash($_POST['password'], PASSWORD_DEFAULT)) . '"';
+				$sqlAccount .= ', "' . mysqli_real_escape_string($db, password_hash($_POST['password'], PASSWORD_DEFAULT)) . '"';
 			} else {
 				$errorPassword = 'Password must be more than 7 characters long.';
 				$errors++;
@@ -161,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$basketNo = randomNumber();
 				$sqlBasket = "SELECT order_id from orders where order_id = " . $basketNo;
 				$checkBasket = mysqli_query($db, $sqlBasket);
-			} while (mysqli_num_rows($checkBasket) !=  0);
+			} while (mysqli_num_rows($checkBasket) < 1);
 
 			$sqlCart = "INSERT INTO orders ( order_id, customer_id, complete) VALUES ( '$basketNo', '$customerNo', false )";
 
