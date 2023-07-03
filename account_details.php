@@ -521,10 +521,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 								echo $errorPostcode;
 							} ?></td>
 					</tr>
+					<tr>
+						<td colspan="3"><input type="hidden" name="addressID" /></td>
+					</tr>
 				</div>
 				<?php
 
-				//	endwhile;
+				//endwhile;
 				?>
 				<tr>
 					<td><button type="submit" name="updateAddress">Update Address</button></td>

@@ -1,5 +1,5 @@
-<?php 
+<?php
 function randomNumber()
 {
-return random_int(0, 9999999999);
+    return random_int(1000, 9999999999);
 }

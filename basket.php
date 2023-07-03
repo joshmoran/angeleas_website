@@ -66,10 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				require("src/database.php");
 
 
-				if ($_SESSION['basket_id'])) {
+				if ($_SESSION['loggedIn']) {
 					$sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = products.id WHERE cart.basket_id = '" . $_SESSION['basket_id'] . "'";
 					$query = mysqli_query($db, $sqlOrder);
-					if (mysqli_num_rows($query) < 1) {
+					if (mysqli_num_rows($query) > 0) {
 
 
 						echo "<tr>";
