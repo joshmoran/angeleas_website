@@ -19,6 +19,10 @@ if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] == false) {
 	header("Location: login.php");
 }
 
+if (isset($_GET['address'])) {
+	$addressID = $_GET['address'];
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	// Three Sections of Details 
@@ -117,45 +121,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 
 	if (isset($_POST['updateAddress'])) {
-		$sqlAddress = 'UPDATE address (';
+		$sqlAddress = 'UPDATE address SET ';
 		$errorsAddress = array();
 
+		// Address Line 1
 		if (!empty($_POST['address1st'])) {
-			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
+
+			$sqlAddress .= ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
 		} else {
 			$errorsAddress[] = 'Address line 1';
-			$addressLine1 = "Line 1 is a required field";
+			$errorLine1 = "Line 1 is a required field";
 		}
+
+		// Address Line 2
 		if (!empty($_POST['address2nd'])) {
 			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ', 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
+			$sqlAddress .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
 		} else {
 			$errorsAddress[] = "Address line 2";
 			$errorLine2 = 'Line 2 is a required field.';
 		}
-		$sqlAddress .= $comma . ', 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
 
+		// Address Line 3
+		$sqlAddress .= ', 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
+
+		// Address Region
 		if (!empty($_POST['region'])) {
 			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ', region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
+			$sqlAddress .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
 		} else {
 			$errorsAddress[] = 'Region';
 			$errorRegion = "Region is a required field";
 		}
+
+		// Address Postcode
 		if (!empty($_POST['postcode']) && strlen($_POST['postcode']) == 7) {
 			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ', postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
+			$sqlAddress .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
 		} else {
 			$errorsAddress[] = 'Postcode';
 			$errorPostcode = "Postcode is a required field";
 		}
 
-		$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '" AND address_id = "' . $_POST['addressID'] . '")';
+		$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '" AND address_id = "' . $_POST['addressID'] . '"';
 
 		echo $sqlAddress;
+		var_dump($errorsAddress);
 
-		if (count($errorsAddress)) {
+		if (count($errorsAddress) == 0) {
 			if (mysqli_query($db, $sqlAddress)) {
 				$error_message = 'Successfully update your credit card details.';
 			} else {
@@ -199,7 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			if (strlen($_POST['postcode']) == 7) {
 				$sqlAddAddress .= ', "' . mysqli_real_escape_string($db, $_POST['postcode']) . '"';
 			} else {
-				$errorAddAddress[] = 'Postcode Invalid';
+				$errorAddAddress[] = 'Postcode';
 				$errorPostcode = 'Please enter a valid postcode to continue.';
 			}
 		} else {
@@ -451,12 +464,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$rowAddress = array();
 					$addressID;
 
-					if (isset($_GET['address']) && $_GET['address'] != 'new') {
-
+					if (isset($_GET['address']) || $_GET['address'] != 'new' || isset($_POST['addressID'])) {
+						
 						$addressRow1 = "SELECT * FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $_GET['address'];
 						$addressRow1Query = mysqli_query($db, $addressRow1);
 						echo 'address row';
-						while ($address =  mysqli_fetch_row($addressRow1Query)) {
+						while ($address =  mysqli_fetch_row($addressRow1Query, $addressResult)) {
 							$addressID = $address[1];
 							$rowAddress[0] = $address[2];
 							$rowAddress[1] = $address[3];
@@ -473,8 +486,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					} else {
 					}
 
-
-					var_dump($rowAddress);
+					$addressRow 
+					while ( )
 					?>
 
 					<tr>
@@ -523,7 +536,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 							} ?></td>
 					</tr>
 					<tr>
-						<td colspan="3"><input type="hidden" name="addressID" /></td>
+						<td colspan="3"><input type="hidden" name="addressID" value="<?php if (isset($addressID)) {
+																							echo $addressID;
+																						} ?>"></td>
 					</tr>
 				</div>
 				<tr>
