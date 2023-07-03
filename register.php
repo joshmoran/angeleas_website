@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// FIRST NAME 
 		if (!empty($_POST['firstname']))
 			if (strlen($firstName) < 3) {
-				$sql .=  ' firstname = "' . mysqli_real_escape_string($_POST['firstname']);
+				$sql .=  ' firstname = "' . mysqli_real_escape_string($db, $_POST['firstname']);
 			} else {
 				$errors[] = 'First Name';
 				$errorFirstName = 'First name must be or equal to 3 characters. ';
