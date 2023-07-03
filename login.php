@@ -9,7 +9,6 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
 if (isset($_GET['message'])) {
 	$error_message = 'Invalid Username and/or Password';
 }
-include "inc/footer.php";
 
 
 if (isset($_POST['login'])) {
@@ -132,7 +131,10 @@ if (isset($_POST['login'])) {
 			</table>
 		</form>
 	</div>
+	<?php
 
+	include "inc/footer.php";
+	?>
 	<script type="text/javascript" src="src/js/js.js"></script>
 </body>
 

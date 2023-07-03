@@ -5,15 +5,6 @@ require "src/database.php";
 
 $addressID = null;
 
-//$_SESSION['loggedIn'] = false;
-
-if (isset($_POST['deleteAddress'])) {
-	echo 'del add';
-}
-if (isset($_POST['updateAddress'])) {
-	echo 'update add';
-}
-
 // Important information
 
 // customer name = split into first and second namer 
@@ -114,122 +105,123 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		$_POST['personalChanges'] = null;
 	}
-	if (isset($_POST['addressChanges'])) {
-		if (isset($_POST['deleteAddress'])) {
-			if (mysqli_query($db, "DELETE FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $_POST['whichAddress'])) {
-				$error_message = 'Successfully deleted the address';
-			} else {
-				$error_message = 'There has been a problem deleting the address. Please try again.';
-			}
 
-			$_POST['addressChanges'] = null;
-			$_POST['deleteAddress'] = null;
+	if (isset($_POST['deleteAddress'])) {
+		if (mysqli_query($db, "DELETE FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $_POST['whichAddress'])) {
+			$error_message = 'Successfully deleted the address';
+		} else {
+			$error_message = 'There has been a problem deleting the address. Please try again.';
 		}
 
-		if (isset($_POST['updateAddress'])) {
-			$sqlAddress = '';
-			$errorsAddress = array();
-
-			if (!empty($_POST['address1st'])) {
-				$comma = checkSql($sqlAddress, 'address');
-				$sqlAddress .= $comma . ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
-			} else {
-				$errorsAddress[] = 'Address line 1';
-				$addressLine1 = "Line 1 is a required field";
-			}
-			if (!empty($_POST['address2nd'])) {
-				$comma = checkSql($sqlAddress, 'address');
-				$sqlAddress .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
-			} else {
-				$errorsAddress[] = "Address line 2";
-				$errorLine2 = 'Line 2 is a required field.';
-			}
-			if (!empty($_POST['address3rd'])) {
-				$comma = checkSql($sqlAddress, 'address');
-				$sqlAddress .= $comma . ' 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
-			}
-			if (!empty($_POST['region'])) {
-				$comma = checkSql($sqlAddress, 'address');
-				$sqlAddress .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
-			} else {
-				$errorsAddress[] = 'Region';
-				$errorsAddress[] = "Region is a required field";
-			}
-			if (!empty($_POST['postcode']) && strlen($_POST['postcode']) == 7) {
-				$comma = checkSql($sqlAddress, 'address');
-				$sqlAddress .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
-			} else {
-				$errorsAddress[] = "Postcode is a required field";
-			}
-
-			$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
-
-			if (count($errorsAddress)) {
-				if (mysqli_query($db, $sqlAddress)) {
-					$error_message = 'Successfully update your credit card details.';
-				} else {
-					$error_message = 'Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
-				}
-			} else {
-				$error_message = 'Please resolve the issues to continue with the change.';
-			}
-			$errorsAddress = null;
-			$_POST['updateAddress'] = null;
-		}
-
-		if (isset($_POST['addAddress'])) {
-			$sqlAddAddress = "INSERT INTO address ( customer_id, 1_line, 2_line, region, postcode) VALUES ( '" . $_SESSION['customer_id'] . "', '";
-			$errorAddAddress = array();
-
-			if (!empty($_POST['address1st'])) {
-				$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address1st']) . "', '";
-			} else {
-				$errorAddAddress[] = 'Address line 1';
-				$errorLine1 = 'Please enter your address line 1 to continue.';
-			}
-
-			if (!empty($_POST['address2nd'])) {
-				$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address2nd']) . "', '";
-			} else {
-				$errorAddAddress[] = 'Address line 2';
-				$errorLine2 = 'Please enter your address line 2 to continue.';
-			}
-
-			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address3rd']) . "', '";
-
-			if (!empty($_POST['region'])) {
-				$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['region']) . "', '";
-			} else {
-				$errorAddAddress[] = 'Address region';
-				$errorRegion = 'Please enter your region to continue.';
-			}
-
-			if (!empty($_POST['postcode'])) {
-				if (strlen($_POST['postcode']) == 7) {
-					$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['postcode']) . "')";
-				} else {
-					$errorAddAddress[] = 'Postcode Invalid';
-					$errorPostcode = 'Please enter a valid postcode to continue.';
-				}
-			} else {
-				$errorAddAddress[] = 'Postcode';
-				$errorPostcode = 'Please enter your postcode to continue.';
-			}
-
-			if (count($errorAddAddress) == 0) {
-				try {
-					mysqli_query($db, $sqlAddAddress);
-					$error_message = 'Successfully added the address to your account.';
-				} catch (Exception $w) {
-					$error_message = 'Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
-				}
-			} else {
-				$error_message = 'Please resolve the issues to continue with the change.';
-			}
-			$_POST['addressChanges'] = null;
-			$_POST['addAddress'] = null;
-		}
+		$_POST['addressChanges'] = null;
+		$_POST['deleteAddress'] = null;
 	}
+
+	if (isset($_POST['updateAddress'])) {
+		$sqlAddress = '';
+		$errorsAddress = array();
+
+		if (!empty($_POST['address1st'])) {
+			$comma = checkSql($sqlAddress, 'address');
+			$sqlAddress .= $comma . ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
+		} else {
+			$errorsAddress[] = 'Address line 1';
+			$addressLine1 = "Line 1 is a required field";
+		}
+		if (!empty($_POST['address2nd'])) {
+			$comma = checkSql($sqlAddress, 'address');
+			$sqlAddress .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
+		} else {
+			$errorsAddress[] = "Address line 2";
+			$errorLine2 = 'Line 2 is a required field.';
+		}
+		if (!empty($_POST['address3rd'])) {
+			$comma = checkSql($sqlAddress, 'address');
+			$sqlAddress .= $comma . ' 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
+		}
+		if (!empty($_POST['region'])) {
+			$comma = checkSql($sqlAddress, 'address');
+			$sqlAddress .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
+		} else {
+			$errorsAddress[] = 'Region';
+			$errorsAddress[] = "Region is a required field";
+		}
+		if (!empty($_POST['postcode']) && strlen($_POST['postcode']) == 7) {
+			$comma = checkSql($sqlAddress, 'address');
+			$sqlAddress .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
+		} else {
+			$errorsAddress[] = "Postcode is a required field";
+		}
+
+		$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+
+		if (count($errorsAddress)) {
+			if (mysqli_query($db, $sqlAddress)) {
+				$error_message = 'Successfully update your credit card details.';
+			} else {
+				$error_message = 'Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
+			}
+		} else {
+			$error_message = 'Please resolve the issues to continue with the change.';
+		}
+		$errorsAddress = null;
+		$_POST['updateAddress'] = null;
+	}
+
+	if (isset($_POST['addAddress'])) {
+		$sqlAddAddress = "INSERT INTO address ( customer_id, 1_line, 2_line, region, postcode) VALUES ( '" . $_SESSION['customer_id'] . "', '";
+		echo $sqlAddAddress;
+		$errorAddAddress = array();
+
+		if (!empty($_POST['address1st'])) {
+			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address1st']) . "', '";
+		} else {
+			$errorAddAddress[] = 'Address line 1';
+			$errorLine1 = 'Please enter your address line 1 to continue.';
+		}
+
+		if (!empty($_POST['address2nd'])) {
+			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address2nd']) . "', '";
+		} else {
+			$errorAddAddress[] = 'Address line 2';
+			$errorLine2 = 'Please enter your address line 2 to continue.';
+		}
+
+		$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address3rd']) . "', '";
+
+		if (!empty($_POST['region'])) {
+			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['region']) . "', '";
+		} else {
+			$errorAddAddress[] = 'Address region';
+			$errorRegion = 'Please enter your region to continue.';
+		}
+
+		if (!empty($_POST['postcode'])) {
+			if (strlen($_POST['postcode']) == 7) {
+				$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['postcode']) . "')";
+			} else {
+				$errorAddAddress[] = 'Postcode Invalid';
+				$errorPostcode = 'Please enter a valid postcode to continue.';
+			}
+		} else {
+			$errorAddAddress[] = 'Postcode';
+			$errorPostcode = 'Please enter your postcode to continue.';
+		}
+
+		if (count($errorAddAddress) == 0) {
+			try {
+				mysqli_query($db, $sqlAddAddress);
+				$error_message = 'Successfully added the address to your account.';
+			} catch (Exception $w) {
+				$error_message = 'Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
+			}
+		} else {
+			$error_message = 'Please resolve the issues to continue with the change.';
+		}
+		$_POST['addressChanges'] = null;
+		$_POST['addAddress'] = null;
+	}
+
 	if (isset($_POST['accountChanges'])) {
 		$sqlAccount = '';
 		$errorsAccount = array();
@@ -471,15 +463,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$sqlAddress = "SELECT * FROM address WHERE address_id = '" . $addressID . "' AND customer_id = '" . $_SESSION['customer_id'] . "'";
 					$addressQuery = mysqli_query($db, $sqlAddress);
 
-					if ( mysqli_num_rows($addressQuery) == 0){
-						
+					if (mysqli_num_rows($addressQuery) == 0 && !isset($_GET['address'])) {
+						header("Location: account_details.php?address=new");
+					} else {
+						try {
+							while ($address = mysqli_fetch_assoc($addressQuery));
+						} catch (Exception $e) {
+							$address = 'working';
+						}
 					}
-					try {
-						while ($address = mysqli_fetch_assoc($addressQuery));
-					} catch (Exception $e) {
-						$address = 'working';
-					}
-
 					?>
 
 					<tr>
