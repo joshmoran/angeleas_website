@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'src/variables.php';
+require 'src/database.php';
 if ($_SESSION['loggedIn'] == false || !isset($_SESSION['loggedIn'])) {
     header("Location: login.php");
 }
@@ -26,9 +27,22 @@ if ($_SESSION['loggedIn'] == false || !isset($_SESSION['loggedIn'])) {
 
         <h2>Your Account</h2>
         <?php
-            $sqlName = 
+        $sqlName = "SELECT first_name, last_name FROM customers WHERE customer_id = " . $_SESSION['customer_id'];
+        $nameQuery = mysqli_query($db, $sqlName);
 
-        <h3>Welcome 
+        foreach ($nameQuery as $user) {
+            $fullName = $user['first_name'] . ' ' . $user['last_name'];
+        }
+
+        $sqlName = "SELECT username FROM accounts WHERE customer_id = " . $_SESSION['customer_id'];
+        $usernameQuery = mysqli_query($db, $sqlName);
+
+        foreach ($usernameQuery as $user) {
+            $username = $user['username'];
+        }
+        ?>
+
+        <h3 style="text-align: center">Welcome <?php echo $fullName . ' (' . $username . ')'; ?></h3>
         <a href="account_details.php"><button>Change Account Details</button></a>
         <br>
         <br>
