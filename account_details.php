@@ -169,28 +169,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 
 	if (isset($_POST['addAddress'])) {
-		$sqlAddAddress = "INSERT INTO address ( customer_id, 1_line, 2_line, region, postcode) VALUES ( '" . $_SESSION['customer_id'] . "', '";
-		echo $sqlAddAddress;
+		$sqlAddAddress = "INSERT INTO address ( customer_id, 1_line, 2_line, 3_line, region, postcode) VALUES ( '" . $_SESSION['customer_id'] . "', '";
 		$errorAddAddress = array();
 
 		if (!empty($_POST['address1st'])) {
-			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address1st']) . "', '";
+			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address1st'] . "', '");
 		} else {
 			$errorAddAddress[] = 'Address line 1';
 			$errorLine1 = 'Please enter your address line 1 to continue.';
 		}
 
 		if (!empty($_POST['address2nd'])) {
-			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address2nd']) . "', '";
+			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address2nd'] . "', '");
 		} else {
 			$errorAddAddress[] = 'Address line 2';
 			$errorLine2 = 'Please enter your address line 2 to continue.';
 		}
 
-		$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address3rd']) . "', '";
+		$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['address3rd'] . "', '");
 
 		if (!empty($_POST['region'])) {
-			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['region']) . "', '";
+			$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['region'] . "', '");
 		} else {
 			$errorAddAddress[] = 'Address region';
 			$errorRegion = 'Please enter your region to continue.';
@@ -198,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		if (!empty($_POST['postcode'])) {
 			if (strlen($_POST['postcode']) == 7) {
-				$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['postcode']) . "')";
+				$sqlAddAddress .= mysqli_real_escape_string($db, $_POST['postcode'] . "')");
 			} else {
 				$errorAddAddress[] = 'Postcode Invalid';
 				$errorPostcode = 'Please enter a valid postcode to continue.';
@@ -208,11 +207,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$errorPostcode = 'Please enter your postcode to continue.';
 		}
 
+		echo $sqlAddAddress;
+
 		if (count($errorAddAddress) == 0) {
-			try {
-				mysqli_query($db, $sqlAddAddress);
+			if (mysqli_query($db, $sqlAddAddress)) {
 				$error_message = 'Successfully added the address to your account.';
-			} catch (Exception $w) {
+			} else {
 				$error_message = 'Something went wrong. Please try again later. Or if the problem continues, please contact the support team.';
 			}
 		} else {
@@ -447,26 +447,81 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 				<div id="address">
 					<?php
-					$address = array();
-					if (isset($_GET['address']) && $_GET['address'] != new){
+					$rowAddress = array();
+					if (isset($_GET['address']) && $_GET['address'] != 'new') {
 						$addressID = $_GET['address'];
 					} else {
 						$addressSQL = "SELECT address_id FROM address WHERE customer_id = " . $_SESSION['customer_id'];
 						$addressQuery = mysqli_query($db, $addressSQL);
-						if ( mysqli_num_rows($addressQuery) > 0 ){
+						if (mysqli_num_rows($addressQuery) > 0) {
 							$addressRow = mysqli_fetch_assoc($addressQuery);
-                            $addressID = $addressRow['address_id'];
+							$addressID = $addressRow['address_id'];
 						}
 					}
 
-					if ( isset($addressID)){
+					if (isset($addressID)) {
 						$addressRow1 = "SELECT * FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $addressID;
 						$addressRow1Query = mysqli_query($db, $addressRow1);
-						foreach ($addressRow1Query as $address){
+						foreach (mysqli_fetch_row($addressRow1Query) as $address) {
 							$rowAddress[0] = $address[2];
+							$rowAddress[1] = $address[3];
+							$rowAddress[2] = $address[4];
+							$rowAddress[3] = $address[5];
+							$rowAddress[4] = $address[6];
 						}
 					}
+
+					var_dump($rowAddress);
 					?>
+
+					<tr>
+						<td><label for="address1st">First Line</label></td>
+						<td><input type="text" name="address1st" value="<?php if (isset($rowAddress[0])) {
+																			echo $rowAddress[0];
+																		} ?>" /></td>
+						<td><?php if (isset($errorLine1)) {
+								echo $errorLine1;
+							} ?></td>
+					</tr>
+					<tr>
+						<td><label for="address2nd">Second Line</label></td>
+						<td><input type="text" name="address2nd" value="<?php if (isset($rowAddress[1])) {
+																			echo $rowAddress[1];
+																		} ?>" /></td>
+						<td><?php if (isset($errorLine2)) {
+								echo $errorLine2;
+							} ?></td>
+					</tr>
+					<tr>
+						<td><label for="address3rd">Third Line</label></td>
+						<td><input type="text" name="address3rd" value="<?php if (isset($rowAddress[2])) {
+																			echo $rowAddress[2];
+																		} ?>" /></td>
+						<td><?php if (isset($errorLine3)) {
+								echo $errorLine3;
+							} ?></td>
+					</tr>
+					<tr>
+						<td><label for="region">Region</label></td>
+						<td><input type="text" name="region" value="<?php if (isset($rowAddress[3])) {
+																		echo $rowAddress[3];
+																	} ?>" /></td>
+						<td><?php if (isset($errorRegion)) {
+								echo $errorRegion;
+							} ?></td>
+					</tr>
+					<tr>
+						<td><label for="postcode">Postcode</label></td>
+						<td><input type="text" name="postcode" value="<?php if (isset($rowAddress[4])) {
+																			echo $rowAddress[4];
+																		} ?>"></td>
+						<td><?php if (isset($errorPostcode)) {
+								echo $errorPostcode;
+							} ?></td>
+					</tr>
+					<tr>
+						<td colspan="3"><input type="hidden" name="addressID" /></td>
+					</tr>
 				</div>
 				<tr>
 					<td><button type="submit" name="updateAddress">Update Address</button></td>
