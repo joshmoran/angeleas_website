@@ -57,14 +57,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			}
 		} else {
 			$errorLastName = 'Last name is required.';
-            $errors++;
+			$errors++;
 		}
 
 		// EMAIL - CHECK IF VALID EMAIL ADDRESS
 		$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
-		if ( !empty($_POST['email'])) {
-			if (checkEmail($_POST['email']) === true || strlen($ema_POST['email']il) != '' || $_POST['email'] != null) {
-				$sqlCustomers. ', email = '. mysqli_real_escape_string($db, $_POST['email']);
+		if (!empty($_POST['email'])) {
+			if (checkEmail($_POST['email']) === true || strlen($ema_POST['email']) != '' || $_POST['email'] != null) {
+				$sqlCustomers . ', email = ' . mysqli_real_escape_string($db, $_POST['email']);
 			} else {
 				$errorEmail = 'Email is required and must be a valid email address.';
 				$errors++;
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		// HOME NUMBER - ONLY CHECK IF INPUT IS ENTERED
-		if (!empty($_POST['phoneHome'])){
+		if (!empty($_POST['phoneHome'])) {
 			if (strlen($_POST['phoneHome']) != 11 && strlen($_POST['phoneHome']) > 0) {
 				$errorPhone = 'Please enter a valid home phone number. Region (5 characters) and the extension (6 characters).';
 				$errors++;
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		// MOBILE NUMBER - ONLY CHECK IF INPUT IS ENTERED
-		if ( !empty($_POST['phoneMobile'])){
+		if (!empty($_POST['phoneMobile'])) {
 			if (strlen($_POST['phoneMobile']) != 11 && strlen($_POST['phoneMobile']) > 1) {
 				$errorMobile = 'Please enter a valid mobile phone number. Please use 0 at the start';
 				$errors++;
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// Check Requirements for inputted values meet the Requirements
 
 
-		if ( !empty($_POST['username'])) {
+		if (!empty($_POST['username'])) {
 			if (mysqli_num_rows($checkUsername) > 0) {
 				$errorUsername = 'Username already in use';
 				$errors++;
@@ -113,16 +113,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorUsername = 'Username must be more than 6 characters long.';
 				$errors++;
 			}
-		
-			} else 
+		} else {
+			$errorUsername = 'Username is required.';
+			$errors++;
 		}
 
-		// Important Values - |first_name, last_name, $email, username, password
+		if (!empty($_POST['password'])) {
+			if (strlen($_POST['password']) > 8) {
+				$sqlAccount .= ', pass = ' . mysqli_real_escape_string($db, password_hash($_POST['password'], PASSWORD_DEFAULT));
+			} else {
+				$errorPassword = 'Password must be more than 7 characters long.';
+				$errors++;
+			}
+		} else {
+			$errorPassword = 'Password is required.';
+			$errors++;
+		}
 
-		//Checking if customer id already exists
+		$sqlCustomers .= ')';
+		$sqlAccount .= ')';
 
-		echo 'There are ' . $errors . ' found.';
 		if ($errors == 0) {
+			$adminMessage = 'Their has been a problem submitting your registration if this problem persists please contact the system administrator';
 			// for table -- customers
 			do {
 				$customerNo = randomNumber();
@@ -131,26 +143,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$checkID = mysqli_query($db, $sqlCheckID);
 			} while (mysqli_num_rows($checkID) != 0);
 
-			// if (strlen($address_1st) >= 1 || $address_1st != null || $address_1st != '' || strlen($postcode) >= 1 || $postcode != null || $postcode != '' || strlen($region) >= 1 || $region != null || $region != '') {
-			$addressIm = $address_1st . ', ' . $address_2nd . ', ' . $address_3rd . ', ' . $region . ',' . $postcode;
-			$sqlCustomer = "INSERT INTO customers VALUES ('$customerNo', '$firstName', '$lastName', '$email', '$addressIm', '$home', '$mobile')";
-
-			if (mysqli_query($db, $sqlCustomer)) {
-				$error_message = 'Successfully added to customers';
-			} else {
-				$error_message = 'Could not add to Customers';
+			if (mysqli_query($db, $sqlCustomer) == false) {
+				$error_message = $adminMessage;
 				return false;
 			}
 			// }
 
 			// for table -- accounts
-			$encryptedPassword = password_hash($password, PASSWORD_DEFAULT);
-			$sqlAccount = "INSERT INTO accounts VALUES ( '$customerNo', '$username', '$encryptedPassword')";
-
-			if (mysqli_query($db, $sqlAccount)) {
-				$error_message = 'Successfully added to Accounts';
-			} else {
-				$error_message = 'Could not add to Accounts';
+			if (mysqli_query($db, $sqlAccount) == false) {
+				$error_message = $adminMessage;
 				return false;
 			}
 			// for table -- cart
@@ -158,24 +159,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$basketNo = randomNumber();
 				$sqlBasket = "SELECT order_id from orders where order_id = " . $basketNo;
 				$checkBasket = mysqli_query($db, $sqlBasket);
-			} while (mysqli_num_rows($checkBasket) > 0);
+			} while (mysqli_num_rows($checkBasket) !=  0);
 
 			$sqlCart = "INSERT INTO orders ( order_id, customer_id, complete) VALUES ( '$basketNo', '$customerNo', false )";
 
-			if (mysqli_query($db, $sqlCart)) {
-				$error_message = 'Successfully added to Cart';
-			} else {
-				$error_message = 'Could not add to Cart';
-				return false;
-			}
-
-			// for table -- $address
-			$sqlAddress = "INSERT INTO address (`customer_id`, `1_line`, `2_line`, `3_line`, `region`, `postcode`) VALUES ( '$customerNo', '$address_1st', '$address_2nd', '$address_3rd', '$region', '$postcode' )";
-
-			if (mysqli_query($db, $sqlAddress)) {
-				$error_message = 'Successfully added to Addresses';
-			} else {
-				$error_message = 'Could not add to Addresses';
+			if (mysqli_query($db, $sqlCart) == false) {
+				$error_message = $adminMessage;
 				return false;
 			}
 
@@ -186,14 +175,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			header("Location: account.php");
 			die();
 		} else {
-			$error_message = 'Their has been a problem submitting your registration if this problem persists please contact the system administrator';
+			$error_message = 'Please correct the errors to continue with registration.';
 			//header("Location: register.php?" . $getMessage);
 			exit();
 		}
 	}
 }
-
-
 ?>
 <!DOCTYPE html>
 <html>
