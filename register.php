@@ -13,6 +13,7 @@ function sanitizeInput($data)
 	return $data;
 }
 
+var_dump($_SESSION);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (isset($_POST['register'])) {
@@ -21,15 +22,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$errors = 0;
 
 		do {
-			$customerNo = randomNumber();
+			(int)$customerNo = randomNumber();
 
 			$sqlCheckID = "SELECT customer_id from customers where customer_id = " . $customerNo;
 			$checkID = mysqli_query($db, $sqlCheckID);
 			echo $customerNo . '<br>';
-		} while (mysqli_num_rows($checkID) > 1);
+		} while (mysqli_num_rows($checkID) < 0);
 
-		$sqlCustomers = 'INSERT INTO customers VALUES ( customer_id = "' . $customerNo . '"';
-		$sqlAccount = ' INSERT INTO accounts VALUES ( customer_id = "' . $customerNo . '"';
+		echo '<br>';
+
+		$sqlCustomers = 'INSERT INTO customers VALUES ( "' . $customerNo . '"';
+		$sqlAccount = ' INSERT INTO accounts VALUES ( "' . $customerNo . '"';
 
 		$checkUsername = mysqli_query($db, 'SELECT * FROM accounts WHERE username = "' . mysqli_real_escape_string($db, $_POST['username']) . '"');
 
@@ -180,8 +183,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$error_message = 'Please correct the errors to continue with registration.';
 			//header("Location: register.php?" . $getMessage);
 		}
+
+		$_POST['register'] = null;
 	}
 }
+
+echo $sqlAccount;
+echo '<br>';
+echo $sqlCustomers;
 ?>
 <!DOCTYPE html>
 <html>
