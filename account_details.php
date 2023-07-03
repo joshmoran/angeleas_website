@@ -113,12 +113,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$error_message = 'There has been a problem deleting the address. Please try again.';
 		}
 
-		$_POST['addressChanges'] = null;
 		$_POST['deleteAddress'] = null;
 	}
 
 	if (isset($_POST['updateAddress'])) {
-		$sqlAddress = '';
+		$sqlAddress = 'UPDATE address (';
 		$errorsAddress = array();
 
 		if (!empty($_POST['address1st'])) {
@@ -130,30 +129,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 		if (!empty($_POST['address2nd'])) {
 			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
+			$sqlAddress .= $comma . ', 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
 		} else {
 			$errorsAddress[] = "Address line 2";
 			$errorLine2 = 'Line 2 is a required field.';
 		}
-		if (!empty($_POST['address3rd'])) {
-			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
-		}
+		$sqlAddress .= $comma . ', 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
+
 		if (!empty($_POST['region'])) {
 			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
+			$sqlAddress .= $comma . ', region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
 		} else {
 			$errorsAddress[] = 'Region';
-			$errorsAddress[] = "Region is a required field";
+			$errorRegion = "Region is a required field";
 		}
 		if (!empty($_POST['postcode']) && strlen($_POST['postcode']) == 7) {
 			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
+			$sqlAddress .= $comma . ', postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
 		} else {
-			$errorsAddress[] = "Postcode is a required field";
+			$errorsAddress[] = 'Postcode';
+			$errorPostcode = "Postcode is a required field";
 		}
 
-		$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+		$sqlAddress .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '" AND address_id = "' . $_POST['addressID'] . '")';
+
+		echo $sqlAddress;
 
 		if (count($errorsAddress)) {
 			if (mysqli_query($db, $sqlAddress)) {
@@ -336,8 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						</th>
 					</tr>
 					<tr>
-						<td><label for="personalChanges">Make changes to my personal details</label></td>
-						<td><input type="checkbox" id="personalChanges" name="personalChanges" /></td>
+						<td colspan="3"><label for="personalChanges">Make changes to my personal details</label></td>
 					</tr>
 					<!-- 
 					INPUTS TO BE ADDED
@@ -412,8 +411,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<th colspan="3">Change Address Details</th>
 				</tr>
 				<tr>
-					<td><label for="addressChanges">Make changes to my personal details</label></td>
-					<td><input type="checkbox" id="addressChanges" name="addressChanges" /></td>
+					<td colspan="3"><label for="addressChanges">Make changes to my personal details</label></td>
 				</tr>
 
 
@@ -451,34 +449,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<div id="address">
 					<?php
 					$rowAddress = array();
-					if (isset($_GET['address']) && $_GET['address'] != 'new') {
-						$addressID = $_GET['address'];
-					} else if (isset($_GET['address']) && $_GET['address'] == 'new') {
-						for ($a = 0; $a < 5; $a++) {
-							$rowAddress[$a] = '';
-						}
-					} else {
-						$addressSQL = "SELECT address_id FROM address WHERE customer_id = " . $_SESSION['customer_id'];
-						$addressQuery = mysqli_query($db, $addressSQL);
-						if (mysqli_num_rows($addressQuery) > 0) {
-							$addressRow = mysqli_fetch_assoc($addressQuery);
-							$addressID = $addressRow['address_id'];
-						}
-					}
+					$addressID;
 
 					if (isset($_GET['address']) && $_GET['address'] != 'new') {
-						$addressRow1 = "SELECT * FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $addressID;
+
+						$addressRow1 = "SELECT * FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $_GET['address'];
 						$addressRow1Query = mysqli_query($db, $addressRow1);
 						echo 'address row';
 						while ($address =  mysqli_fetch_row($addressRow1Query)) {
-
+							$addressID = $address[1];
 							$rowAddress[0] = $address[2];
 							$rowAddress[1] = $address[3];
 							$rowAddress[2] = $address[4];
 							$rowAddress[3] = $address[5];
 							$rowAddress[4] = $address[6];
 						}
+					} else if (isset($_GET['address']) && $_GET['address'] == 'new') {
+						for ($a = 0; $a < 5; $a++) {
+							$rowAddress[$a] = '';
+						}
+					} else if (isset($_POST['addressID'])) {
+						$addressID = $_POST['addressID'];
+					} else {
 					}
+
 
 					var_dump($rowAddress);
 					?>
