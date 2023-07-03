@@ -302,11 +302,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			if (isset($error_message)) {
 				echo '<p class="messages">' . $error_message . '</p>';
 			}
-			if (count($errors) > 1) {
-				foreach ($errors as $error) {
-					echo '<p id="message">' . $error . '</p>';
-				}
-			}
 			?>
 		</div>
 		<form method="post" id="makeChanges" action="account_details.php">
@@ -452,81 +447,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 				<div id="address">
 					<?php
-
-					if (isset($_GET['address'])) {
-						if ($_GET['address'] != 'new') {
-							$addressID = -1;
-						} else {
-							$addressID = $_GET['address'];
+					$address = array();
+					if (isset($_GET['address']) && $_GET['address'] != new){
+						$addressID = $_GET['address'];
+					} else {
+						$addressSQL = "SELECT address_id FROM address WHERE customer_id = " . $_SESSION['customer_id'];
+						$addressQuery = mysqli_query($db, $addressSQL);
+						if ( mysqli_num_rows($addressQuery) > 0 ){
+							$addressRow = mysqli_fetch_assoc($addressQuery);
+                            $addressID = $addressRow['address_id'];
 						}
 					}
-					$sqlAddress = "SELECT * FROM address WHERE address_id = '" . $addressID . "' AND customer_id = '" . $_SESSION['customer_id'] . "'";
-					$addressQuery = mysqli_query($db, $sqlAddress);
 
-					if (mysqli_num_rows($addressQuery) == 0 && !isset($_GET['address'])) {
-						header("Location: account_details.php?address=new");
-					} else {
-						try {
-							while ($address = mysqli_fetch_assoc($addressQuery));
-						} catch (Exception $e) {
-							$address = 'working';
+					if ( isset($addressID)){
+						$addressRow1 = "SELECT * FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $addressID;
+						$addressRow1Query = mysqli_query($db, $addressRow1);
+						foreach ($addressRow1Query as $address){
+							$rowAddress[0] = $address[2];
 						}
 					}
 					?>
-
-					<tr>
-						<td><label for="address1st">First Line</label></td>
-						<td><input type="text" name="address1st" value="<?php if (isset($address)) {
-																			echo $address['1_line'];
-																		} ?>" /></td>
-						<td><?php if (isset($errorLine1)) {
-								echo $errorLine1;
-							} ?></td>
-					</tr>
-					<tr>
-						<td><label for="address2nd">Second Line</label></td>
-						<td><input type="text" name="address2nd" value="<?php if (isset($address['2_line'])) {
-																			echo $address['2_line'];
-																		} ?>" /></td>
-						<td><?php if (isset($errorLine2)) {
-								echo $errorLine2;
-							} ?></td>
-					</tr>
-					<tr>
-						<td><label for="address3rd">Third Line</label></td>
-						<td><input type="text" name="address3rd" value="<?php if (isset($address['3_line'])) {
-																			echo $address['3_line'];
-																		} ?>" /></td>
-						<td><?php if (isset($errorLine3)) {
-								echo $errorLine3;
-							} ?></td>
-					</tr>
-					<tr>
-						<td><label for="region">Region</label></td>
-						<td><input type="text" name="region" value="<?php if (isset($address['region'])) {
-																		echo $address['region'];
-																	} ?>" /></td>
-						<td><?php if (isset($errorRegion)) {
-								echo $errorRegion;
-							} ?></td>
-					</tr>
-					<tr>
-						<td><label for="postcode">Postcode</label></td>
-						<td><input type="text" name="postcode" value="<?php if (isset($address['postcode'])) {
-																			echo $address['postcode'];
-																		} ?>"></td>
-						<td><?php if (isset($errorPostcode)) {
-								echo $errorPostcode;
-							} ?></td>
-					</tr>
-					<tr>
-						<td colspan="3"><input type="hidden" name="addressID" /></td>
-					</tr>
 				</div>
-				<?php
-
-				//endwhile;
-				?>
 				<tr>
 					<td><button type="submit" name="updateAddress">Update Address</button></td>
 					<td><button type="submit" name="deleteAddress">Delete Address</button></td>
