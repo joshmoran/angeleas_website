@@ -3,6 +3,8 @@ session_start();
 require "src/variables.php";
 require "src/database.php";
 
+$addressID = null;
+
 //$_SESSION['loggedIn'] = false;
 
 if (isset($_POST['deleteAddress'])) {
@@ -214,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorPostcode = 'Please enter your postcode to continue.';
 			}
 
-			if (!count($errorsAddress)) {
+			if (count($errorAddAddress) == 0) {
 				try {
 					mysqli_query($db, $sqlAddAddress);
 					$error_message = 'Successfully added the address to your account.';
@@ -438,7 +440,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					while ($address = mysqli_fetch_array($addressRows)) {
 						$fullAddress = $address[2] . ', ' . $address[3] . ', ' . $address[4] . ', ' . $address[5] . ', ' . $address[6];
 						// echo $fullAddress;
-						if (!isset($addressID)) {
+						if ($addressID == null) {
 							$addressID = $address[1];
 						}
 						echo '<option value="' . $address[1] . '"';
@@ -478,9 +480,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 					<tr>
 						<td><label for="address1st">First Line</label></td>
-						<td><input type="text" value="<?php if (isset($address)) {
-															echo $address['1_line'];
-														} ?>" /></td>
+						<td><input type="text" name="address1st" value="<?php if (isset($address)) {
+																			echo $address['1_line'];
+																		} ?>" /></td>
 						<td><?php if (isset($errorLine1)) {
 								echo $errorLine1;
 							} ?></td>

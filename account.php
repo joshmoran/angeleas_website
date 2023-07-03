@@ -25,6 +25,10 @@ if ($_SESSION['loggedIn'] == false || !isset($_SESSION['loggedIn'])) {
     <div id="container">
 
         <h2>Your Account</h2>
+        <?php
+            $sqlName = 
+
+        <h3>Welcome 
         <a href="account_details.php"><button>Change Account Details</button></a>
         <br>
         <br>
