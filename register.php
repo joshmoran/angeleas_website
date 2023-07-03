@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		$errors = 0;
 		$customerNo = 0;
+		$basketNo = 0;
 
 		do {
 			$no = randomNumber();
@@ -164,10 +165,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			}
 			// for table -- cart
 			do {
-				$basketNo = randomNumber();
+				$no = randomNumber();
+				$basketNo = $no;
 				$sqlBasket = "SELECT order_id from orders where order_id = " . $basketNo;
 				$checkBasket = mysqli_query($db, $sqlBasket);
-			} while (mysqli_num_rows($checkBasket) != 1);
+			} while (mysqli_num_rows($checkBasket) != 0);
 
 			$sqlCart = "INSERT INTO orders ( order_id, customer_id, complete) VALUES ( '$basketNo', '$customerNo', false )";
 

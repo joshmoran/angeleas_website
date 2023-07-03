@@ -9,7 +9,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 	header("Location: products.php");
 }
 
-if (empty($_SESSION['loggedIn']) || !isset($_SESSION['loggedIn'])) {
+if (isset($_SESSION['loggedIn'])) {
 	if (!isset($_SESSION['customer_id'])) {
 		header("Location: products.php?error=customer");
 	}
@@ -55,18 +55,19 @@ if (empty($_SESSION['basket_id'])) {
 if (!empty($_POST['addToBasket'])) {
 	$item = $_POST['item'];
 	$quantity = $_POST['quantity'];
-	$price = $_POST['cost'];
-	$productID = $_GET['id'];
+	$price = $_POST['cost']; #
+	$basketNo = 0;
 
 	$total = (int)$quantity * (float)$price;
 	// Check status is complete
 	$sqlStatus = "SELECT * FROM orders WHERE customer_id = " . $_SESSION['customer_id'] . " AND complete = 0";
 	$status = mysqli_query($db, $sqlStatus);
 
-	if (mysqli_num_rows($status) === 0  || $_SESSION['basket_id'] == '') {
+	if (mysqli_num_rows($status) === 0) {
 
 		do {
-			$basketNo = randomNumber();
+			$no = randomNumber();
+			$basketNo = $no;
 
 			$sqlCheckID = "SELECT order_id from orders where order_id = " . $basketNo;
 			$checkID = mysqli_query($db, $sqlCheckID);

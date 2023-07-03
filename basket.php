@@ -5,6 +5,8 @@ require "src/variables.php";
 require "src/database.php";
 require "src/random_number.php";
 
+echo $_SESSION['basket_id'];
+
 if (isset($_GET['del'])) {
 	$sqlDelete = "DELETE FROM cart WHERE product_id = " . $_GET['del'] . " AND basket_id = " . $_SESSION['basket_id'];
 	$queryDel = mysqli_query($db, $sqlDelete);
@@ -64,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				require("src/database.php");
 
 
-				if (isset($_SESSION['customer_id'])) {
+				if ($_SESSION['basket_id'])) {
 					$sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = products.id WHERE cart.basket_id = '" . $_SESSION['basket_id'] . "'";
 					$query = mysqli_query($db, $sqlOrder);
 					if (mysqli_num_rows($query) < 1) {
