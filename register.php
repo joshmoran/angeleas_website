@@ -20,14 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		require "src/database.php";
 
 		$errors = 0;
+		$customerNo = 0;
 
 		do {
-			(int)$customerNo = randomNumber();
+			$no = randomNumber();
+			(int)$customerNo = $no;
 
 			$sqlCheckID = "SELECT customer_id from customers where customer_id = " . $customerNo;
 			$checkID = mysqli_query($db, $sqlCheckID);
 			echo $customerNo . '<br>';
-		} while (mysqli_num_rows($checkID) < 0);
+		} while (mysqli_num_rows($checkID) != 0);
 
 		echo '<br>';
 
@@ -165,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$basketNo = randomNumber();
 				$sqlBasket = "SELECT order_id from orders where order_id = " . $basketNo;
 				$checkBasket = mysqli_query($db, $sqlBasket);
-			} while (mysqli_num_rows($checkBasket) < 1);
+			} while (mysqli_num_rows($checkBasket) != 1);
 
 			$sqlCart = "INSERT INTO orders ( order_id, customer_id, complete) VALUES ( '$basketNo', '$customerNo', false )";
 
@@ -185,12 +187,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		$_POST['register'] = null;
+
+		echo $sqlAccount;
+		echo '<br>';
+		echo $sqlCustomers;
 	}
 }
 
-echo $sqlAccount;
-echo '<br>';
-echo $sqlCustomers;
 ?>
 <!DOCTYPE html>
 <html>
