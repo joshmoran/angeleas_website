@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// EMAIL - CHECK IF VALID EMAIL ADDRESS
 		$regex = '/\b[a-z0-9-_.]+@[a-z0-9-_.]+(\.[a-z0-9]+)+/';
 		if (!empty($_POST['email'])) {
-			if (checkEmail($_POST['email']) === true || strlen($ema_POST['email']) != '' || $_POST['email'] != null) {
+			if (checkEmail($_POST['email']) === true || strlen($_POST['email']) != '' || $_POST['email'] != null) {
 				$sqlCustomers .= ', "' . mysqli_real_escape_string($db, $_POST['email']) . '"';
 			} else {
 				$errorEmail = 'Email is required and must be a valid email address.';
@@ -189,10 +189,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		$_POST['register'] = null;
-
-		echo $sqlAccount;
-		echo '<br>';
-		echo $sqlCustomers;
 	}
 }
 

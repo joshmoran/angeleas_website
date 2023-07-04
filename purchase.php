@@ -25,7 +25,7 @@ if (isset($_GET['error'])) {
 }
 
 // Add functionality to add an address to the users account
-if (!empty($_POST['addAddress'])) {
+if (isset($_POST['addAddress'])) {
     $customerID = $_SESSION['customer_id'];
 
     // Main variables needed
@@ -62,8 +62,8 @@ if (!empty($_POST['addAddress'])) {
     }
 
     // If there are no errors in the required fields, submit and insert the data into the 'address' table    
-    if (empty($errors)) {
-        $sqlAddAddress = "INSERT INTO address VALUES ( '$customerID', '$line1', '$line2', '$line3', '$region', '$postcode' )";
+    if (count($errors) == 0) {
+        $sqlAddAddress = "INSERT INTO address ( customer_id, 1_line, 2_line, 3_line, region, postcode ) VALUES ( '$customerID', '$line1', '$line2', '$line3', '$region', '$postcode' )";
 
         if (mysqli_query($db, $sqlAddAddress)) {
             $errors[] = 'Successfully added the address';
@@ -191,7 +191,7 @@ if (!empty($_POST['purchase'])) {
             <?php
             // For single errors 
             if (isset($error_message)) {
-                echo '<h2 id="message">Error - ' . $error_message . '</h2>';
+                echo '<h2 id="message">' . $error_message . '</h2>';
             }
 
             // For an array of errors 
@@ -252,10 +252,10 @@ if (!empty($_POST['purchase'])) {
                 <input type="text" name="3_line" placeholder="Third line of address" />
                 <br>
                 <label for="region">Region</label>
-                <input type="text" name="region" placeholder="Third line of address" />
+                <input type="text" name="region" placeholder="Region of address" />
                 <br>
                 <label for="postcode">Postcode</label>
-                <input type="text" name="postcode" placeholder="Third line of address" />
+                <input type="text" name="postcode" placeholder="Postcode of address" />
                 <br>
                 <input type="submit" name="addAddress" value="Add address" />
         </form>

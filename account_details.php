@@ -142,10 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$error_message = 'There has been a problem submitting your results. Please try again.';
 		}
 
-		echo $sqlCustomer;
-
-		echo $_POST['addressID'];
-		echo $_SESSION['customer_id'];
+		$_POST['makeChangesCustomer'] = null;
 	}
 
 	if (isset($_POST['deleteAddress'])) {
@@ -212,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 			$error_message = 'Please resolve the issues to continue with the change.';
 		}
-		$errorsAddress = null;
+
 		$_POST['updateAddress'] = null;
 	}
 
@@ -255,10 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$errorPostcode = 'Please enter your postcode to continue.';
 		}
 
-
 		$sqlAddAddress .= ')';
-
-		echo $sqlAddAddress;
 
 		if (count($errorAddAddress) == 0) {
 			if (mysqli_query($db, $sqlAddAddress)) {
@@ -269,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 			$error_message = 'Please resolve the issues to continue with the change.';
 		}
-		$_POST['addressChanges'] = null;
+
 		$_POST['addAddress'] = null;
 	}
 
@@ -324,7 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$error_message = 'Please resolve the errors to continue with the change.';
 		}
 
-		$_POST['accountChanges'] = null;
+		$_POST['makeChangesAccount'] = null;
 	}
 }
 
