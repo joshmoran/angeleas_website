@@ -2,32 +2,35 @@
 session_start();
 require "src/variables.php";
 
-if (!empty($_POST['email'])) {
-	try {
-		if (isset($_POST['']))
-			$to = 'josh@lovingfamily.co.uk';
-		$subject = $_POST['subject'];
+if (isset($_POST['email'])) {
+	$to = 'josh@lovingfamily.co.uk';
+	
+	if ( !empty($_POST))$subject = $_POST['subject'];
 
-		$message = "Name: " . $_POST['name'] . "<br>Customer Number: ";
-		if (isset($_SESSION['customer_id '])) {
-			$message .= $_SESSION['customer_id'];
-		} else {
-			$message .= ' guest';
-		}
-		$message .= "<br>Message: " . $_POST['message'];
-		echo $subject . ' ' . $message;
-		// Always set content-type when sending HTML email
-		$headers = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type:text/html;" . "charset=iso-8859-1" . "\r\n";
-
-		// More headers
-		$headers .= 'From: <webmaster@lovingfamily.co.uk>' . "\r\n";
-		$headers .= 'Cc: myboss@example.com' . "\r\n";
-
-		mail($to, $subject, $message, $headers);
-	} catch (Exception $e) {
-		$error_message = $e->getMessage();
+	$message = "Name: " . $_POST['name'] . "<br>Customer Number: ";
+	if (isset($_SESSION['customer_id '])) {
+		$message .= $_SESSION['customer_id'];
+	} else {
+		$message .= ' guest';
 	}
+	$message .= "<br>Message: " . $_POST['message'];
+	// Always set content-type when sending HTML email
+	$headers = "MIME-Version: 1.0" . "\r\n";
+	$headers .= "Content-type:text/html;" . "charset=iso-8859-1" . "\r\n";
+
+	// More headers
+	$headers .= 'From: <webmaster@lovingfamily.co.uk>' . "\r\n";
+	//$headers .= 'Cc: myboss@example.com' . "\r\n";
+	if ( count($errors) == 0 ) {
+		if (mail($to, $subject, $message, $headers)) {
+			$error_message = 'Message sent successfully.';
+		} else {
+			$error_message = 'There has been an internal issue. Please contact the system administrator.';
+		}
+	} else {
+		$error_message = 'Please correct the errors below to submit the message.';
+	}
+	$_POST['email'] = null;
 }
 // to, subject, message, header, parameters
 
@@ -58,7 +61,7 @@ if (!empty($_POST['email'])) {
 		</div>
 		<form action="contact.php" id="email" method="post">
 			<h2>Contact Us</h1>
-				<p>Please contact us for any quieries, issues or questions that you want answered.</p>
+				<p>Please contact us for any queries, issues or questions that you want answered.</p>
 				<p>Please allow for 72 hours for a response</p>
 
 				<label for="name">Your Name: </label>

@@ -7,10 +7,10 @@ require "src/random_number.php";
 
 if (isset($_GET['del'])) {
 	$sqlDelete = "DELETE FROM cart WHERE product_id = " . $_GET['del'] . " AND basket_id = " . $_SESSION['basket_id'];
-	if ( $queryDel = mysqli_query($db, $sqlDelete) ) {
+	if ($queryDel = mysqli_query($db, $sqlDelete)) {
 		$error_message = 'Successfully deleted the item from the basket.';
 	} else {
-		$error_message = 'An internal '
+		$error_message = 'An internal error occurred, please contact ehe system administrator.';
 	}
 }
 
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				require("src/database.php");
 
 
-				if ($_SESSION['loggedIn']) {
+				if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
 					$sqlOrder = "SELECT * FROM cart INNER JOIN products on cart.product_id = products.id WHERE cart.basket_id = '" . $_SESSION['basket_id'] . "'";
 					$query = mysqli_query($db, $sqlOrder);
 					if (mysqli_num_rows($query) > 0) {
