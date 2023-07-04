@@ -103,7 +103,7 @@ if (isset($_POST['login'])) {
 		<div id="messages">
 			<?php
 			if (isset($error_message)) {
-				echo '<p class="messageText">' . $error_message . '</p>';
+				echo '<p class="message">' . $error_message . '</p>';
 			}
 			?>
 		</div>

@@ -15,7 +15,7 @@ $errors = array();
 if (isset($_GET['error'])) {
     // For address errors
     if ($_GET['error'] == 'address') {
-        $errors[] = 'Please provide a valid address.';
+        $error_message = 'Please provide a valid address.';
     }
 
     // For credit card errors
@@ -189,18 +189,9 @@ if (!empty($_POST['purchase'])) {
     <div id="container">
         <div id="messages">
             <?php
-            // For single errors 
             if (isset($error_message)) {
-                echo '<h2 id="message">' . $error_message . '</h2>';
+                echo '<p class="message">' . $error_message . '</p>';
             }
-
-            // For an array of errors 
-            if (count($errors) > 1) {
-                foreach ($errors as $error) {
-                    echo '<p id="message">' . $error . '</p>';
-                }
-            }
-
             ?>
         </div>
         <!-- 

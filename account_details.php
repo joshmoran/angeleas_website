@@ -146,14 +146,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 
 	if (isset($_POST['deleteAddress'])) {
-		if (isset($_POST['whichAddress'])){
+		if (isset($_POST['whichAddress']) && $_POST['whichAddress'] != 'new') {
 			if (mysqli_query($db, "DELETE FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $_POST['whichAddress'])) {
 				$error_message = 'Successfully deleted the address';
 			} else {
 				$error_message = 'There has been a problem deleting the address. Please try again.';
 			}
 		} else {
-			$error
+			$error_message = 'There are no addresses in the system. Please add an address to delete it.';
 		}
 		$_POST['deleteAddress'] = null;
 	}
@@ -199,9 +199,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		$sqlAddress .= ')';
-
-		echo $sqlAddress;
-		var_dump($errorsAddress);
 
 		if (count($errorsAddress) == 0) {
 			if (mysqli_query($db, $sqlAddress)) {
@@ -348,7 +345,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		<div id="messages">
 			<?php
 			if (isset($error_message)) {
-				echo '<p class="messages">' . $error_message . '</p>';
+				echo '<p class="message">' . $error_message . '</p>';
 			}
 			?>
 		</div>

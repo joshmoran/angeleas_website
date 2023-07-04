@@ -125,7 +125,7 @@ if (isset($_POST['categorySelected'])) {
         <div id="messages">
             <?php
             if (isset($error_message)) {
-                echo '<h2 id="message">Error - ' . $error_message . '</h2>';
+                echo '<p class="message">' . $error_message . '</p>';
             }
             ?>
         </div>

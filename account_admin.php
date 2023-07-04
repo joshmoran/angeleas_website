@@ -7,7 +7,6 @@ require "src/database.php";
 if ($_SESSION['admin'] == false || !isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) {
     header("Location:login.php");
 }
-$errors = array();
 // dispatch 
 // accept 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -18,9 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $sql = "UPDATE orders SET status = 'order accepted, awaiting dispatch' WHERE customer_id = $customerID AND order_id = $basketID";
 
         if (mysqli_query($db, $sql)) {
-            $errors[] = 'Changed status - accepted order';
+            $error_message = 'Changed status - accepted order';
         } else {
-            $errors[] = 'There has been a problem changing the order status, please contact the administrator';
+            $error_message = 'There has been a problem changing the order status, please contact the administrator';
         }
     }
 
@@ -32,9 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $sql = "UPDATE orders SET status = 'order dispatched' WHERE customer_id = " . $customerID . " AND order_id = " . $basketID;
 
         if (mysqli_query($db, $sql)) {
-            $errors[] = 'Changed status - accepted order';
+            $error_message = 'Changed status - accepted order';
         } else {
-            $errors[] = 'There has been a problem changing the order status, please contact the administrator';
+            $error_message = 'There has been a problem changing the order status, please contact the administrator';
         }
     }
 }
@@ -54,17 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     <?php
     include "inc/header.php";
     ?>
-    <div id="errors">
-        <?php
-        if (count($errors) > 0) {
-            echo '<ul>';
-            foreach ($errors as $error) {
-                echo '<li class="message">' . $error . '</li>';
-            }
-            echo '</ul>';
-        }
-        ?>
-    </div>
+    <?php
+    if (isset($error_message)) {
+        echo '<p class="message">' . $error_message . '</p>';
+    }
+    ?>
     <div id="container">
         <table><?php
                 require "src/database.php";

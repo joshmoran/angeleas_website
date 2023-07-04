@@ -49,10 +49,10 @@ if (!empty($_POST['email'])) {
 <body>
 	<?php include("inc/header.php"); ?>
 	<div id="container">
-		<div id="errors">
+		<div id="messages">
 			<?php
 			if (isset($error_message)) {
-				echo "<h3 id='error_message'>" . $error_message . "</h3>";
+				echo '<p class="message">' . $error_message . '</p>';
 			}
 			?>
 		</div>

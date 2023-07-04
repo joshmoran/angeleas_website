@@ -95,7 +95,7 @@ if (!empty($_POST['addToBasket'])) {
 	//header("Location: basket.php");
 	//
 	$sqlCartResults = mysqli_query($db, $sqlInsertToCart);
-	$error_message = 'Add to cart';
+	$error_message = 'Added to cart';
 }
 ?>
 <!DOCTYPE html>
@@ -119,7 +119,9 @@ if (!empty($_POST['addToBasket'])) {
 	</header>
 	<div id="messages">
 		<?php
-		echo '<p>' . $error_message . '</p>';
+		if (isset($error_message)) {
+			echo '<p class="message">' . $error_message . '</p>';
+		}
 		?>
 	</div>
 	<div id="contentSplit">

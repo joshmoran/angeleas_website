@@ -53,9 +53,9 @@ header
 #messages
 {
     display: block;
+    text-align: center;
     clear: both;
-    background-color: red;
-    height: 100px;
+    height: max-content;
     width: 100%;
 
 }
@@ -64,8 +64,9 @@ header
 {
     color: white;
     font-weight: 900;
+    font-size: 30px;
     color: #333;
-    ;
+    text-align: center;
 }
 
 #container,
