@@ -1,7 +1,7 @@
 Main pages
 - about                 complete          accessability
 - account - admin       complete          accessability
-- account - details
+- account - Details     complete        accessability
 - account               complete         accessability
 - basket                complete         accessability
 - complete              complete         accessability
@@ -13,7 +13,7 @@ Main pages
 - order history         complete          accessability
 - products              complete          accessability
 - purchase
-- register
+- register              complete          accessability
 
 
 INSERT INTO address ( customer_id, 1_line, 2_line, region, postcode) VALUES ( '0276494', '10 eastlands', 'Winlaton', 'Gateshead', 'NE215DS' );

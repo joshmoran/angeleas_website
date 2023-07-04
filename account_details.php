@@ -58,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		$sqlCustomer = '';
 		$errorCustomer = array();
+
 		function checkEmail($str)
 
 		{
@@ -129,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$sqlCustomer .= $comma . ' home = "' . mysqli_escape_string($db, $_POST['home']) . '" ';
 		}
 
-		$sqlCustomer .= " WHERE customer_id = " . $_SESSION['customer_id'];
+		$sqlCustomer .= ' WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
 
 		if (count($errorCustomer) === 0) {
 			if (mysqli_query($db, $sqlCustomer)) {
@@ -144,6 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		echo $sqlCustomer;
 
 		echo $_POST['addressID'];
+		echo $_SESSION['customer_id'];
 	}
 
 	if (isset($_POST['deleteAddress'])) {
@@ -457,7 +459,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<th colspan="3">Change Address Details</th>
 				</tr>
 				<tr>
-					<td colspan="3"><label for="addressChanges">Make changes to my personal details</label></td>
+					<td colspan="3"><label for="addressChanges">Make changes to my addresses.</label></td>
 				</tr>
 
 
@@ -600,8 +602,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						</th>
 					</tr>
 					<tr>
-						<td><label for="accountChanges">Make payment details changes</label></td>
-						<td colspan="2"><input type="checkbox" name="accountChanges" /></td>
+						<td colspan="3"><label for="accountChanges">Make changes to my account details.</label></td>
 					</tr>
 					<tr>
 						<td><label for="username">Username: </label></td>
@@ -621,7 +622,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				endwhile;
 				?>
 				<tr>
-					<td colspan="3"><button type="submit" name="makeChangesAccount">Submit</button></td>
+					<td colspan="3"><button type="submit" name="makeChangesAccount">Make account changes</button></td>
 				</tr>
 
 			</table>
