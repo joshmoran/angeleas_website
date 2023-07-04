@@ -332,7 +332,6 @@ if (!empty($_POST['purchase'])) {
     </div>
     <input type="submit" name="purchase" form="purchase" value="Process Order" />
     </form>
-    </div>
     <?php
     include "inc/footer.php";
     ?>

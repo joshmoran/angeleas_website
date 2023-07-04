@@ -5,8 +5,6 @@ require "src/variables.php";
 require "src/database.php";
 require "src/random_number.php";
 
-echo $_SESSION['basket_id'];
-
 if (isset($_GET['del'])) {
 	$sqlDelete = "DELETE FROM cart WHERE product_id = " . $_GET['del'] . " AND basket_id = " . $_SESSION['basket_id'];
 	$queryDel = mysqli_query($db, $sqlDelete);

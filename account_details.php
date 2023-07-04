@@ -146,12 +146,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 
 	if (isset($_POST['deleteAddress'])) {
-		if (mysqli_query($db, "DELETE FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $_POST['whichAddress'])) {
-			$error_message = 'Successfully deleted the address';
+		if (isset($_POST['whichAddress'])){
+			if (mysqli_query($db, "DELETE FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $_POST['whichAddress'])) {
+				$error_message = 'Successfully deleted the address';
+			} else {
+				$error_message = 'There has been a problem deleting the address. Please try again.';
+			}
 		} else {
-			$error_message = 'There has been a problem deleting the address. Please try again.';
+			$error
 		}
-
 		$_POST['deleteAddress'] = null;
 	}
 
@@ -508,11 +511,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					}
 
 
-					if (isset($_GET['address']) && $_GET['address'] == 'new') {
-						for ($a = 0; $a < 5; $a++) {
-							$rowAddress[$a] = '';
-						}
-					} else {
+					if (isset($_GET['address']) && $_GET['address'] != 'new') {
 						$row = "SELECT * FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $addressID;
 						$rowQuery = mysqli_query($db, $row);
 						while ($address = mysqli_fetch_row($rowQuery)) {
@@ -522,6 +521,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 							$rowAddress[3] = $address[5];
 							$rowAddress[4] = $address[6];
 						}
+					} else {
+						for ($a = 0; $a < 5; $a++) {
+							$rowAddress[$a] = '';
+						}
 					}
 					?>
 
@@ -529,6 +532,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						<td><label for="address1st">First Line</label></td>
 						<td><input type="text" name="address1st" value="<?php if (isset($rowAddress[0])) {
 																			echo $rowAddress[0];
+																		} else if (isset($_POST['address1st'])) {
+																			echo $_POST['address1st'];
 																		} ?>" /></td>
 						<td><?php if (isset($errorLine1)) {
 								echo $errorLine1;
@@ -538,6 +543,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						<td><label for="address2nd">Second Line</label></td>
 						<td><input type="text" name="address2nd" value="<?php if (isset($rowAddress[1])) {
 																			echo $rowAddress[1];
+																		} else if (isset($_POST['address2nd'])) {
+																			echo $_POST['address2nd'];
 																		} ?>" /></td>
 						<td><?php if (isset($errorLine2)) {
 								echo $errorLine2;
@@ -547,6 +554,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						<td><label for="address3rd">Third Line</label></td>
 						<td><input type="text" name="address3rd" value="<?php if (isset($rowAddress[2])) {
 																			echo $rowAddress[2];
+																		} else if (isset($_POST['address3rd'])) {
+																			echo $_POST['address3rd'];
 																		} ?>" /></td>
 						<td><?php if (isset($errorLine3)) {
 								echo $errorLine3;
@@ -556,6 +565,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						<td><label for="region">Region</label></td>
 						<td><input type="text" name="region" value="<?php if (isset($rowAddress[3])) {
 																		echo $rowAddress[3];
+																	} else if (isset($_POST['region'])) {
+																		echo $_POST['region'];
 																	} ?>" /></td>
 						<td><?php if (isset($errorRegion)) {
 								echo $errorRegion;
@@ -565,6 +576,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						<td><label for="postcode">Postcode</label></td>
 						<td><input type="text" name="postcode" value="<?php if (isset($rowAddress[4])) {
 																			echo $rowAddress[4];
+																		} else if (isset($_POST['postcode'])) {
+																			echo $_POST['postcode'];
 																		} ?>"></td>
 						<td><?php if (isset($errorPostcode)) {
 								echo $errorPostcode;

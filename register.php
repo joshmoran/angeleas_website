@@ -13,8 +13,6 @@ function sanitizeInput($data)
 	return $data;
 }
 
-var_dump($_SESSION);
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (isset($_POST['register'])) {
 		require "src/database.php";
@@ -29,10 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			$sqlCheckID = "SELECT customer_id from customers where customer_id = " . $customerNo;
 			$checkID = mysqli_query($db, $sqlCheckID);
-			echo $customerNo . '<br>';
 		} while (mysqli_num_rows($checkID) != 0);
-
-		echo '<br>';
 
 		$sqlCustomers = 'INSERT INTO customers VALUES ( "' . $customerNo . '"';
 		$sqlAccount = ' INSERT INTO accounts VALUES ( "' . $customerNo . '"';
