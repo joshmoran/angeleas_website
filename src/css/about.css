@@ -1,7 +1,8 @@
 #container
 {
     margin: 0 auto;
-    display: inline-flex;
+    width: 80%;
+    display: inline-block;
 }
 
 #left
