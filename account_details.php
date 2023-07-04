@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 
-	if (isset($_POST['personalChanges'])) {
+	if (isset($_POST['makeChangesCustomer'])) {
 
 		// $sqlCustomer = "UPDATE customers SET ";
 		// Check if variables are empty, if empty and not required, move on
@@ -58,27 +58,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		$sqlCustomer = '';
 		$errorCustomer = array();
+		function checkEmail($str)
+
+		{
+			return (preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $str)) ? true : false;
+		}
 
 		if (!empty($_POST['firstName'])) {
-			$comma = checkSql($sqlCustomer, 'customer');
-
-			$sqlCustomer .= $comma . ' first_name = "' . mysqli_real_escape_string($db, $_POST['firstName']) . '" ';
+			if (strlen($_POST['firstname']) > 3) {
+				$comma = checkSql($sqlCustomer, 'customer');
+				$sqlCustomer .= $comma . ' first_name = "' . mysqli_real_escape_string($db, $_POST['firstName']) . '" ';
+			} else {
+				$errorCustomer[] = 'firstname';
+				$errorFirstName = 'First name must not be empty or less than 3 characters.';
+			}
 		} else {
-			$errorCustomer[] = "First Name is a required field";
+			$errorCustomer[] = "firstname";
+			$errorFirstName = ' First name is a required.';
 		}
 
 		if (!empty($_POST['lastName'])) {
-			$comma = checkSql($sqlCustomer, 'customer');
-			$sqlCustomer .= $comma . ' last_name = "' . mysqli_escape_string($db, $_POST['lastName']) . '" ';
+			if (strlen($_POST['lastname']) > 3) {
+				$comma = checkSql($sqlCustomer, 'customer');
+				$sqlCustomer .= $comma . ' last_name = "' . mysqli_escape_string($db, $_POST['lastName']) . '" ';
+			} else {
+				$errorCustomer[] = 'lastname';
+				$errorLastName = 'Last name must not be empty or less than 3 characters.';
+			}
 		} else {
-			$errorCustomer[] = "last Name is a required field";
+			$errorCustomer[] = 'lastname';
+			$errorLastName = 'Last name is a required.';
 		}
 
 		if (!empty($_POST['email'])) {
-			$comma = checkSql($sqlCustomer, 'customer');
-			$sqlCustomer .= $comma . ' email = "' . mysqli_escape_string($db, $_POST['email']) . '" ';
+			if (checkEmail($_POST['email']) === true || strlen($ema_POST['email']) != '' || $_POST['email'] != null) {
+				$comma = checkSql($sqlCustomer, 'customer');
+				$sqlCustomer .= $comma . ' email = "' . mysqli_escape_string($db, $_POST['email']) . '" ';
+			} else {
+				$errorCustomer[] = 'Email';
+				$errorEmail = ''
+			}
 		} else {
-			$errorCustomer[] = "last Name is a required field";
+			$errorCustomer[] = "Email is a required field";
 		}
 
 		if (!empty($_POST['mobile'])) {
@@ -121,13 +142,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 
 	if (isset($_POST['updateAddress'])) {
-		$sqlAddress = 'INSERT INTO address ( customer_id, 1_line, 2_line, 3_line, region, postcode ) VALUES ( ';
+		$sqlAddress = 'INSERT INTO address ( customer_id, 1_line, 2_line, 3_line, region, postcode ) VALUES ( "' . $_SESSION['customer_id'] . '"';
 		$errorsAddress = array();
 
 		// Address Line 1
 		if (!empty($_POST['address1st'])) {
 
-			$sqlAddress .= ' 1_line = "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
+			$sqlAddress .= ', "' . mysqli_real_escape_string($db, $_POST['address1st']) . '" ';
 		} else {
 			$errorsAddress[] = 'Address line 1';
 			$errorLine1 = "Line 1 is a required field";
@@ -135,20 +156,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		// Address Line 2
 		if (!empty($_POST['address2nd'])) {
-			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' 2_line = "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
+			$sqlAddress .= ', "' . mysqli_real_escape_string($db, $_POST['address2nd']) . '" ';
 		} else {
 			$errorsAddress[] = "Address line 2";
 			$errorLine2 = 'Line 2 is a required field.';
 		}
 
 		// Address Line 3
-		$sqlAddress .= ', 3_line = "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
+		$sqlAddress .= ', "' . mysqli_real_escape_string($db, $_POST['address3rd']) . '" ';
 
 		// Address Region
 		if (!empty($_POST['region'])) {
-			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' region = "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
+			$sqlAddress .=  ', "' . mysqli_real_escape_string($db, $_POST['region']) . '" ';
 		} else {
 			$errorsAddress[] = 'Region';
 			$errorRegion = "Region is a required field";
@@ -156,14 +175,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		// Address Postcode
 		if (!empty($_POST['postcode']) && strlen($_POST['postcode']) == 7) {
-			$comma = checkSql($sqlAddress, 'address');
-			$sqlAddress .= $comma . ' postcode = "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
+			$sqlAddress .= ', "' . mysqli_real_escape_string($db, $_POST['postcode']) . '" ';
 		} else {
 			$errorsAddress[] = 'Postcode';
 			$errorPostcode = "Postcode is a required field";
 		}
 
-		$sqlAddress .= ') WHERE customer_id = "' . $_SESSION['customer_id'] . '"';
+		$sqlAddress .= ')';
 
 		echo $sqlAddress;
 		var_dump($errorsAddress);
@@ -238,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$_POST['addAddress'] = null;
 	}
 
-	if (isset($_POST['accountChanges'])) {
+	if (isset($_POST['makeChangesAccount'])) {
 		$sqlAccount = '';
 		$errorsAccount = array();
 
