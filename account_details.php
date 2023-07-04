@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		if (!empty($_POST['firstName'])) {
-			if (strlen($_POST['firstname']) > 3) {
+			if (strlen($_POST['firstName']) > 3) {
 				$comma = checkSql($sqlCustomer, 'customer');
 				$sqlCustomer .= $comma . ' first_name = "' . mysqli_real_escape_string($db, $_POST['firstName']) . '" ';
 			} else {
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		if (!empty($_POST['lastName'])) {
-			if (strlen($_POST['lastname']) > 3) {
+			if (strlen($_POST['lastName']) > 3) {
 				$comma = checkSql($sqlCustomer, 'customer');
 				$sqlCustomer .= $comma . ' last_name = "' . mysqli_escape_string($db, $_POST['lastName']) . '" ';
 			} else {
@@ -96,24 +96,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$sqlCustomer .= $comma . ' email = "' . mysqli_escape_string($db, $_POST['email']) . '" ';
 			} else {
 				$errorCustomer[] = 'Email';
-				$errorEmail = ''
+				$errorEmail = 'Must be a valid email address.';
 			}
 		} else {
-			$errorCustomer[] = "Email is a required field";
+			$errorCustomer[] = 'email';
+			$errorEmail = 'Email is a required field';
 		}
 
 		if (!empty($_POST['mobile'])) {
+			if (strlen($_POST['mobile']) == 11) {
+				$comma = checkSql($sqlCustomer, 'customer');
+				$sqlCustomer .= $comma . 'mobile = "' . mysqli_escape_string($db, $_POST['mobile']) . '"';
+			} else {
+				$errorCustomer[] = 'mobile phone';
+				$errorMobile = 'Enter a valid mobile number, must start with 11 characters and starts with 0.';
+			}
+		} else {
 			$comma = checkSql($sqlCustomer, 'customer');
 			$sqlCustomer .= $comma . ' mobile = "' . mysqli_escape_string($db, $_POST['mobile']) . '" ';
-		} else {
-			$errorCustomer[] = "last Name is a required field";
 		}
 
 		if (!empty($_POST['home'])) {
+			if (strlen($_POST['home']) == 11) {
+				$comma = checkSql($sqlCustomer, 'customer');
+				$sqlCustomer .= $comma . ' home = "' . mysqli_escape_string($db, $_POST['home']) . '" ';
+			} else {
+				$errorCustomer[] = 'home phone';
+				$errorHome = 'Enter a valid home number, must start with 11 characters and starts with 0.';
+			}
+		} else {
 			$comma = checkSql($sqlCustomer, 'customer');
 			$sqlCustomer .= $comma . ' home = "' . mysqli_escape_string($db, $_POST['home']) . '" ';
-		} else {
-			$errorCustomer[] = "last Name is a required field";
 		}
 
 		$sqlCustomer .= " WHERE customer_id = " . $_SESSION['customer_id'];
@@ -128,7 +141,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$error_message = 'There has been a problem submitting your results. Please try again.';
 		}
 
-		$_POST['personalChanges'] = null;
+		echo $sqlCustomer;
+
+		echo $_POST['addressID'];
 	}
 
 	if (isset($_POST['deleteAddress'])) {
