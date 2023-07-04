@@ -480,17 +480,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					}
 
 					$row = "SELECT * FROM address WHERE customer_id = " . $_SESSION['customer_id'] . " AND address_id = " . $addressID;
+					$rowQuery = mysqli_query($db, $row);
 					if (isset($_GET['address']) && $_GET['address'] != 'new') {
-						while ($address = mysqli_fetch_row(mysqli_query($db, $row))) {
+						while ($address = mysqli_fetch_row($rowQuery)) {
 							$rowAddress[0] = $address[2];
 							$rowAddress[1] = $address[3];
 							$rowAddress[2] = $address[4];
 							$rowAddress[3] = $address[5];
 							$rowAddress[4] = $address[6];
 						}
-					} else {
+					} else if (isset($_GET['address']) && $_GET['address'] == 'new') {
 						for ($a = 0; $a < 5; $a++) {
 							$rowAddress[$a] = '';
+						}
+					} else {
+						while ($address = mysqli_fetch_row($rowQuery)) {
+							$rowAddress[0] = $address[2];
+							$rowAddress[1] = $address[3];
+							$rowAddress[2] = $address[4];
+							$rowAddress[3] = $address[5];
+							$rowAddress[4] = $address[6];
 						}
 					}
 					?>
